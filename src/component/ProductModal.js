@@ -12,12 +12,12 @@ const Product=props=>{
 
   // const {details}=props
 
-const catProductLists=useSelector(state=>state.products.CatProducts)
-const error=useSelector(state=>state.products.error)
-const details=useSelector(state=>state.products.productDetails)
-console.log(details.unit_quantity)
-const catid=details.category
-const dispatch=useDispatch()
+ const catProductLists=useSelector(state=>state.products.CatProducts)
+ const error=useSelector(state=>state.products.error)
+ const details=useSelector(state=>state.products.productDetails)
+ console.log(details.unit_quantity)
+ const catid=details.category
+ const dispatch=useDispatch()
  const onCatProduct=(id)=>dispatch(productActions.initFetchCatProducts(id))
  const onCartAdd=(item)=>dispatch(cartActions.cartAction(item))
  const onCartUpdate=(id, units)=>dispatch(cartActions.updateCartUnits(id, units))
@@ -76,6 +76,7 @@ const OnSubHandler =(item)=>{
     aria-labelledby="contained-modal-title-vcenter"
     centered
     className="product-modal"
+  
   >
   
   {/* <div className={attachClasses.join(' ')} > */}
@@ -121,15 +122,38 @@ const OnSubHandler =(item)=>{
                   </div>
                 </div>
                 <div className="product-info">
+                 <div className="product-dt">
+
+                 
                   <h5 className="mt-2">Details</h5>
-                  <p>{details.inventory_list && details.inventory_list[0].unit_price}</p>
+                  <p>{details.inventory_list && details.inventory_list[0].unit_price}
+                  Et quidem faciunt, ut summum bonum sit extremum et rationibus conquisitis de voluptate. Sed ut summum bonum sit id,
+                  </p>
+                  </div>
+                 <div className="product-dt">
+
+                 
+                  <h5 className="mt-2 ">Ingredients</h5>
+                  <p>
+                  Et quidem faciunt, ut summum bonum sit extremum et rationibus conquisitis de voluptate. Sed ut summum bonum sit id,
+                  </p>
+                  </div>
+                 <div className="product-dt">
+
+                 
+                  <h5 className="mt-2">More Information</h5>
+                  <p>
+                  Et quidem faciunt, ut summum bonum sit extremum et rationibus conquisitis de voluptate. Sed ut summum bonum sit id,
+                  </p>
+                  </div>
+
                 </div>
               </div>
             </div>
           </div>
         </div>
         </Modal.Body> 
-     <Modal.Footer>
+     <Modal.Footer  className="mb-5">
         <div className="container">
           <div className="row">
             <div className="col-md-12 col-sm-12 col-12">

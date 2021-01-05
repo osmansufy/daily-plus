@@ -13,7 +13,7 @@ import Footer from './container/Footer';
 import React ,{useEffect, useState,Suspense} from 'react';
 import { createBrowserHistory } from "history";
 
-import { Route,Switch } from 'react-router-dom';
+import { BrowserRouter, Route,Switch } from 'react-router-dom';
 import CategoryPage from './pages/Category';
 
 import OffersPage from './pages/Offers';
@@ -27,6 +27,9 @@ import Logout from './pages/logout';
 import Location from './pages/Location';
 import AddAddress from './component/Map/AddAddress';
 import PreOrderInfo from './pages/order/PreOrderInfo';
+import PreOrderDetails from './component/PreOrder/PreOrderDetails';
+import ProductId from './pages/ProductId';
+
 
 const App=(props)=> {
 
@@ -46,11 +49,13 @@ const history = createBrowserHistory();
   
 
   let routes=(
+   
 <Switch>
     <Route path='/' exact component={Home} />
    
     <Route path='/category/:id/:name' exact  component={CategoryPage}  />
-    
+    <Route path='/product/:id' exact  component={ProductId}  />
+
   <Route path='/offers' exact component={OffersPage} />
   <Route path='/order/info' exact component={OrderInfo} />
   <Route path='/checkout' exact component={CheckOut} />
@@ -59,24 +64,28 @@ const history = createBrowserHistory();
   <Route path='/user' exact component={User} />
   <Route path='/order' exact component={Orders} />
   <Route path='/order/preorder' exact component={PreOrderInfo} />
+  <Route path='/order/preorder/info' exact component={PreOrderDetails} />
   
   <Route path='/logout' exact component={Logout} />
   <Route path='/location' exact component={Location} />
   <Route path='/location/save' exact component={AddAddress} />
     </Switch>
   );
-  return  (<div class="wrapper">
+  return  (
+   
+  <div class="wrapper">
     <Sidebar show={showSidebar} closed={shideberClosed} />
     <div class="content-wrapper">
     <Header btnClicked={btnClickHandler} />
     
-   {/* <Router path="/" component={} /> */}
+   
   
     {routes}
  
  <Footer />
  </div>
  </div>
+
   );
 }
 

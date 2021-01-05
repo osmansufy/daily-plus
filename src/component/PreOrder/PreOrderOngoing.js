@@ -6,8 +6,11 @@ import Spinner from '../../container/Spinner/Spinner';
 import cartIcon from '../../assets/img/cart.png'
 import moment from 'moment'
 import { Container, Row } from "react-bootstrap";
+import { useHistory } from "react-router";
 const PreOngoing = () => {
 
+
+    const history=useHistory()
     const usersToken=useSelector(state=>state.auth.accessToken)
     const [loading,setLoading]=useState(false)
     const [preAllOrder,setPreAllOrder]=useState([])
@@ -28,6 +31,14 @@ const PreOngoing = () => {
          })
     },[])
 
+    const onPreOrderDetails=(id)=>{
+      history.push({
+        pathname: '/order/preorder/info',
+       //  search: `?id=${id}`,
+        state: { id: id}
+    });
+    }
+
     let contentPreOngoing=<div className="row ongoing justify-content-center"><img />
     <p>There is no ongoing order right now. You can order from home</p>
     </div>
@@ -35,7 +46,7 @@ if (loading) {
   contentPreOngoing=<Spinner />
 }else if(!loading && preAllOrder.length >0){
   contentPreOngoing= preAllOrder.filter(order=>order.status==1).map(order=>{
-    return <a>    <div className="row order-info">
+    return <a onClick={()=>onPreOrderDetails(order.id)}>    <div className="row order-info">
     <div className="info-left">
         
         <img src={cartIcon}/>

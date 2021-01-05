@@ -51,7 +51,7 @@ props.onUpdateCartUnits({id:item.id, unit_quantity:parseInt(item.unit_quantity +
       
       
           </div>
-    <h6 class="mt-3 pro-title mb-2">{props.data.description}</h6>
+    <h6 class="mt-3 pro-title mb-2">{props.data.name}</h6>
           <div class="price">
             <h6 class="sell-price">{props.data.inventory_list[0].unit_price_final} <span class="regular-price">{props.data.inventory_list[0].unit_price}</span></h6>
             <div class="sell-icon">

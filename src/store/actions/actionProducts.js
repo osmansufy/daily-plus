@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../axios'
 import * as actionTypes from './actionsTypes'
 
 export const setProducts=(products)=>{
@@ -10,7 +10,7 @@ export const setProducts=(products)=>{
 
 export const initFetchProducts=()=>{
     return dispatch=>{
-        axios.get('https://api.dailyplus.store/v0/catalogue/product/public/paginated/')
+        axios.get('catalogue/product/public/paginated/')
         .then(response=>{
             dispatch(setProducts(response.data.results))
         }).catch(error=>{
@@ -35,7 +35,7 @@ export const initFetchCatProducts=(id)=>{
     return dispatch=>{
       
       const  quariParam='?category='+id
-       axios.get('https://api.dailyplus.store/v0/catalogue/product/public/'+quariParam)
+       axios.get('catalogue/product/public/'+quariParam)
         .then(response=>{
             
             dispatch(setCatProducts(response.data))
@@ -51,5 +51,26 @@ export const productDetails=(details)=>{
     return {
         type:actionTypes.PRODUCTS_DETAILS,
         details:details
+    }
+}
+
+export const singleProduct=(data)=>{
+    return{
+        type:actionTypes.SINGLE_PRODUCT,
+        product:data
+    }
+}
+export const onSingleProducFetch=(id)=>{
+  return dispatch=>{
+        axios.get('catalogue/product/public/'+id+'/')
+        .then(response=>{
+            console.log(response)
+            dispatch(singleProduct(response.data))
+            dispatch(initFetchCatProducts(response.data.category))
+        }).catch(error=>{
+        
+            console.log(error)
+      
+                    })
     }
 }

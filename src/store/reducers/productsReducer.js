@@ -2,9 +2,11 @@ import * as actionTypes from '../actions/actionsTypes'
 
 const initialState={
     products:null,
+    singleProduct:null,
     productDetails:[],
     CatProducts:null,
     catName:null,
+    loading:false,
     error:false
 }
 const reducer=(state=initialState,action)=>{
@@ -35,6 +37,13 @@ const reducer=(state=initialState,action)=>{
             return {
             ...state,
             error:true,
+            // catName:action.name
+            
+            }
+        case actionTypes.SINGLE_PRODUCT:
+            return {
+            ...state,
+            singleProduct:action.product,
             // catName:action.name
             
             }

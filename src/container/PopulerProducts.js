@@ -5,10 +5,11 @@ import Spinner from '../container/Spinner/Spinner'
  import * as productActions from '../store/actions/actionProducts'
 import {connect} from 'react-redux'
 import ProductModal from '../component/ProductModal'
+import { Route, Router, useHistory } from 'react-router';
 
 const PopulerProducts=props =>{
   const [modalShow, setModalShow] = useState(false);
-  
+  const history=useHistory()
  useEffect(() => {
   props.onInItProducts()
   
@@ -18,12 +19,15 @@ const PopulerProducts=props =>{
  
     props.onProductDetails(item)
     setModalShow(true)
+  
    }
    const modalClosedHandler=()=>{
     setModalShow(false)
     props.onProductDetails([])
    }
-return ( <><section>
+return ( <>
+
+<section>
             <div class="container">
               <div class="row">
                 <div class="col-md-6 col-sm-6 col-6">
@@ -48,7 +52,9 @@ return ( <><section>
             </div>
             
           </section>
-         
+        
+    
+        
           <ProductModal modalClosed={modalClosedHandler}  show={modalShow}
         onHide={() => setModalShow(false)}  />
 

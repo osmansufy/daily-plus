@@ -62,7 +62,7 @@ footer{
     border: none;
 }
 .btn-primary{
-    color: #ffffff;
+    color: #ffffff !important;
     background-color: var(--primary-color);
 
 }

@@ -61,8 +61,8 @@ const PreOrderCheckout = () => {
             time_slot:0,
             // payment_method: orderInformation.paymentMethod,
             recipient_phone: userInfo.phone,
-          recipient_address: userAddress[0].address,
-          recipient_point: `{"lat":${userAddress[0].location.lat},"lng":${userAddress[0].location.lng}}`
+            recipient_address: userAddress[0].address,
+            recipient_point: `{"lat":${userAddress[0].location.lat},"lng":${userAddress[0].location.lng}}`
           }
 
        axios.post('order/pre/order/',preOrderSend,{

@@ -11,7 +11,12 @@
     box-sizing: border-box;
     transition: all 0.3s ease-out;
 } */
-
+.product-dt {
+  font-family: 'Poppins';
+}
+.product-modal .modal-dialog {
+  max-width: 75% !important;
+}
 
 .btn.is-active, .btn:hover {
   background-color: #5EC401;
@@ -116,7 +121,7 @@ a.btn.tag-btn {
   color: #37474F;
   min-height: 60px;
   font-family: Poppins;
-  font-size: 14px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 21px;

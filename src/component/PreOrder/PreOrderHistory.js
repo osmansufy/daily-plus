@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useReducer, useState } from "react"
 import { useSelector } from "react-redux"
 import axios from '../../axios'
 import Spinner from '../../container/Spinner/Spinner';
@@ -6,11 +6,42 @@ import Spinner from '../../container/Spinner/Spinner';
 import cartIcon from '../../assets/img/cart.png'
 import moment from 'moment'
 import { Container, Row } from "react-bootstrap";
+import { useHistory } from "react-router";
+import {statusOrder} from '../../utility/orderStatus'
 const PreHistory = () => {
 
     const usersToken=useSelector(state=>state.auth.accessToken)
     const [loading,setLoading]=useState(false)
     const [preAllOrder,setPreAllOrder]=useState([])
+    const history=useHistory()
+     
+  const statusReducer=(currStatus,action)=>{
+    switch (action.type) {
+      case 6 :
+        return  "cancelled"
+      
+      case 5 :
+        return  "complete"
+      
+      case 4 :
+        return  "on-the-way"
+      
+      case 3 :
+        return  "processing"
+      
+      case 2 :
+        return  "confirmed"
+      case 1 :
+        return  "pending"
+      
+    
+      default:
+        throw new Error('Should not get there!');
+    }
+  }
+
+  const [status,statDispatch]=useReducer(statusReducer,"")
+
     useEffect(()=>{
       setLoading(true)
         axios.get('order/pre/order/',{
@@ -28,12 +59,22 @@ const PreHistory = () => {
          })
     },[])
 
+
+  const onPreOrderDetails=(id)=>{
+    history.push({
+      pathname: '/order/preorder/info',
+     //  search: `?id=${id}`,
+      state: { id: id}
+  });
+  }
+ 
+
     let contentPreHistory=""
 if (loading) {
   contentPreHistory=<Spinner />
 }else if(!loading && preAllOrder.length >0){
   contentPreHistory= preAllOrder.filter(order=>order.status!=1).map(order=>{
-    return <a>    <div className="row order-info">
+    return <a onClick={()=>onPreOrderDetails(order.id)}>    <div className="row order-info">
     <div className="info-left">
         
         <img src={cartIcon}/>
@@ -41,7 +82,7 @@ if (loading) {
               <h4>
 {order.order_identifier}
               </h4>
-              <h5>Pending</h5>
+              <h5>{statusOrder(order.status)}</h5>
               <h5>{moment(order.ts_delivery).utc().format('MMM DD.YYYY')}</h5>
           </div>
           </div>  

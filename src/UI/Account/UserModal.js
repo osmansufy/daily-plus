@@ -12,6 +12,12 @@ const UserModal = () => {
        const onPreOrder=()=>{
               history.push('/order/preorder')
        }
+       const onuser=()=>{
+              history.push('/user')
+       }
+       const onlogout=()=>{
+              history.push('/logout')
+       }
     return (  
     
   //   <div className="userModal" >
@@ -33,9 +39,9 @@ const UserModal = () => {
 <div className="container">
 
 <h4>User</h4>
-<Dropdown.Item eventKey="1"className="row userInfo userProfile "  >
+<Dropdown.Item onClick={onuser} eventKey="1"className="row userInfo userProfile "  >
 
-<Link to="/user"> <img src={proIcon}/><span>My Profile</span></Link>
+ <img src={proIcon}/><span>My Profile</span>
 
        </Dropdown.Item>
 <Dropdown.Item onClick={onOrder} eventKey="2"className="row userInfo userOrder  "  >
@@ -45,12 +51,12 @@ const UserModal = () => {
        </Dropdown.Item>
 <Dropdown.Item onClick={onPreOrder} eventKey="2"className="row userInfo userOrder  "  >
 
-<img src={bagIcon}/><span>My  PreOrder</span>
+<img src={bagIcon}/><span>PreOrder</span>
 
        </Dropdown.Item>
-<Dropdown.Item eventKey="3"className="row userInfo userLogout "  >
+<Dropdown.Item onClick={onlogout} eventKey="3"className="row userInfo userLogout "  >
 
-<Link to="/logout"><img src={logIcon}/><span>Logout</span></Link>
+<img src={logIcon}/><span>Logout</span>
 
        </Dropdown.Item>
 

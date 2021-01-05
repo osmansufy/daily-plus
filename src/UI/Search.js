@@ -1,9 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import Axios from 'axios';
+import './search.css'
+import bagIcon from '../assets/img/bag_white.png'
+import Spinner from '../container/Spinner/Spinner'
+import { useHistory } from "react-router";
 const Search = (props) => {
 const [searchEnter,setSearchEnter]=useState('')
 const [searchResult,setsearchResult]=useState([])
+const [showResult,setShowResult]=useState(false)
 const inputRef=useRef()
+const history=useHistory()
   console.log(searchResult)
   console.log(searchEnter)
 
@@ -12,12 +18,14 @@ const inputRef=useRef()
       
     
     const timer=  setTimeout(()=>{ 
+      setShowResult(false)
         if (searchEnter===inputRef.current.value) {
             const query=searchEnter.length ===0?'':`?token=${searchEnter}`
            
             Axios.get('https://api.dailyplus.store/v0/catalogue/product/public/'+query)
             .then(response=>{
                 setsearchResult(response.data)
+                setShowResult(true)
             }) 
         }  
         },200)
@@ -31,8 +39,13 @@ const inputRef=useRef()
 getPreOrders()
   },[searchEnter,inputRef])
 
+const onProductSelect=(id)=>{
+  setShowResult(false)
+  history.push('/product/'+id)
+}
+
   let products=""
-  if (searchEnter.length>0) {
+  if (showResult && searchEnter.length>0) {
       products=<div className="search-container" id="searchContainer">
  
       <div className="search-result" id="searchResult">
@@ -42,24 +55,26 @@ getPreOrders()
         <ul>
             {searchResult.map(product=>(
      <li>
+       <a onClick={()=>onProductSelect(product.id)}>
      <div className="search-result-list">
        <div className="search-result-list-img mr-2">
          <img src={ product.image_list[0] && product.image_list[0].thumbnail_image_url} alt="" />
        </div>
-       <div className="search-result-list-detail">
-         <button className="btn recommended-btn mb-2">Recommended</button>
-            <h6>{product && product.name}</h6>
-         <p className="regular-price">800</p>
-         <div className="sell-price">900</div>
+       <div className="search-result-list-detail my-3">
+         {/* <button className="btn recommended-btn mb-2">Recommended</button> */}
+            <h6>{product && product.name}--{product && product.unit_name}</h6>
+         <p className="regular-price mt-2"></p>
+         <div className="sell-price mt-2">ট { product.image_list[0] && product.inventory_list[0].unit_price_final}</div>
        </div>
        <div className="search-result-list-btns">
        
          <div className="search-result-list-btn-cart">
            <i className="fa fa-heart-o mr-2" />
-           <button className="btn btn-primary"><i className="fa fa-shopping-bag mr-2" />Add</button>
+           <button className="btn search-btn btn-primary"><img className="mr-3" src={bagIcon} /> Add</button>
          </div>
        </div>
      </div>
+     </a>
      <hr />
     </li>
             ))}
