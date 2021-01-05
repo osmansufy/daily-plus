@@ -1,72 +1,74 @@
-import React, { Component, useEffect, useState } from 'react';
-import axios from 'axios'
+import React, { useEffect, useState} from 'react';
+
 import SinglePopuler from '../component/SinglePopuler';
 import Spinner from '../container/Spinner/Spinner'
-function PopulerProducts(props) {
-    const [productList, setProductList] = useState([]);
+ import * as productActions from '../store/actions/actionProducts'
+import {connect} from 'react-redux'
+import ProductModal from '../component/ProductModal'
 
-
-    
-
-    useEffect(() => {
-      axios.get('https://api.dailyplus.store/v0/catalogue/product/public/paginated/').then(response=>{
-           
-        setProductList(response.data.results)
-         
-      })
+const PopulerProducts=props =>{
+  const [modalShow, setModalShow] = useState(false);
+  
+ useEffect(() => {
+  props.onInItProducts()
+  
     }, []);
 
-
-
-    // state={
-    //     populerProducts:[]
-    // }
-    // componentDidMount(){
-    //     axios.get('https://api.dailyplus.store/v0/catalogue/product/public/paginated/').then(response=>{
-           
-    //         this.setState({populerProducts:response.data.results})
-           
-    //         console.log(response.data.results);
-    //     })
-    // };
-
-      
-      
-      // const  populers=productList.map(populer=>{
-      //     return(<SinglePopuler thum={populer.image_list.thumbnail_image_url} feature={populer.image_list.image_url} title={populer.name}  desc={populer.description} sellPrice={populer.inventory_list.unit_price_final} />
-            
-      //       )
-          
-      // })
-      
-
-      // console.log("productList", productList)
-      // populers=this.state.populerProducts.map(populer=>{
-      //      return(<SinglePopuler thum={populer.image_list.thumbnail_image_url} feature={populer.image_list.image_url} title={populer.name}  desc={populer.description} sellPrice={populer.inventory_list.unit_price_final} />
-      // })
-        
-        return (
-            <section>
+   const productHandler=(item)=>{
+ 
+    props.onProductDetails(item)
+    setModalShow(true)
+   }
+   const modalClosedHandler=()=>{
+    setModalShow(false)
+    props.onProductDetails([])
+   }
+return ( <><section>
             <div class="container">
               <div class="row">
-                <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-md-6 col-sm-6 col-6">
                   <h2>Popular Items</h2>
                 </div>
-                <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-md-6 col-sm-6 col-6">
                   <button class="btn btn-primary float-right">View All Products</button>
                 </div>
               </div>
               <div class="row populer-items">
 
                 
-              {productList && productList.map((item, index) => (
-                <SinglePopuler data={item} key={index}/>
-              ))}
-                  {/* {populers} */}
+              {props.productLists && props.productLists.map((item, index) => {
+               return <SinglePopuler
+               clicked={()=>productHandler(item)}
+               data={item} key={index}/>
+              }
+                
+              )}
+                  
                </div>
             </div>
+            
           </section>
-        )
+         
+          <ProductModal modalClosed={modalClosedHandler}  show={modalShow}
+        onHide={() => setModalShow(false)}  />
+
+          </>
+        
+)
+        
+}
+const mapStateToProps=state=>{
+  return {
+    productLists:state.products.products,
+    
+  }
 }
 
-export default PopulerProducts;
+const mapDispatchToProps=dispatch=>{
+  return{
+    onInItProducts:()=>dispatch(productActions.initFetchProducts()),
+    onProductDetails:(details)=>dispatch(productActions.productDetails(details))
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(PopulerProducts)

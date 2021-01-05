@@ -1,415 +1,230 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import ButtonLink from '../UI/Button/ButtonLink';
+// import Button from '../UI/Button/Button';
+import MyBag from '../UI/MyBag';
+import CartBtn from '../UI/Button/CartBtn';
+import { Link } from 'react-router-dom';
+import Notification from '../UI/Notification'
+import CartBag from '../UI/CartBag';
+import logo from '../assets/img/logo.png'
+import callIcon from '../assets/img/call.png'
+import offerIcon from '../assets/img/offer_24px.png'
+import placeIcon from '../assets/img/place_24px.png'
+import accountPic from '../assets/img/account.png'
+import Search from '../UI/Search';
+import { useDispatch, useSelector } from 'react-redux';
+import UserModal from '../UI/Account/UserModal';
+import Address from '../UI/Address/Address';
+import deliveryIcon from '../assets/img/delivery-icon.png'
+import lampIcon from '../assets/img/lamp-icon.svg'
+import * as actionAddress from '../store/actions/actionAddress'
+import {DropdownButton,ButtonGroup,Dropdown} from 'react-bootstrap'
+import axios from '../axios'
+const Header=(props) =>{
+  const [smShow, setSmShow] = useState(false);
+const isSignUp=useSelector(state=>state.auth.accessToken)
+const [cartShow,setCartShow]=useState(false)
+const [notishow,setNotiShow]=useState(false)
+const [searchShow,setSearchShow]=useState(false)
+const [addressShow,setAddresshShow]=useState(false)
 
-function Header(props) {
-    return (
-        <div>
+const dispatch =useDispatch()
+const onAddress=(isSignUp)=>dispatch(actionAddress.onUserAddress(isSignUp))
+
+useEffect(()=>{
+  if (isSignUp) {
+    onAddress(isSignUp)
+  }
+  
+},[isSignUp])
+const cartClickHandler=()=>{
+  setCartShow(true)
+ 
+  
+}
+const serachToggole=()=>{
+  setSearchShow(true)
+}
+const cartClosed=()=>{
+  setCartShow(false)
+}
+const notificationHandler=()=>{
+  setNotiShow(true)
+}
+const searchClose=()=>{
+  setSearchShow(false)
+}
+const notClosed=()=>{
+  setNotiShow(false)
+}
+// const userProhandle=()=>{
+//   setSmShow(!smShow)
+
+//   const userModal=document.querySelector('.userModal')
+//   smShow? userModal.style.display='flex':userModal.style.display='none'
+// }
+const addresshandle=()=>{
+  setAddresshShow(!addressShow)
+ 
+  console.log(isSignUp)
+  const addressModal=document.querySelector('.addressModal')
+  addressShow? addressModal.style.display='flex':addressModal.style.display='none'
+}
+
+const addressClicked=()=>{
+  setAddresshShow(!addressShow)
+  const addressModal=document.querySelector('.addressModal')
+  addressShow? addressModal.style.display='flex':addressModal.style.display='none'
+}
+
+    return (<>
           <header>
-            <div class="container">
-              <div class="row">
-                <div class="col-md-12">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-12">
                 </div>
               </div>
-              <div class="row header-top">
-                <div class="col-md-2 col-sm-3 col-12">
-                  <div class="logo-holder">
-                    <a href="index.html"><img src="assets/dist/img/logo.png" alt="logo" class="logo" /></a>
+              <div className="row header-top">
+                <div className="col-md-2 col-sm-3 col-12">
+                  <div className="logo-holder">
+                    <Link to='/'><img src={logo} alt="logo" className="logo" /></Link>
                   </div>
+                  <div onClick={serachToggole} className="search_toggler">
+                  <i className="fa fa-search mobile_search"  />
+                  </div>
+                  
                 </div>
-                <div class="col-md-10 col-sm-9 col-12">
-                  <div class="top-right">
-                    <div class="search">
-                      <div class="input-group md-form form-sm form-2 pl-0">
-                        <input class="form-control my-0 py-1 red-border" type="text" placeholder="Search Products (examples: Egg, Rice etc.)" aria-label="Search" />
-                        <span class="custom-serach" id="basic-text1"><i class="fa fa-search text-grey" aria-hidden="true" /></span>
-                        <div class="input-group-append">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="notification-btn">
-                      <button class="btn" onclick="notificationShow()">
+                <div className="col-md-10 col-sm-9 col-12">
+                  <div className="top-right">
+                    <Search show={searchShow}  closed={searchClose}/>
+                    <div className="notification-btn">
+                      {/* <div  onClick={notificationHandler}>
                         <svg width={22} height={28} viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path fillRule="evenodd" clipRule="evenodd" d="M20.9694 20.8923L19.2053 19.1282V12.2906C19.2053 8.09231 16.9626 4.57778 13.0514 3.64786V2.71795C13.0514 1.5829 12.1352 0.666664 11.0002 0.666664C9.86512 0.666664 8.94888 1.5829 8.94888 2.71795V3.64786C5.02409 4.57778 2.79503 8.07863 2.79503 12.2906V19.1282L1.03093 20.8923C0.169389 21.7538 0.771098 23.2308 1.98819 23.2308H19.9984C21.2292 23.2308 21.8309 21.7538 20.9694 20.8923ZM5.53007 20.4957V12.2906C5.53007 8.89914 7.59503 6.13675 11.0002 6.13675C14.4053 6.13675 16.4702 8.89914 16.4702 12.2906V20.4957H5.53007ZM13.7352 24.5983C13.7352 26.1026 12.5044 27.3333 11.0002 27.3333C9.48221 27.3333 8.26511 26.1026 8.26511 24.5983H13.7352Z" fill="#37474F" />
                         </svg>
-                      </button>
-                      <div class="notification-holder" id="notificationHolder">
-                        <div class="notification-header pb-2">
-                          <button class="btn"><i class="fa fa-arrow-left pr-2" aria-hidden="true" />Notification</button>
-                          <button class="btn" onclick="notificationHide()">X</button>
-                        </div>
-                        <div class="notification-list noti-unread" style={{padding: '5px'}}>
-                          <h6>Order #378 <span class="float-right">3.30pm</span></h6>
-                          <div class="noti-message">
-                            <p>Lorem ipsum dolor sit amet, consectetur</p>
-                            <div class="noti-message-icon">
-                              <i class="fa fa-star" />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="notification-list pt-2">
-                          <h6>Order #378 <span class="float-right">3.30pm</span></h6>
-                          <div class="noti-message">
-                            <p>Lorem ipsum dolor sit amet, consectetur</p>
-                            <div class="noti-message-icon">
-                              <i class="fa fa-star" />
-                            </div>
-                          </div>
-                        </div>
-                        <div class="notification-list pt-2">
-                          <h6>Order #378 <span class="float-right">3.30pm</span></h6>
-                          <div class="noti-message">
-                            <p>Lorem ipsum dolor sit amet, consectetur</p>
-                            <div class="noti-message-icon">
-                              <i class="fa fa-star" />
-                            </div>
-                          </div>
-                        </div>
+                      </div> */}
+                       <Dropdown as={ButtonGroup}   title="Dropdown "  
+ 
+ >
+  <Dropdown.Toggle id="dropdown-custom-1"> <svg width={22} height={28} viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" clipRule="evenodd" d="M20.9694 20.8923L19.2053 19.1282V12.2906C19.2053 8.09231 16.9626 4.57778 13.0514 3.64786V2.71795C13.0514 1.5829 12.1352 0.666664 11.0002 0.666664C9.86512 0.666664 8.94888 1.5829 8.94888 2.71795V3.64786C5.02409 4.57778 2.79503 8.07863 2.79503 12.2906V19.1282L1.03093 20.8923C0.169389 21.7538 0.771098 23.2308 1.98819 23.2308H19.9984C21.2292 23.2308 21.8309 21.7538 20.9694 20.8923ZM5.53007 20.4957V12.2906C5.53007 8.89914 7.59503 6.13675 11.0002 6.13675C14.4053 6.13675 16.4702 8.89914 16.4702 12.2906V20.4957H5.53007ZM13.7352 24.5983C13.7352 26.1026 12.5044 27.3333 11.0002 27.3333C9.48221 27.3333 8.26511 26.1026 8.26511 24.5983H13.7352Z" fill="#37474F" />
+                      </svg></Dropdown.Toggle>
+ <Notification show={notishow} closed={notClosed} />
+</Dropdown>
+                      {/* <Notification show={notishow} closed={notClosed} /> */}
                       </div>
-                    </div>
-                    <div class="lamp-btn">
-                      <button class="btn"><img src="assets/dist/img/lamp-icon.svg" />
+                    <div className="lamp-btn">
+                      <button className="btn"><img src={lampIcon} />
                       </button>
                     </div>
-                    <div class="wishlist-btn">
+                    <div className="wishlist-btn">
                       <a href="#">
-                        {/* <i class="fa fa-heart-o icon" aria-hidden="true"></i> */}
+                        {/* <i className="fa fa-heart-o icon" aria-hidden="true"></i> */}
                         <svg width={25} height={22} viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path fillRule="evenodd" clipRule="evenodd" d="M22.5452 2.32386C21.2831 0.955081 19.5484 0.199997 17.6681 0.199997C16.2558 0.199997 14.9573 0.64826 13.8212 1.5269C13.51 1.76755 13.2152 2.03729 12.938 2.33461L12.6667 2.64107C12.3132 2.22054 11.9274 1.84793 11.5124 1.52693C10.3763 0.64826 9.07774 0.199997 7.66548 0.199997C5.78503 0.199997 4.05047 0.955036 2.78843 2.32384C1.54746 3.66994 0.866699 5.50167 0.866699 7.47867C0.866699 9.5117 1.62275 11.3689 3.22218 13.2989L3.61926 13.7643C4.30151 14.5402 5.0667 15.2882 6.2794 16.3659L7.27853 17.2415L11.2968 20.6919L11.4833 20.8548C11.8105 21.1414 12.2309 21.2994 12.6667 21.2994C13.1022 21.2994 13.5227 21.1415 13.8501 20.855L16.1408 18.8825L17.7606 17.4961C19.8345 15.7068 20.8763 14.7293 21.792 13.6753L22.1114 13.2987C23.7107 11.369 24.4667 9.51183 24.4667 7.47867C24.4667 5.50157 23.7861 3.66987 22.5452 2.32386ZM15.2043 3.31538C15.9398 2.74666 16.7646 2.46111 17.6681 2.46111C18.9135 2.46111 20.0525 2.95594 20.8827 3.85644C21.7337 4.7795 22.2058 6.0647 22.2058 7.47867C22.2058 8.97327 21.6489 10.3135 20.3705 11.8561L20.1308 12.1396L19.973 12.32C19.3868 12.9807 18.7111 13.6413 17.6685 14.5721L17.0617 15.1083L12.6654 18.8856L11.6787 18.0332L9.08387 15.8136L8.11546 14.9712C6.74049 13.762 5.94505 12.9922 5.25412 12.1989L4.96302 11.8561C3.68458 10.3136 3.12764 8.97331 3.12764 7.47867C3.12764 6.0647 3.59969 4.7795 4.45067 3.85643C5.28106 2.95588 6.41996 2.46111 7.66548 2.46111C8.56879 2.46111 9.39357 2.74667 10.1291 3.31544C10.6998 3.75677 11.1739 4.33449 11.546 4.95825C11.7831 5.35551 12.2044 5.59483 12.6667 5.59483C13.129 5.59483 13.5503 5.35551 13.7873 4.95836C14.1598 4.33426 14.6338 3.75671 15.2043 3.31538Z" fill="#37474F" />
                         </svg>
                       </a>
+                      
                     </div>
-                    <div class="cart-btn">
-                      <a href="#" id="cartShowBtn">
-                        {/* <i class="fa fa-shopping-bag icon"></i> */}
-                        <svg width={23} height={27} viewBox="0 0 23 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <div className="cart-btn">
+                    <CartBtn clicked={cartClickHandler}  > <svg width={23} height={27} viewBox="0 0 23 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path fillRule="evenodd" clipRule="evenodd" d="M20.672 6.70655L22.6624 25.6615C22.6854 25.8811 22.6143 26.1003 22.4662 26.2645C22.3186 26.4286 22.108 26.5223 21.887 26.5223H0.779479C0.558693 26.5223 0.348098 26.4286 0.200241 26.2645C0.0525849 26.1003 -0.0187458 25.8811 0.00423188 25.6615L1.9947 6.70655C2.03646 6.30973 2.37093 6.00842 2.76995 6.00842H6.51111V5.15545C6.51111 2.49663 8.67441 0.333336 11.3334 0.333336C13.9922 0.333336 16.1555 2.49663 16.1555 5.15545V6.00842H19.8967C20.2957 6.00842 20.6302 6.30973 20.672 6.70655ZM8.53666 5.15545C8.53666 3.61395 9.79169 2.35889 11.3334 2.35889C12.8749 2.35889 14.13 3.61393 14.13 5.15545V5.54176H8.53666V5.15545ZM20.5034 24.4967H2.16328L3.89209 8.03398H6.04445V9.28504C6.04445 9.97316 6.60244 10.5311 7.29056 10.5311C7.97867 10.5311 8.53666 9.97316 8.53666 9.28504V8.03398H14.13V9.28504C14.13 9.97316 14.688 10.5311 15.3761 10.5311C16.0642 10.5311 16.6222 9.97316 16.6222 9.28504V8.03398H18.7746L20.5034 24.4967Z" fill="#37474F" />
-                        </svg>
-                      </a>
+                        </svg></CartBtn>
+                     {/* {<MenuButton clicked={props.btnClicked} />} */}
                     </div>
-                    <div class="user-btn">
-                      <button class="btn" onclick="userShow()"><img src="assets/dist/img/user.png" alt="" /></button>
-                      <div class="user-holder" id="userHolder">
+                    <div className="user-btn">
+                      <button className="btn" onclick="userShow()"><img src="assets/dist/img/user.png" alt="" /></button>
+                      <div className="user-holder" id="userHolder">
                         <h6>User</h6>
                         <hr />
-                        <div class="user-body">
-                          <button class="btn profile-btn" onclick="profileShow()"><i class="fa fa-user pr-2" />My Profile</button>
-                          <div class="profile-holder" id="profileHolder">
-                            <h6>User</h6>
-                            <hr />
-                            <form action>
-                              <div class="profile-photo-cotainer">
-                                <img src="assets/dist/img/user.png" alt="" class="profile-photo" />
-                                <input type="file" class="photo-upload" />
-                              </div>
-                              <div class="profile-form-fileds">
-                                <div class="name mb-3">
-                                  <label htmlFor>Full Name</label>
-                                  <input type="text" class="form-control" />
-                                  <i class="fa fa-user" />
-                                </div>
-                              </div>
-                              <div class="password-change mb-3">
-                                <button class="btn btn-secondary">Change Password</button>
-                                <i class="fa fa-facebook" />
-                              </div>
-                              <div class="profile-submit">
-                                <button class="btn btn-primary">Save</button>
-                                <i class="fa fa-facebook" />
-                              </div>
-                            </form>
-                          </div>
-                          <hr />
-                          <button class="btn order-btn" onclick="orderShow()"><i class="fa fa-shopping-bag pr-2" />My Order</button>
-                          <div class="order-holder" id="orderHolder">
-                            <h6>My Oder</h6>
-                            <hr />
-                            <div class="order-tab-toggler">
-                              <button class="btn" onclick="openOrderTab('ongoing-order')">Ongoing</button>
-                              <button class="btn" onclick="openOrderTab('history-order')">History</button> 
-                              <hr />
-                            </div>
-                            <div class="order-tabs">
-                              <div id="ongoing-order" class="tabs">
-                                <img src="assets/dist/img/image 1.svg" alt="" class="mt-3 mb-3" />
-                                <p class="text-center order-ongoing-alert">There is no ongoing order right now. You can order from home</p>
-                              </div>
-                              <div id="history-order" class="tabs" style={{display: 'none'}}>
-                                <div class="history-item pt-2">
-                                  <div class="history-item-img">
-                                    <img src="assets/dist/img/boxed-bg.jpg" alt="" />
-                                  </div>
-                                  <div class="history-item-details">
-                                    <h5>Order #678</h5>
-                                    <p class="status" st>Delivered</p>
-                                    <p>October 26,2016</p>
-                                  </div>
-                                  <div class="history-item-price">
-                                    <h6>700</h6>
-                                  </div>
-                                </div>
-                                <div class="history-item pt-2">
-                                  <div class="history-item-img">
-                                    <img src="assets/dist/img/boxed-bg.jpg" alt="" />
-                                  </div>
-                                  <div class="history-item-details">
-                                    <h5>Order #678</h5>
-                                    <p class="status" st>Delivered</p>
-                                    <p>October 26,2016</p>
-                                  </div>
-                                  <div class="history-item-price">
-                                    <h6>700</h6>
-                                  </div>
-                                </div>
-                                <div class="history-item pt-2">
-                                  <div class="history-item-img">
-                                    <img src="assets/dist/img/boxed-bg.jpg" alt="" />
-                                  </div>
-                                  <div class="history-item-details">
-                                    <h5>Order #678</h5>
-                                    <p class="status" st>Delivered</p>
-                                    <p>October 26,2016</p>
-                                  </div>
-                                  <div class="history-item-price">
-                                    <h6>700</h6>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <hr />
-                          <button class="btn"><i class="fa fa-power-off pr-2" />Logout</button>
-                        </div>
+                        
                       </div>
                     </div>
-                    <div class="login-btn">
-                      <button class="btn btn-secondary" onclick="showLogin()">Log In</button>
-                      <div class="loging-holder" id="loginHolder">
-                        <div class="login-header">
-                          <h6>Signup</h6>
-                        </div>
-                        <div class="login-body">
-                          <form id="regForm" action>
-                            {/* One "tab" for each step in the form: */}
-                            <div class="tab">
-                              <h6 class="pt-2">Your Information</h6>
-                              <p>It looks like you don't have account in this number. Please let us know some information for a scure service</p>
-                              <div class="camera-icon">
-                                <i class="fa fa-camera fa-2x" aria-hidden="true" />
-                              </div>
-                              <button class="btn btn-sync-facebook mb-3 mt-4">Sync From Facebook <i class="fa fa-facebook pl-3" style={{color: 'white'}} /></button>
-                              <p><input placeholder="Full Name" oninput="this.class = ''" /></p>
-                            </div>
-                            <div class="tab">
-                              <img src="assets/dist/img/mobile-1976104_1280.webp" class="img-fluid" alt="" />
-                              <h6 class="pt-2">Enter your mobile number</h6>
-                              <p>We need to verify you. We will send you a one time verification code.</p>
-                              <p><input placeholder="880 1XXXXXXX" oninput="this.class = ''" /></p>
-                            </div>
-                            <div class="tab">
-                              <img src="assets/dist/img/mobile-1976104_1280.webp" class="img-fluid" alt="" />
-                              <h6 class="pt-2">Enter Verification Code</h6>
-                              <p>We have sent SMS to:</p>
-                              <h6>019XXXXXXXXX</h6>
-                              <div class="verification-container pt-3">
-                                <p><input oninput="this.class = ''" /></p>
-                                <p><input oninput="this.class = ''" /></p>
-                                <p><input oninput="this.class = ''" /></p>
-                                <p><input oninput="this.class = ''" /></p>
-                                <p><input oninput="this.class = ''" /></p>
-                              </div>
-                              <div class="verification-bottom">
-                                <a href="#" class="btn-resend-otp">Resend OTP</a>
-                                <a href="#" class="btn-chg-nmbr">Change Phone Number</a>
-                              </div>
-                            </div>
-                            <div class="tab">
-                              <img src="assets/dist/img/mobile-1976104_1280.webp" class="img-fluid" alt="" />
-                              <h6 class="pt-2">Choose a Password</h6>
-                              <p>For the security &amp; safety please choose a password</p>
-                              <p><input type="password" placeholder="Password" oninput="this.class = ''" /></p>
-                              <p><input type="password" placeholder="Confirm Password" oninput="this.class = ''" /></p>
-                            </div>
-                            <div style={{overflow: 'auto'}}>
-                              <div>
-                                {/* <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button> */}
-                                <button type="button" class="btn mt-4" id="nextBtn" onclick="nextPrev(1)">Next <i class="fa fa-angle-right" style={{color: '#F4F6F9'}} /></button>
-                              </div>
-                            </div>
-                            <div style={{textAlign: 'center', marginTop: '40px', display: 'none'}}>
-                              <span class="step" />
-                              <span class="step" />
-                              <span class="step" />
-                            </div>
-                          </form>
-                        </div>
-                      </div>
+                    <div className="login-btn">
+                     {isSignUp!=null ? <Dropdown as={ButtonGroup}  title="Dropdown "  
+ 
+ >
+                    <Dropdown.Toggle  id="dropdown-custom-2"> 
+                  {/* <i class="fas fa-user"></i> */}
+                  <img src={accountPic} />
+                    </Dropdown.Toggle>
+                   
+                <UserModal/>
+                   </Dropdown>:<Link to='/signup'  className="btn btn-secondary">Log In</Link> } 
+                   {/* {isSignUp!=null ? <UserModal/>:""} */}
+
+                  
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <hr />
-            <div class="container">
-              <div class="row header-bottom">
-                {/*
-                <div class="col-md-5 col-sm-4 col-12">
-                    <div class="category-btn">
-                        <button class="header-bottom-btn" onclick="showCat()"><i class="fa fa-bars"></i>Category</button>
-                        <nav>
-                            <div class="sidenav" id="catMenu">
-                                <a href="#">Fish</a>
-                                <a href="#">Vigitable</a>
-                                <a href="#">Milk</a>
-                                <button class="dropdown-btn">Vebaraze
-                                  <i class="fa fa-caret-down"></i>
-                                </button>
-                                <div class="dropdown-container">
-                                  <a href="#">Coca Cola</a>
-                                  <a href="#">Pepsi</a>
-                                  
-                                </div>
-                                <a href="#">contact</a>
-                              </div>
-                        </nav>
-                    </div>
-                </div>
-      */}
-                <div class="col-md-4 col-sm-4 col-4">
-                  <div class="bottom-right">
-                    <a style={{padding: '5px', color: '#000'}} class="nav-link sidebar-toggle" href="#" role="button"><i class="fas fa-bars" style={{padding: '5px', color: '#5EC401'}} />Category</a>
+            <div className="container">
+              <div className="row header-bottom">
+            
+                <div className="col-md-4 col-sm-4 col-4">
+                  <div className="bottom-right">
+                    <ButtonLink clicked={props.btnClicked} ><i className="fas fa-bars" style={{padding: '5px', color: '#5EC401'}} />Category</ButtonLink>
                   </div>
                 </div>
-                <div class="col-md-8 col-sm-8 col-8">
-                  <div class="bottom-right">
-                    <div class="offer">
-                      <a href="offer.html" class="header-bottom-btn">
-                        <svg width={33} height={32} viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <mask id="path-1-outside-1" maskUnits="userSpaceOnUse" x="1.00024" y="0.333328" width={30} height={31} fill="black">
-                            <rect fill="white" x="1.00024" y="0.333328" width={30} height={31} />
-                            <path fillRule="evenodd" clipRule="evenodd" d="M29.0436 15.7557C28.9245 15.9994 28.9245 16.2789 29.0436 16.5227L30.1481 18.782C30.763 20.04 30.2758 21.5395 29.0389 22.1957L26.8175 23.3743C26.5779 23.5015 26.4136 23.7277 26.3667 23.9949L25.9321 26.4718C25.6902 27.8509 24.4151 28.7777 23.0284 28.5815L20.5384 28.2293C20.2698 28.1916 20.004 28.2778 19.809 28.4664L18.0015 30.2148C17.4985 30.7016 16.8525 30.9449 16.2069 30.945C15.5611 30.945 14.9156 30.7017 14.4123 30.2148L12.6049 28.4664C12.4099 28.2778 12.144 28.1912 11.8754 28.2293L9.38549 28.5815C9.2612 28.5991 9.13755 28.6077 9.0157 28.6077C7.77844 28.6078 6.70191 27.7273 6.48167 26.4718L6.04722 23.9948C6.00032 23.7277 5.83601 23.5014 5.59634 23.3743L3.37492 22.1957C2.13806 21.5394 1.65087 20.04 2.26576 18.7821L3.37017 16.5228C3.48931 16.2791 3.48931 15.9995 3.37017 15.7558L2.26582 13.4965C1.65092 12.2386 2.13812 10.7391 3.37497 10.0829L5.5964 8.90422C5.83601 8.77704 6.00032 8.55085 6.04722 8.28365L6.48167 5.80677C6.7236 4.42765 7.99885 3.50079 9.38543 3.69702L11.8754 4.04923C12.1441 4.08706 12.4098 4.00083 12.6049 3.81217L14.4123 2.06354C15.4186 1.0899 16.9952 1.08995 18.0016 2.06354L19.809 3.812C20.0039 4.0006 20.2697 4.087 20.5384 4.04906L23.0284 3.69685C24.4145 3.50073 25.6902 4.42747 25.9321 5.8066L26.3666 8.2836C26.4135 8.55073 26.5778 8.77698 26.8175 8.9041L29.0389 10.0828C30.2758 10.739 30.763 12.2384 30.1481 13.4963L29.0436 15.7557ZM26.017 21.8656L28.2384 20.6869C28.6569 20.4649 28.8217 19.9576 28.6136 19.5318L27.5092 17.2726C27.1571 16.5523 27.1571 15.7259 27.5092 15.0056L28.6136 12.7463C28.8217 12.3207 28.6568 11.8135 28.2384 11.5914L26.0169 10.4128C25.3086 10.037 24.8229 9.36852 24.6844 8.57873L24.2499 6.10173C24.1681 5.63512 23.7363 5.3216 23.2675 5.38793L20.7775 5.74014C19.9836 5.85252 19.1977 5.59712 18.6214 5.03959L16.814 3.29114C16.4735 2.96183 15.9401 2.96183 15.5996 3.29114L13.7922 5.03959C13.2159 5.59706 12.4298 5.85252 11.6361 5.74014L9.14611 5.38793C8.6769 5.32165 8.24557 5.63512 8.16368 6.10173L7.72922 8.57867C7.59071 9.36846 7.10496 10.0369 6.39672 10.4128L4.17529 11.5914C3.7568 11.8135 3.59197 12.3207 3.8 12.7463L4.90441 15.0057C5.25651 15.726 5.25651 16.5523 4.90441 17.2727L3.8 19.532C3.59197 19.9576 3.7568 20.4648 4.17529 20.6869L6.39672 21.8655C7.10502 22.2413 7.59071 22.9098 7.72928 23.6996L8.16379 26.1766C8.24569 26.6432 8.67742 26.9567 9.14623 26.8904L11.6362 26.5382C11.7591 26.5208 11.8819 26.5122 12.0037 26.5122C12.6685 26.5122 13.3052 26.7675 13.7923 27.2387L15.5997 28.9872C15.9402 29.3165 16.4736 29.3165 16.8141 28.9872L18.6215 27.2388C19.1978 26.6813 19.9836 26.4257 20.7776 26.5382L23.2676 26.8904C23.7368 26.9567 24.1682 26.6432 24.25 26.1766L24.6845 23.6997C24.823 22.9099 25.3087 22.2415 26.017 21.8656ZM21.2378 9.9C21.5713 9.56653 22.1121 9.56653 22.4455 9.9C22.779 10.2335 22.779 10.7742 22.4454 11.1077L11.1741 22.379C11.0074 22.5458 10.7888 22.6292 10.5703 22.6292C10.3518 22.6292 10.1332 22.5458 9.9665 22.379C9.63302 22.0456 9.63302 21.5049 9.9665 21.1714L21.2378 9.9ZM12.7909 8.45393C11.0644 8.45393 9.65975 9.85856 9.65975 11.585C9.65975 13.3115 11.0644 14.7161 12.7909 14.7161C14.5173 14.7161 15.922 13.3115 15.922 11.585C15.922 9.85856 14.5173 8.45393 12.7909 8.45393ZM12.7909 13.0082C12.0061 13.0082 11.3677 12.3698 11.3677 11.585C11.3677 10.8002 12.0061 10.1618 12.7909 10.1618C13.5756 10.1618 14.2141 10.8002 14.2141 11.585C14.2141 12.3698 13.5756 13.0082 12.7909 13.0082ZM16.4915 20.6936C16.4915 18.9671 17.8961 17.5625 19.6226 17.5625C21.349 17.5625 22.7537 18.9671 22.7537 20.6936C22.7537 22.4201 21.349 23.8247 19.6226 23.8247C17.8961 23.8247 16.4915 22.4201 16.4915 20.6936ZM18.1993 20.6936C18.1993 21.4784 18.8378 22.1168 19.6226 22.1168C20.4073 22.1168 21.0458 21.4784 21.0458 20.6936C21.0458 19.9088 20.4073 19.2704 19.6226 19.2704C18.8377 19.2704 18.1993 19.9088 18.1993 20.6936Z" />
-                          </mask>
-                          <path fillRule="evenodd" clipRule="evenodd" d="M29.0436 15.7557C28.9245 15.9994 28.9245 16.2789 29.0436 16.5227L30.1481 18.782C30.763 20.04 30.2758 21.5395 29.0389 22.1957L26.8175 23.3743C26.5779 23.5015 26.4136 23.7277 26.3667 23.9949L25.9321 26.4718C25.6902 27.8509 24.4151 28.7777 23.0284 28.5815L20.5384 28.2293C20.2698 28.1916 20.004 28.2778 19.809 28.4664L18.0015 30.2148C17.4985 30.7016 16.8525 30.9449 16.2069 30.945C15.5611 30.945 14.9156 30.7017 14.4123 30.2148L12.6049 28.4664C12.4099 28.2778 12.144 28.1912 11.8754 28.2293L9.38549 28.5815C9.2612 28.5991 9.13755 28.6077 9.0157 28.6077C7.77844 28.6078 6.70191 27.7273 6.48167 26.4718L6.04722 23.9948C6.00032 23.7277 5.83601 23.5014 5.59634 23.3743L3.37492 22.1957C2.13806 21.5394 1.65087 20.04 2.26576 18.7821L3.37017 16.5228C3.48931 16.2791 3.48931 15.9995 3.37017 15.7558L2.26582 13.4965C1.65092 12.2386 2.13812 10.7391 3.37497 10.0829L5.5964 8.90422C5.83601 8.77704 6.00032 8.55085 6.04722 8.28365L6.48167 5.80677C6.7236 4.42765 7.99885 3.50079 9.38543 3.69702L11.8754 4.04923C12.1441 4.08706 12.4098 4.00083 12.6049 3.81217L14.4123 2.06354C15.4186 1.0899 16.9952 1.08995 18.0016 2.06354L19.809 3.812C20.0039 4.0006 20.2697 4.087 20.5384 4.04906L23.0284 3.69685C24.4145 3.50073 25.6902 4.42747 25.9321 5.8066L26.3666 8.2836C26.4135 8.55073 26.5778 8.77698 26.8175 8.9041L29.0389 10.0828C30.2758 10.739 30.763 12.2384 30.1481 13.4963L29.0436 15.7557ZM26.017 21.8656L28.2384 20.6869C28.6569 20.4649 28.8217 19.9576 28.6136 19.5318L27.5092 17.2726C27.1571 16.5523 27.1571 15.7259 27.5092 15.0056L28.6136 12.7463C28.8217 12.3207 28.6568 11.8135 28.2384 11.5914L26.0169 10.4128C25.3086 10.037 24.8229 9.36852 24.6844 8.57873L24.2499 6.10173C24.1681 5.63512 23.7363 5.3216 23.2675 5.38793L20.7775 5.74014C19.9836 5.85252 19.1977 5.59712 18.6214 5.03959L16.814 3.29114C16.4735 2.96183 15.9401 2.96183 15.5996 3.29114L13.7922 5.03959C13.2159 5.59706 12.4298 5.85252 11.6361 5.74014L9.14611 5.38793C8.6769 5.32165 8.24557 5.63512 8.16368 6.10173L7.72922 8.57867C7.59071 9.36846 7.10496 10.0369 6.39672 10.4128L4.17529 11.5914C3.7568 11.8135 3.59197 12.3207 3.8 12.7463L4.90441 15.0057C5.25651 15.726 5.25651 16.5523 4.90441 17.2727L3.8 19.532C3.59197 19.9576 3.7568 20.4648 4.17529 20.6869L6.39672 21.8655C7.10502 22.2413 7.59071 22.9098 7.72928 23.6996L8.16379 26.1766C8.24569 26.6432 8.67742 26.9567 9.14623 26.8904L11.6362 26.5382C11.7591 26.5208 11.8819 26.5122 12.0037 26.5122C12.6685 26.5122 13.3052 26.7675 13.7923 27.2387L15.5997 28.9872C15.9402 29.3165 16.4736 29.3165 16.8141 28.9872L18.6215 27.2388C19.1978 26.6813 19.9836 26.4257 20.7776 26.5382L23.2676 26.8904C23.7368 26.9567 24.1682 26.6432 24.25 26.1766L24.6845 23.6997C24.823 22.9099 25.3087 22.2415 26.017 21.8656ZM21.2378 9.9C21.5713 9.56653 22.1121 9.56653 22.4455 9.9C22.779 10.2335 22.779 10.7742 22.4454 11.1077L11.1741 22.379C11.0074 22.5458 10.7888 22.6292 10.5703 22.6292C10.3518 22.6292 10.1332 22.5458 9.9665 22.379C9.63302 22.0456 9.63302 21.5049 9.9665 21.1714L21.2378 9.9ZM12.7909 8.45393C11.0644 8.45393 9.65975 9.85856 9.65975 11.585C9.65975 13.3115 11.0644 14.7161 12.7909 14.7161C14.5173 14.7161 15.922 13.3115 15.922 11.585C15.922 9.85856 14.5173 8.45393 12.7909 8.45393ZM12.7909 13.0082C12.0061 13.0082 11.3677 12.3698 11.3677 11.585C11.3677 10.8002 12.0061 10.1618 12.7909 10.1618C13.5756 10.1618 14.2141 10.8002 14.2141 11.585C14.2141 12.3698 13.5756 13.0082 12.7909 13.0082ZM16.4915 20.6936C16.4915 18.9671 17.8961 17.5625 19.6226 17.5625C21.349 17.5625 22.7537 18.9671 22.7537 20.6936C22.7537 22.4201 21.349 23.8247 19.6226 23.8247C17.8961 23.8247 16.4915 22.4201 16.4915 20.6936ZM18.1993 20.6936C18.1993 21.4784 18.8378 22.1168 19.6226 22.1168C20.4073 22.1168 21.0458 21.4784 21.0458 20.6936C21.0458 19.9088 20.4073 19.2704 19.6226 19.2704C18.8377 19.2704 18.1993 19.9088 18.1993 20.6936Z" fill="#5EC401" />
-                          <path d="M29.0436 16.5227L28.864 16.6105L28.864 16.6105L29.0436 16.5227ZM29.0436 15.7557L29.2233 15.8435L29.2233 15.8435L29.0436 15.7557ZM30.1481 18.782L30.3277 18.6942L30.3277 18.6942L30.1481 18.782ZM29.0389 22.1957L28.9452 22.019L28.9452 22.019L29.0389 22.1957ZM26.8175 23.3743L26.7237 23.1977L26.7237 23.1977L26.8175 23.3743ZM26.3667 23.9949L26.1697 23.9603L26.1697 23.9603L26.3667 23.9949ZM25.9321 26.4718L25.7352 26.4372V26.4372L25.9321 26.4718ZM23.0284 28.5815L23.0564 28.3835H23.0564L23.0284 28.5815ZM20.5384 28.2293L20.5664 28.0313L20.5662 28.0312L20.5384 28.2293ZM19.809 28.4664L19.6699 28.3226L19.6699 28.3226L19.809 28.4664ZM18.0015 30.2148L17.8625 30.0711L17.8624 30.0711L18.0015 30.2148ZM16.2069 30.945L16.2069 30.745H16.2069L16.2069 30.945ZM14.4123 30.2148L14.2732 30.3586L14.2732 30.3586L14.4123 30.2148ZM12.6049 28.4664L12.744 28.3226L12.7439 28.3226L12.6049 28.4664ZM11.8754 28.2293L11.9035 28.4273L11.9036 28.4273L11.8754 28.2293ZM9.38549 28.5815L9.35748 28.3835H9.35748L9.38549 28.5815ZM9.0157 28.6077V28.4077H9.01568L9.0157 28.6077ZM6.48167 26.4718L6.28468 26.5064L6.28468 26.5064L6.48167 26.4718ZM6.04722 23.9948L6.24421 23.9603L6.24421 23.9602L6.04722 23.9948ZM5.59634 23.3743L5.5026 23.551L5.50263 23.551L5.59634 23.3743ZM3.37492 22.1957L3.46866 22.019L3.46865 22.019L3.37492 22.1957ZM2.26576 18.7821L2.08608 18.6942L2.08608 18.6943L2.26576 18.7821ZM3.37017 16.5228L3.19049 16.435L3.19049 16.435L3.37017 16.5228ZM3.37017 15.7558L3.54986 15.668L3.54986 15.6679L3.37017 15.7558ZM2.26582 13.4965L2.08614 13.5843L2.08614 13.5843L2.26582 13.4965ZM3.37497 10.0829L3.46871 10.2596L3.46871 10.2596L3.37497 10.0829ZM5.5964 8.90422L5.69014 9.08089L5.69017 9.08088L5.5964 8.90422ZM6.04722 8.28365L6.24421 8.31823L6.24421 8.31821L6.04722 8.28365ZM6.48167 5.80677L6.28468 5.77221L6.28468 5.77222L6.48167 5.80677ZM9.38543 3.69702L9.35741 3.89505L9.35742 3.89505L9.38543 3.69702ZM11.8754 4.04923L11.8474 4.24726L11.8475 4.24728L11.8754 4.04923ZM12.6049 3.81217L12.7439 3.95592L12.7439 3.95591L12.6049 3.81217ZM14.4123 2.06354L14.5514 2.20728L14.5514 2.20728L14.4123 2.06354ZM18.0016 2.06354L17.8625 2.20728L17.8625 2.20729L18.0016 2.06354ZM19.809 3.812L19.6699 3.95574V3.95574L19.809 3.812ZM20.5384 4.04906L20.5664 4.2471L20.5664 4.24709L20.5384 4.04906ZM23.0284 3.69685L23.0564 3.89488L23.0564 3.89488L23.0284 3.69685ZM25.9321 5.8066L26.1291 5.77205V5.77204L25.9321 5.8066ZM26.3666 8.2836L26.1696 8.31815L26.1696 8.31818L26.3666 8.2836ZM26.8175 8.9041L26.9112 8.72743L26.9112 8.72742L26.8175 8.9041ZM29.0389 10.0828L28.9452 10.2594L28.9452 10.2594L29.0389 10.0828ZM30.1481 13.4963L30.3277 13.5842L30.3277 13.5842L30.1481 13.4963ZM28.2384 20.6869L28.1447 20.5102L28.1447 20.5103L28.2384 20.6869ZM26.017 21.8656L25.9232 21.6889L25.9232 21.6889L26.017 21.8656ZM28.6136 19.5318L28.7933 19.444L28.7933 19.444L28.6136 19.5318ZM27.5092 17.2726L27.3296 17.3604L27.3296 17.3604L27.5092 17.2726ZM27.5092 15.0056L27.3296 14.9178L27.3296 14.9178L27.5092 15.0056ZM28.6136 12.7463L28.7933 12.8342L28.7933 12.8342L28.6136 12.7463ZM28.2384 11.5914L28.1446 11.7681L28.1446 11.7681L28.2384 11.5914ZM26.0169 10.4128L26.1107 10.2361L26.1107 10.2361L26.0169 10.4128ZM24.6844 8.57873L24.4874 8.61328L24.4874 8.61329L24.6844 8.57873ZM24.2499 6.10173L24.0529 6.13628V6.13628L24.2499 6.10173ZM23.2675 5.38793L23.2955 5.58596L23.2955 5.58596L23.2675 5.38793ZM20.7775 5.74014L20.7495 5.54212L20.7495 5.54212L20.7775 5.74014ZM18.6214 5.03959L18.4823 5.18334V5.18334L18.6214 5.03959ZM16.814 3.29114L16.9531 3.14739L16.953 3.14737L16.814 3.29114ZM15.5996 3.29114L15.7387 3.43489L15.7387 3.43488L15.5996 3.29114ZM13.7922 5.03959L13.9313 5.18335L13.9313 5.18334L13.7922 5.03959ZM11.6361 5.74014L11.6641 5.54212L11.6641 5.54212L11.6361 5.74014ZM9.14611 5.38793L9.17413 5.1899L9.17409 5.1899L9.14611 5.38793ZM8.16368 6.10173L7.96669 6.06715L7.96669 6.06717L8.16368 6.10173ZM7.72922 8.57867L7.53223 8.54412L7.53223 8.54412L7.72922 8.57867ZM6.39672 10.4128L6.49046 10.5894L6.49047 10.5894L6.39672 10.4128ZM4.17529 11.5914L4.26902 11.7681L4.26903 11.7681L4.17529 11.5914ZM3.8 12.7463L3.62032 12.8342L3.62032 12.8342L3.8 12.7463ZM4.90441 15.0057L5.0841 14.9178L5.08409 14.9178L4.90441 15.0057ZM4.90441 17.2727L5.08409 17.3605L5.0841 17.3605L4.90441 17.2727ZM3.8 19.532L3.62032 19.4441L3.62032 19.4441L3.8 19.532ZM4.17529 20.6869L4.26903 20.5102L4.26902 20.5102L4.17529 20.6869ZM6.39672 21.8655L6.30298 22.0422L6.30299 22.0422L6.39672 21.8655ZM7.72928 23.6996L7.92627 23.665L7.92627 23.665L7.72928 23.6996ZM8.16379 26.1766L7.9668 26.2111L7.9668 26.2112L8.16379 26.1766ZM9.14623 26.8904L9.17423 27.0884L9.17424 27.0884L9.14623 26.8904ZM11.6362 26.5382L11.6642 26.7362L11.6642 26.7362L11.6362 26.5382ZM13.7923 27.2387L13.9314 27.095L13.9314 27.095L13.7923 27.2387ZM15.5997 28.9872L15.4606 29.1309L15.4607 29.1309L15.5997 28.9872ZM16.8141 28.9872L16.675 28.8434L16.675 28.8434L16.8141 28.9872ZM18.6215 27.2388L18.4825 27.095L18.4825 27.095L18.6215 27.2388ZM20.7776 26.5382L20.7496 26.7362L20.7496 26.7362L20.7776 26.5382ZM23.2676 26.8904L23.2396 27.0885L23.2396 27.0885L23.2676 26.8904ZM24.25 26.1766L24.053 26.1421V26.1421L24.25 26.1766ZM24.6845 23.6997L24.8815 23.7343L24.8815 23.7342L24.6845 23.6997ZM22.4455 9.9L22.3041 10.0414L22.3041 10.0414L22.4455 9.9ZM21.2378 9.9L21.0964 9.75858V9.75858L21.2378 9.9ZM22.4454 11.1077L22.304 10.9663L22.304 10.9663L22.4454 11.1077ZM11.1741 22.379L11.0327 22.2376L11.0326 22.2377L11.1741 22.379ZM9.9665 22.379L9.82508 22.5205L9.9665 22.379ZM9.9665 21.1714L10.1079 21.3128L9.9665 21.1714ZM14.2141 11.585L14.4141 11.585V11.585H14.2141ZM29.2233 16.4349C29.1313 16.2465 29.1313 16.0318 29.2233 15.8435L28.864 15.6678C28.7177 15.967 28.7177 16.3114 28.864 16.6105L29.2233 16.4349ZM30.3277 18.6942L29.2233 16.4349L28.864 16.6105L29.9684 18.8699L30.3277 18.6942ZM29.1326 22.3723C30.4648 21.6656 30.99 20.0491 30.3277 18.6942L29.9684 18.8699C30.5359 20.0309 30.0867 21.4133 28.9452 22.019L29.1326 22.3723ZM26.9112 23.551L29.1326 22.3723L28.9452 22.019L26.7237 23.1977L26.9112 23.551ZM26.5636 24.0295C26.5999 23.823 26.7261 23.6492 26.9112 23.551L26.7237 23.1977C26.4296 23.3538 26.2272 23.6324 26.1697 23.9603L26.5636 24.0295ZM26.1291 26.5063L26.5636 24.0294L26.1697 23.9603L25.7352 26.4372L26.1291 26.5063ZM23.0004 28.7795C24.494 28.9908 25.8686 27.9917 26.1291 26.5063L25.7352 26.4372C25.5119 27.7101 24.3363 28.5646 23.0564 28.3835L23.0004 28.7795ZM20.5104 28.4273L23.0004 28.7795L23.0564 28.3835L20.5664 28.0313L20.5104 28.4273ZM19.948 28.6101C20.0986 28.4645 20.3028 28.3982 20.5106 28.4274L20.5662 28.0312C20.2368 27.985 19.9094 28.0911 19.6699 28.3226L19.948 28.6101ZM18.1406 30.3586L19.948 28.6101L19.6699 28.3226L17.8625 30.0711L18.1406 30.3586ZM16.2069 31.145C16.903 31.1449 17.5992 30.8824 18.1406 30.3586L17.8624 30.0711C17.3977 30.5208 16.802 30.7449 16.2069 30.745L16.2069 31.145ZM14.2732 30.3586C14.8148 30.8825 15.5106 31.1451 16.2069 31.145L16.2069 30.745C15.6116 30.745 15.0164 30.5209 14.5514 30.0711L14.2732 30.3586ZM12.4659 28.6101L14.2732 30.3586L14.5514 30.0711L12.744 28.3226L12.4659 28.6101ZM11.9036 28.4273C12.1108 28.3979 12.3151 28.4643 12.4659 28.6101L12.7439 28.3226C12.5047 28.0912 12.1771 27.9845 11.8473 28.0313L11.9036 28.4273ZM9.4135 28.7795L11.9035 28.4273L11.8474 28.0313L9.35748 28.3835L9.4135 28.7795ZM9.0157 28.8077C9.14691 28.8077 9.27992 28.7984 9.41351 28.7795L9.35748 28.3835C9.24249 28.3998 9.1282 28.4077 9.0157 28.4077V28.8077ZM6.28468 26.5064C6.52185 27.8584 7.68222 28.8078 9.01572 28.8077L9.01568 28.4077C7.87466 28.4078 6.88196 27.5962 6.67867 26.4373L6.28468 26.5064ZM5.85023 24.0294L6.28468 26.5064L6.67867 26.4373L6.24421 23.9603L5.85023 24.0294ZM5.50263 23.551C5.68776 23.6492 5.81399 23.823 5.85023 24.0294L6.24421 23.9602C6.18664 23.6324 5.98426 23.3537 5.69006 23.1976L5.50263 23.551ZM3.28117 22.3723L5.5026 23.551L5.69008 23.1977L3.46866 22.019L3.28117 22.3723ZM2.08608 18.6943C1.42381 20.0491 1.94903 21.6655 3.28118 22.3723L3.46865 22.019C2.3271 21.4133 1.87792 20.031 2.44545 18.8699L2.08608 18.6943ZM3.19049 16.435L2.08608 18.6942L2.44544 18.8699L3.54985 16.6107L3.19049 16.435ZM3.19048 15.8436C3.28254 16.032 3.28254 16.2467 3.19049 16.435L3.54985 16.6107C3.69609 16.3115 3.69608 15.9671 3.54986 15.668L3.19048 15.8436ZM2.08614 13.5843L3.19049 15.8436L3.54986 15.6679L2.4455 13.4087L2.08614 13.5843ZM3.28124 9.90621C1.94908 10.613 1.42387 12.2295 2.08614 13.5843L2.4455 13.4087C1.87798 12.2476 2.32716 10.8652 3.46871 10.2596L3.28124 9.90621ZM5.50266 8.72755L3.28123 9.90622L3.46871 10.2596L5.69014 9.08089L5.50266 8.72755ZM5.85023 8.24907C5.81399 8.45554 5.68776 8.6293 5.50263 8.72756L5.69017 9.08088C5.98426 8.92478 6.18664 8.64616 6.24421 8.31823L5.85023 8.24907ZM6.28468 5.77222L5.85023 8.2491L6.24421 8.31821L6.67867 5.84132L6.28468 5.77222ZM9.41346 3.49899C7.92002 3.28764 6.54524 4.28687 6.28468 5.77221L6.67867 5.84133C6.90196 4.56843 8.07768 3.71394 9.35741 3.89505L9.41346 3.49899ZM11.9034 3.85121L9.41345 3.49899L9.35742 3.89505L11.8474 4.24726L11.9034 3.85121ZM12.4658 3.66842C12.3152 3.81414 12.111 3.88043 11.9033 3.85119L11.8475 4.24728C12.1771 4.29368 12.5045 4.18751 12.7439 3.95592L12.4658 3.66842ZM14.2732 1.9198L12.4658 3.66843L12.7439 3.95591L14.5514 2.20728L14.2732 1.9198ZM18.1406 1.9198C17.0567 0.871208 15.3571 0.871133 14.2732 1.91981L14.5514 2.20728C15.4801 1.30866 16.9337 1.3087 17.8625 2.20728L18.1406 1.9198ZM19.948 3.66825L18.1406 1.9198L17.8625 2.20729L19.6699 3.95574L19.948 3.66825ZM20.5105 3.85102C20.3028 3.88035 20.0986 3.81396 19.948 3.66825L19.6699 3.95574C19.9092 4.18723 20.2366 4.29366 20.5664 4.2471L20.5105 3.85102ZM23.0004 3.49882L20.5104 3.85103L20.5664 4.24709L23.0564 3.89488L23.0004 3.49882ZM26.1291 5.77204C25.8686 4.28666 24.4933 3.28759 23.0004 3.49882L23.0564 3.89488C24.3357 3.71387 25.5119 4.56828 25.7352 5.84115L26.1291 5.77204ZM26.5636 8.24904L26.1291 5.77205L25.7352 5.84115L26.1696 8.31815L26.5636 8.24904ZM26.9112 8.72742C26.7261 8.62922 26.5998 8.45544 26.5636 8.24901L26.1696 8.31818C26.2272 8.64603 26.4296 8.92474 26.7238 9.08079L26.9112 8.72742ZM29.1326 9.9061L26.9112 8.72743L26.7237 9.08077L28.9452 10.2594L29.1326 9.9061ZM30.3277 13.5842C30.99 12.2293 30.4648 10.6129 29.1326 9.9061L28.9452 10.2594C30.0867 10.8651 30.5359 12.2475 29.9684 13.4085L30.3277 13.5842ZM29.2233 15.8435L30.3277 13.5842L29.9684 13.4085L28.864 15.6678L29.2233 15.8435ZM28.1447 20.5103L25.9232 21.6889L26.1107 22.0423L28.3322 20.8636L28.1447 20.5103ZM28.434 19.6197C28.5947 19.9485 28.4679 20.3388 28.1447 20.5102L28.3321 20.8636C28.846 20.591 29.0488 19.9666 28.7933 19.444L28.434 19.6197ZM27.3296 17.3604L28.434 19.6197L28.7933 19.444L27.6889 17.1848L27.3296 17.3604ZM27.3296 14.9178C26.9504 15.6935 26.9504 16.5847 27.3296 17.3604L27.6889 17.1848C27.3639 16.5199 27.3639 15.7583 27.6889 15.0934L27.3296 14.9178ZM28.434 12.6585L27.3296 14.9178L27.6889 15.0934L28.7933 12.8342L28.434 12.6585ZM28.1446 11.7681C28.4678 11.9396 28.5946 12.3298 28.434 12.6585L28.7933 12.8342C29.0487 12.3117 28.8459 11.6874 28.3321 11.4148L28.1446 11.7681ZM25.9232 10.5894L28.1446 11.7681L28.3321 11.4148L26.1107 10.2361L25.9232 10.5894ZM24.4874 8.61329C24.6366 9.46383 25.1604 10.1848 25.9232 10.5895L26.1107 10.2361C25.4569 9.88926 25.0093 9.2732 24.8814 8.54416L24.4874 8.61329ZM24.0529 6.13628L24.4874 8.61328L24.8814 8.54417L24.4469 6.06718L24.0529 6.13628ZM23.2955 5.58596C23.6576 5.53473 23.9897 5.77595 24.0529 6.13628L24.4469 6.06718C24.3464 5.49428 23.8151 5.10846 23.2395 5.1899L23.2955 5.58596ZM20.8055 5.93817L23.2955 5.58596L23.2395 5.1899L20.7495 5.54212L20.8055 5.93817ZM18.4823 5.18334C19.103 5.78375 19.9506 6.05919 20.8055 5.93817L20.7495 5.54212C20.0167 5.64584 19.2924 5.41049 18.7604 4.89585L18.4823 5.18334ZM16.6749 3.43488L18.4823 5.18334L18.7604 4.89585L16.9531 3.14739L16.6749 3.43488ZM15.7387 3.43488C16.0016 3.18059 16.412 3.18056 16.675 3.43491L16.953 3.14737C16.535 2.7431 15.8786 2.74306 15.4606 3.14739L15.7387 3.43488ZM13.9313 5.18334L15.7387 3.43489L15.4606 3.14739L13.6531 4.89585L13.9313 5.18334ZM11.608 5.93817C12.4629 6.0592 13.3106 5.78369 13.9313 5.18335L13.6531 4.89584C13.1211 5.41044 12.3968 5.64584 11.6641 5.54212L11.608 5.93817ZM9.1181 5.58596L11.6081 5.93817L11.6641 5.54212L9.17413 5.1899L9.1181 5.58596ZM8.36067 6.1363C8.42392 5.77592 8.75572 5.53477 9.11814 5.58597L9.17409 5.1899C8.59808 5.10853 8.06723 5.49431 7.96669 6.06715L8.36067 6.1363ZM7.92622 8.61322L8.36067 6.13628L7.96669 6.06717L7.53223 8.54412L7.92622 8.61322ZM6.49047 10.5894C7.25318 10.1847 7.77704 9.46379 7.92622 8.61322L7.53223 8.54412C7.40438 9.27313 6.95674 9.88915 6.30296 10.2361L6.49047 10.5894ZM4.26903 11.7681L6.49046 10.5894L6.30298 10.2361L4.08155 11.4148L4.26903 11.7681ZM3.97968 12.6585C3.81902 12.3298 3.94583 11.9396 4.26902 11.7681L4.08155 11.4148C3.56777 11.6874 3.36491 12.3117 3.62032 12.8342L3.97968 12.6585ZM5.08409 14.9178L3.97968 12.6585L3.62032 12.8342L4.72473 15.0935L5.08409 14.9178ZM5.0841 17.3605C5.46328 16.5847 5.46328 15.6936 5.0841 14.9178L4.72472 15.0935C5.04974 15.7584 5.04974 16.5199 4.72472 17.1848L5.0841 17.3605ZM3.97968 19.6198L5.08409 17.3605L4.72473 17.1848L3.62032 19.4441L3.97968 19.6198ZM4.26902 20.5102C3.94583 20.3387 3.81902 19.9485 3.97968 19.6198L3.62032 19.4441C3.36491 19.9667 3.56777 20.591 4.08155 20.8635L4.26902 20.5102ZM6.49046 21.6889L4.26903 20.5102L4.08155 20.8635L6.30298 22.0422L6.49046 21.6889ZM7.92627 23.665C7.77704 22.8145 7.25325 22.0935 6.49044 21.6889L6.30299 22.0422C6.95678 22.389 7.40438 23.0051 7.53229 23.7341L7.92627 23.665ZM8.36079 26.142L7.92627 23.665L7.53229 23.7341L7.9668 26.2111L8.36079 26.142ZM9.11823 26.6923C8.7562 26.7435 8.42403 26.5023 8.36078 26.142L7.9668 26.2112C8.06735 26.784 8.59865 27.1698 9.17423 27.0884L9.11823 26.6923ZM11.6082 26.3401L9.11822 26.6923L9.17424 27.0884L11.6642 26.7362L11.6082 26.3401ZM12.0037 26.3122C11.8725 26.3122 11.7404 26.3214 11.6081 26.3401L11.6642 26.7362C11.7779 26.7201 11.8913 26.7122 12.0037 26.7122V26.3122ZM13.9314 27.095C13.407 26.5878 12.7204 26.3122 12.0037 26.3122V26.7122C12.6165 26.7122 13.2034 26.9473 13.6533 27.3825L13.9314 27.095ZM15.7388 28.8434L13.9314 27.095L13.6533 27.3825L15.4606 29.1309L15.7388 28.8434ZM16.675 28.8434C16.4121 29.0977 16.0018 29.0978 15.7387 28.8434L15.4607 29.1309C15.8787 29.5352 16.5352 29.5352 16.9531 29.1309L16.675 28.8434ZM18.4825 27.095L16.675 28.8434L16.9531 29.1309L18.7606 27.3825L18.4825 27.095ZM20.8057 26.3402C19.9505 26.219 19.1031 26.4947 18.4825 27.095L18.7606 27.3825C19.2926 26.8679 20.0167 26.6324 20.7496 26.7362L20.8057 26.3402ZM23.2956 26.6924L20.8056 26.3402L20.7496 26.7362L23.2396 27.0885L23.2956 26.6924ZM24.053 26.1421C23.9898 26.5024 23.658 26.7436 23.2955 26.6924L23.2396 27.0885C23.8156 27.1698 24.3465 26.7841 24.447 26.2112L24.053 26.1421ZM24.4875 23.6651L24.053 26.1421L24.447 26.2112L24.8815 23.7343L24.4875 23.6651ZM25.9232 21.6889C25.1605 22.0937 24.6367 22.8146 24.4875 23.6651L24.8815 23.7342C25.0093 23.0052 25.457 22.3892 26.1107 22.0423L25.9232 21.6889ZM22.5869 9.75859C22.1754 9.34699 21.508 9.34701 21.0964 9.75858L21.3793 10.0414C21.6346 9.78605 22.0487 9.78607 22.3041 10.0414L22.5869 9.75859ZM22.5868 11.2491C22.9985 10.8375 22.9985 10.1702 22.5869 9.75858L22.3041 10.0414C22.5595 10.2969 22.5595 10.7108 22.304 10.9663L22.5868 11.2491ZM11.3155 22.5205L22.5868 11.2491L22.304 10.9663L11.0327 22.2376L11.3155 22.5205ZM10.5703 22.8292C10.8396 22.8292 11.1098 22.7263 11.3156 22.5204L11.0326 22.2377C10.905 22.3654 10.738 22.4292 10.5703 22.4292V22.8292ZM9.82508 22.5205C10.0308 22.7262 10.3009 22.8292 10.5703 22.8292V22.4292C10.4027 22.4292 10.2357 22.3653 10.1079 22.2376L9.82508 22.5205ZM9.82507 21.03C9.4135 21.4415 9.4135 22.1089 9.82508 22.5205L10.1079 22.2376C9.85255 21.9822 9.85255 21.5682 10.1079 21.3128L9.82507 21.03ZM21.0964 9.75858L9.82507 21.03L10.1079 21.3128L21.3793 10.0414L21.0964 9.75858ZM9.85975 11.585C9.85975 9.96902 11.1748 8.65393 12.7909 8.65393V8.25393C10.9539 8.25393 9.45975 9.74811 9.45975 11.585H9.85975ZM12.7909 14.5161C11.1748 14.5161 9.85975 13.2011 9.85975 11.585H9.45975C9.45975 13.422 10.9539 14.9161 12.7909 14.9161V14.5161ZM15.722 11.585C15.722 13.2011 14.4069 14.5161 12.7909 14.5161V14.9161C14.6278 14.9161 16.122 13.422 16.122 11.585H15.722ZM12.7909 8.65393C14.4069 8.65393 15.722 9.96902 15.722 11.585H16.122C16.122 9.74811 14.6278 8.25393 12.7909 8.25393V8.65393ZM11.1677 11.585C11.1677 12.4803 11.8956 13.2082 12.7909 13.2082V12.8082C12.1166 12.8082 11.5677 12.2593 11.5677 11.585H11.1677ZM12.7909 9.96179C11.8956 9.96179 11.1677 10.6898 11.1677 11.585H11.5677C11.5677 10.9107 12.1166 10.3618 12.7909 10.3618V9.96179ZM14.4141 11.585C14.4141 10.6898 13.6861 9.96179 12.7909 9.96179V10.3618C13.4652 10.3618 14.0141 10.9107 14.0141 11.585H14.4141ZM12.7909 13.2082C13.6861 13.2082 14.414 12.4803 14.4141 11.585L14.0141 11.585C14.0141 12.2593 13.4651 12.8082 12.7909 12.8082V13.2082ZM19.6226 17.3625C17.7856 17.3625 16.2915 18.8567 16.2915 20.6936H16.6915C16.6915 19.0776 18.0065 17.7625 19.6226 17.7625V17.3625ZM22.9537 20.6936C22.9537 18.8567 21.4595 17.3625 19.6226 17.3625V17.7625C21.2386 17.7625 22.5537 19.0776 22.5537 20.6936H22.9537ZM19.6226 24.0247C21.4595 24.0247 22.9537 22.5305 22.9537 20.6936H22.5537C22.5537 22.3096 21.2386 23.6247 19.6226 23.6247V24.0247ZM16.2915 20.6936C16.2915 22.5305 17.7856 24.0247 19.6226 24.0247V23.6247C18.0065 23.6247 16.6915 22.3096 16.6915 20.6936H16.2915ZM19.6226 21.9168C18.9483 21.9168 18.3993 21.3679 18.3993 20.6936H17.9993C17.9993 21.5888 18.7274 22.3168 19.6226 22.3168V21.9168ZM20.8458 20.6936C20.8458 21.3679 20.2969 21.9168 19.6226 21.9168V22.3168C20.5178 22.3168 21.2458 21.5888 21.2458 20.6936H20.8458ZM19.6226 19.4704C20.2969 19.4704 20.8458 20.0193 20.8458 20.6936H21.2458C21.2458 19.7984 20.5178 19.0704 19.6226 19.0704V19.4704ZM18.3993 20.6936C18.3993 20.0193 18.9482 19.4704 19.6226 19.4704V19.0704C18.7273 19.0704 17.9993 19.7984 17.9993 20.6936H18.3993Z" fill="#5EC401" mask="url(#path-1-outside-1)" />
-                        </svg>
-                        {/* <i class="fa fa-percent"></i> */}
-                        Offers</a>
+                <div className="col-md-8 col-sm-8 col-8">
+                  <div className="bottom-right">
+                    <div className="offer">
+                      <Link to='/offers' className="header-bottom-btn">
+                       <img className="mr-2" src={offerIcon} />
+                        {/* <i className="fa fa-percent"></i> */}
+                        Offers</Link>
                     </div>
-                    <div class="contact-btn">
-                      <a href="#" class="header-bottom-btn">
-                        <svg width={25} height={24} viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path fillRule="evenodd" clipRule="evenodd" d="M22.1049 16.3333L18.7182 15.9467C17.9049 15.8533 17.1049 16.1333 16.5316 16.7067L14.0782 19.16C10.3049 17.24 7.21157 14.16 5.29156 10.3733L7.75823 7.90667C8.33156 7.33333 8.61156 6.53333 8.51823 5.72L8.13156 2.36C7.97156 1.01333 6.83823 0 5.47823 0H3.17156C1.6649 0 0.411565 1.25333 0.504898 2.76C1.21156 14.1467 10.3182 23.24 21.6916 23.9467C23.1982 24.04 24.4516 22.7867 24.4516 21.28V18.9733C24.4649 17.6267 23.4516 16.4933 22.1049 16.3333ZM5.22 2.66667C5.3 3.85333 5.5 5.01333 5.82 6.12L4.22 7.72C3.67333 6.12 3.32667 4.42667 3.20667 2.66667H5.22ZM21.8333 19.2933C20.66 19.2133 19.5 19.0133 18.3667 18.6933L16.7667 20.28C18.38 20.8133 20.0733 21.16 21.8333 21.28V19.2933Z" fill="#5EC401" />
-                        </svg>
-                        {/* <i class="fa fa-phone" aria-hidden="true"></i> */}
+                    <div className="contact-btn">
+                      <a href="#" className="header-bottom-btn">
+                      <img className="mr-2" src={callIcon} />
+                        {/* <i className="fa fa-phone" aria-hidden="true"></i> */}
                         0198382-2928</a>
                     </div>
-                    <div class="delivery">
-                      <h6>Delivery to</h6>
+
+                    <Dropdown as={ButtonGroup}  title="Dropdown "  
+ 
+ >
+                    <Dropdown.Toggle  id="dropdown-custom-1" className="address-button"  >  <div className="delivery">  <h6>Delivery to</h6>
+                     <p id="contentcshow" style={{cursor: 'pointer'}}>Dingi Technologies Ltd, Badda Link. . .
+                       
+                      
+                     </p>
+                     </div>
+                     <img className="mt-4 ml-2" src={deliveryIcon} />
+                     
+                    </Dropdown.Toggle>
+                    <Address />
+                  </Dropdown>
+                    {/* <div className="delivery">
+                      <img src={placeIcon} />
+                      <div className="ml-3">
+
+                      
+                      <a onClick={addresshandle}><h6>Delivery to</h6>
                       <p id="contentcshow" style={{cursor: 'pointer'}}>Dingi Technologies Ltd, Badda Link. . .
-                        <svg width={24} height={25} viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M15.8751 9.24999L11.9951 13.13L8.1151 9.24999C7.92827 9.06274 7.67462 8.9575 7.4101 8.9575C7.14558 8.9575 6.89193 9.06274 6.7051 9.24999C6.3151 9.63999 6.3151 10.27 6.7051 10.66L11.2951 15.25C11.6851 15.64 12.3151 15.64 12.7051 15.25L17.2951 10.66C17.6851 10.27 17.6851 9.63999 17.2951 9.24999C16.9051 8.86999 16.2651 8.85999 15.8751 9.24999Z" fill="#5EC401" />
-                          <mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x={6} y={8} width={12} height={8}>
-                            <path d="M15.8751 9.24999L11.9951 13.13L8.1151 9.24999C7.92827 9.06274 7.67462 8.9575 7.4101 8.9575C7.14558 8.9575 6.89193 9.06274 6.7051 9.24999C6.3151 9.63999 6.3151 10.27 6.7051 10.66L11.2951 15.25C11.6851 15.64 12.3151 15.64 12.7051 15.25L17.2951 10.66C17.6851 10.27 17.6851 9.63999 17.2951 9.24999C16.9051 8.86999 16.2651 8.85999 15.8751 9.24999Z" fill="white" />
-                          </mask>
-                          <g mask="url(#mask0)">
-                          </g>
-                        </svg>
-                        {/* <i class="fa fa-arrow-down" aria-hidden="true"></i> */}
+                     
+                        
                       </p>
-                      <div class="contents wow fadeInRight" id="hidecontent">
-                        <div class="close-btn ">
-                          <button class="btn btn-danger" id="contentclose">x Close</button>
-                        </div>
-                        <div class="row " id="remove-div">
-                          <div class="col-md-12">
-                            <div class="title-radio">
-                              <h5>Selected Delivery Address</h5>
-                            </div>
-                          </div>
-                          {/*  Current Location start      */}
-                          <div class="col-md-12">
-                            <div class="title_input">
-                              <input type="radio" id="mapsec" /><span>Current Location</span>
-                              <div class="ami" id="ami">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14594.229522317766!2d90.40309515!3d23.869846199999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sbd!4v1605526118900!5m2!1sen!2sbd" style={{border: 0}} allowFullScreen aria-hidden="false" tabIndex={0} width={300} height={150} frameBorder={0} />
-                                <div class="title-work">
-                                  <button class="btn btn-success btn-block"><i class="fa fa-plus" aria-hidden="true" />Add New Location</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          {/*  Current Location End      */}
-                          {/*  Home Section start      */}
-                          <div class="col-md-12">
-                            <div class="title-home hover-location">
-                              <i class="fa fa-home" aria-hidden="true" /><span>Home</span><i class="fa fa-ellipsis-v" aria-hidden="true" id="home_click" style={{cursor: 'pointer'}} />
-                              <a href>
-                                <p>Lorem ipsum dolor sit amet, consectetur.</p>
-                                <p style={{color: 'rgba(243, 122, 32, 1)'}}>Current Delivery as selected address</p>
-                              </a>
-                            </div>
-                            <div class="home" id="home">
-                              <div class="edit">
-                                <i class="fa fa-arrow-left" aria-hidden="true" /> <span style={{padding: '8px 0'}}>Edit address</span>
-                              </div>
-                              <div class="adress_home">
-                                <h6>Address name</h6>
-                                <p>work</p>
-                              </div>
-                              <div class="adress_home">
-                                <i class="fa fa-map-pin" style={{marginLeft: '10px'}} aria-hidden="true" /><span style={{padding: '0 8px', color: '#5EC401'}}>Address</span>
-                                <p>House #3(3rd floor) road 12</p>
-                              </div>
-                              <div class="text_box">
-                                <form action>
-                                  <textarea name class="form-control" id cols={10} rows={5} placeholder="You can write the correct address here" defaultValue={""} />
-                                  <button class="btn btn-success btn-block" style={{margin: '20px 0'}}>save address</button>
-                                </form>
-                              </div>
-                            </div>
-                          </div>
-                          {/*  Home Section End      */}
-                          {/*  Work Section Start      */}
-                          <div class="col-md-12 hover-location">
-                            <div class="title-home">
-                              <i class="fa fa-briefcase" aria-hidden="true" /><span>work</span>
-                              <a href>
-                                <p>Lorem ipsum dolor sit amet, consectetur.</p>
-                                <p style={{color: 'rgba(243, 122, 32, 1)'}}>Current Delivery as selected address</p>
-                              </a>
-                            </div>
-                          </div>
-                          {/*  Work Section End      */}
-                          {/*  Location Section Start      */}
-                          <div class="col-md-12">
-                            <div class="title-home">
-                              <i class="fa fa-map-marker" aria-hidden="true" /><span>Location</span><i class="fa fa-ellipsis-v" aria-hidden="true" id="close_location" style={{cursor: 'pointer'}} />
-                              <a href>
-                                <p>Lorem ipsum dolor sit amet, consectetur.</p>
-                                <p style={{color: 'rgba(243, 122, 32, 1)'}}>Current Delivery as selected address</p>
-                              </a>
-                            </div>
-                            <div class="location" id="location">
-                              <div class="location-img">
-                                <img src="assets/dist/img/512.webp" alt="" />
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum, quaerat.</p>
-                                <button class="btn btn-info btn-block" style={{margin: '20px 0'}}>save address</button>
-                              </div>   
-                            </div>
-                          </div>
-                          {/*  Location Section End      */}
-                          <div class="col-md-12">
-                            <div class="title-work">
-                              <button class="btn btn-success btn-block"><i class="fa fa-plus" aria-hidden="true" />Add New Address</button>
-                            </div>
-                          </div>
-                        </div>
+                      </a>
                       </div>
-                    </div>
+                      <img className="mt-4 ml-2" src={deliveryIcon} />
+                      
+                     
+                        
+                      <Address  clicked={addressClicked}/>
+                    </div> */}
                   </div>
                 </div>
               </div>
             </div>
           </header>  
-        </div>
+        
+        
+          <CartBag clicked={cartClickHandler} />
+        <MyBag cartShow={cartShow} closed={cartClosed} />
+        </>
     );
 }
 

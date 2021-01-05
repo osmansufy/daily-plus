@@ -1,32 +1,59 @@
-import React from 'react';
-
+import React ,{useState} from 'react';
+import {Carousel, Container} from 'react-bootstrap'
+import bannerImg from '../assets/img/banner.webp'
 function Banner(props) {
+
+  const [index, setIndex] = useState(0);
+
+  const handleSelect = (selectedIndex, e) => {
+    setIndex(selectedIndex);
+  };
     return (
-        <section>
-        <div class="container">
-          <div class="row">
-            <div class="col-md-12 col-sm-12 col-12">
-              <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                  <li data-target="#carouselExampleIndicators" data-slide-to={0} class="active" />
-                  <li data-target="#carouselExampleIndicators" data-slide-to={1} />
-                  <li data-target="#carouselExampleIndicators" data-slide-to={2} />
-                </ol>
-                <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <img src="assets/dist/img/banner.webp" class="d-block w-100" alt="..." />
-                  </div>
-                  <div class="carousel-item">
-                    <img src="assets/dist/img/banner.webp" class="d-block w-100" alt="..." />
-                  </div>
-                  <div class="carousel-item">
-                    <img src="assets/dist/img/banner.webp" class="d-block w-100" alt="..." />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <section className="banner_sec">
+     
+
+<Container>
+  <Carousel activeIndex={index} onSelect={handleSelect} nextIcon="" prevIcon="">
+    <Carousel.Item>
+      {/* <img
+        className="d-block w-100"
+        src="holder.js/800x400?text=First slide&bg=373940"
+        alt="First slide"
+      /> */}
+      <img src={bannerImg} class="d-block w-100" alt="..." />
+      <Carousel.Caption>
+        {/* <h3>First slide label</h3>
+        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p> */}
+      </Carousel.Caption>
+    </Carousel.Item>
+    <Carousel.Item>
+      {/* <img
+        className="d-block w-100"
+        src="holder.js/800x400?text=Second slide&bg=282c34"
+        alt="Second slide"
+      /> */}
+<img src={bannerImg} class="d-block w-100" alt="..." />
+      <Carousel.Caption>
+        {/* <h3>Second slide label</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> */}
+      </Carousel.Caption>
+    </Carousel.Item>
+    <Carousel.Item>
+      {/* <img
+        className="d-block w-100"
+        src="holder.js/800x400?text=Third slide&bg=20232a"
+        alt="Third slide"
+      /> */}
+<img src={bannerImg} class="d-block w-100" alt="..." />
+      <Carousel.Caption>
+        {/* <h3>Third slide label</h3>
+        <p>
+          Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+        </p> */}
+      </Carousel.Caption>
+    </Carousel.Item>
+  </Carousel>
+  </Container>
       </section>
     );
 }

@@ -1,0 +1,167 @@
+.location-action-modal {
+    max-width: 900px;
+  }
+  
+  .location-action-modal .location-map-view {
+    height: 400px;
+  }
+  
+  .location-action-modal #login-with-phone .row {
+    border: 0;
+  }
+  
+  .location-action-modal #login-with-phone .form-group {
+    margin-bottom: 13px;
+  }
+  
+  .location-action-modal .dingigl-map {
+    border-radius: 6px;
+  }
+  
+  .marker {
+    background-image: url("../map_pinned.png");
+    background-repeat: no-repeat;
+    background-size: 23px;
+    width: 50px;
+    height: 80px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-position: 12px 8px;
+  }
+  
+  .region-search {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    z-index: 999;
+    width: 260px;
+  }
+
+  /*
+Map type selection
+*/
+
+.map-type {
+  position: absolute;
+  z-index: 1;
+  bottom: 115px;
+  text-align: right;
+  right: 357px;
+  margin: 0px;
+}
+.map-type li {
+  padding: 6px 0px;
+}
+
+.map-type li button {
+  background: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 23px;
+}
+
+.map-view.agent-collapsed .map-type {
+  right: 7px;
+}
+
+.map-type li button.task-map-active {
+  background: #25c27a;
+  color: #fff;
+}
+
+.map-type li button.agent-map-active {
+  background: rgba(233, 30, 99, 1);
+  color: #fff;
+}
+
+/*
+Task Action Style
+*/
+
+.task-actions {
+  margin: 5px 0px 0px 0px;
+  width: 100%;
+  overflow: hidden;
+}
+.task-actions button,
+.task-actions a {
+  font-size: 14px;
+  color: #25c27a;
+  padding: 0px;
+  float: left;
+}
+.task-actions button i,
+.task-actions a i {
+  font-size: 20px;
+}
+.task-actions button span,
+.task-actions a span {
+  display: inline;
+  position: relative;
+  top: 3px;
+}
+
+.task-actions button.map-fly {
+  margin-right: 10px;
+}
+  
+.region-search-form {
+  display: flex;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  background: #fff;
+  width: 70%;
+  margin: 0 auto;
+}
+  .region-search-form input {
+    border: 0;
+    height: 100%;
+    outline: none !important;
+    flex-grow: 1;
+    height: 48px;
+  }
+  
+  .region-search-form button {
+    min-width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #25c27a;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: #fff;
+  }
+  
+  ul.map-locations-list {
+    background: #fff;
+    z-index: 99;
+    padding: 5px 5px;
+    max-height: 110px;
+    max-width: 200px;
+    overflow-y: scroll;
+    font-size: 12px;
+    margin: 0 auto;
+    width: 70%;
+    /* left: 0; */
+    /* right: 0; */
+    /* position: absolute; */
+}
+
+
+.custom_page.map-location .modal-footer .btn-custom.btn-lg.btn-block {
+  /* padding: 0 !important; */
+  margin: 10px 0 !important;
+}
+
+.custom_page.map-location .modal-footer {
+  width: 70%;
+  margin: 0 auto;
+  padding: 0 !important;
+}
+
+a.mapboxgl-ctrl-logo {
+  display: none !important;
+}

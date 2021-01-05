@@ -1,4 +1,9 @@
 import React from 'react';
+import logo from '../assets/img/logo.png'
+import play from '../assets/img/play.png'
+import app from '../assets/img/app.png'
+import bkash from '../assets/img/bkash.svg'
+import visa from '../assets/img/visa-logo.svg'
 
 function Footer(props) {
     return (
@@ -7,7 +12,7 @@ function Footer(props) {
           <div class="row">
             <div class="col-md-5 col-sm-5 col-12">
               <div class="logo">
-                <img src="assets/dist/img/logo.png" alt="" class="img-fluid" />
+                <img src={logo} alt="" class="img-fluid" />
               </div>
               <div class="social mt-4">
                 <div class="box">
@@ -41,8 +46,8 @@ function Footer(props) {
             <div class="col-md-2 col-sm-2 col-12">
               <h3>App Download</h3>
               <ul class="mt-3 p-0">
-                <li><a href="#"><img class="img-fluid" src="assets/dist/img/play.png" alt="" /></a></li>
-                <li><a href="#"><img class="img-fluid" src="assets/dist/img/app.png" alt="" /></a></li>
+                <li><a href="#"><img class="img-fluid" src={play } alt="" /></a></li>
+                <li><a href="#"><img class="img-fluid" src={app} alt="" /></a></li>
               </ul>
             </div>
           </div>
@@ -55,8 +60,8 @@ function Footer(props) {
                 <ul>
                   <li style={{background: 'transparent'}}><span>Payment Methods</span></li>
                   <li><a href><img src="assets/dist/img/Cash%20on%20delivery.png" alt="" /></a></li>
-                  <li><a href><img src="assets/dist/img/BKash-bKash-Logo%202.svg" alt="" /></a></li>
-                  <li><a href><img src="assets/dist/img/visa-logo-CF29426B98-seeklogo.svg" alt="" /></a></li>
+                  <li><a href><img src={bkash} alt="" /></a></li>
+                  <li><a href><img src={visa} alt="" /></a></li>
                   <li><a href><img src="assets/dist/img/mastercard-logo-38C4789CCA-seeklogo.svg" alt="" /></a></li>    
                 </ul>
               </div>

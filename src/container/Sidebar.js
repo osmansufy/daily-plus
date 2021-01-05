@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useEffect ,useState} from 'react';
+import axios from 'axios'
+import classes from './Sidebar.Module.css'
+import { Link,withRouter} from 'react-router-dom';
+const Sidebar=props=>{
+ const [categories,setCategories]=useState([])
+ console.log(categories)
+  useEffect(()=>{
 
-function Sidebar(props) {
+    axios.get('https://api.dailyplus.store/v0/catalogue/category/').then(response=>{
+           
+      setCategories(response.data)
+      
+      
+  }).
+  catch(error=>{
+    console.log(error)
+  })
+  },[])
+
+  let attachClasses=[classes.mainsidebar,classes.close]
+  if(props.show){
+    attachClasses=[classes.mainsidebar,classes.show]
+  }
+  let overlayClasses=[classes.header_overlay,classes.close]
+  if(props.show){
+    overlayClasses=[classes.header_overlay,classes.active]
+  }
     return (
         <div>
-            <aside class="main-sidebar sidebar-dark-primary elevation-4" style={{background: '#FFFF'}}>
+            <aside class={attachClasses.join(' ')} style={{background: '#FFFF', width:'35%' }}>
           {/* Brand Logo */}
           {/* Sidebar */}
           <div class="sidebar">
@@ -20,222 +45,29 @@ function Sidebar(props) {
               <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 {/* Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library */}
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <img src="assets/dist/img/list1.svg" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
+               {categories.map(cat=>( <li class="nav-item has-treeview">
+              
+                  <Link onClick={props.closed} to={"/category/"+cat.id+"/"+cat.name} className="nav-link" >
+                    <img src={cat.image} alt="User Avatar" class="img-size-50 mr-3 img-circle" />
                     <p>
-                      Fish and Meat
+                      {cat.name}
                       <i class="fas fa-angle-left right" />
                     </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="fish.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Fish</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="meat.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Meat</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <img src="assets/dist/img/list2.svg" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
-                    <p>
-                      Daily
-                      <i class="fas fa-angle-left right" />
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="milk.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Milk</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="rice.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Rice</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <img src="assets/dist/img/list3.svg" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
-                    <p>
-                      Fruits and Vegetables
-                      <i class="fas fa-angle-left right" />
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="mango.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Mango</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="cucomba.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Cucomba</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <img src="assets/dist/img/list1.svg" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
-                    <p>
-                      Fish and Meat
-                      <i class="fas fa-angle-left right" />
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="fish.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Fish</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="meat.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Meat</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <img src="assets/dist/img/list2.svg" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
-                    <p>
-                      Daily
-                      <i class="fas fa-angle-left right" />
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="milk.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Milk</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="rice.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Rice</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <img src="assets/dist/img/list3.svg" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
-                    <p>
-                      Fruits and Vegetables
-                      <i class="fas fa-angle-left right" />
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="mango.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Mango</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="cucomba.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Cucomba</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <img src="assets/dist/img/list1.svg" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
-                    <p>
-                      Fish and Meat
-                      <i class="fas fa-angle-left right" />
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="fish.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Fish</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="meat.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Meat</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <img src="assets/dist/img/list2.svg" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
-                    <p>
-                      Daily
-                      <i class="fas fa-angle-left right" />
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="milk.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Milk</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="rice.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Rice</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="nav-item has-treeview">
-                  <a href="#" class="nav-link">
-                    <img src="assets/dist/img/list3.svg" alt="User Avatar" class="img-size-50 mr-3 img-circle" />
-                    <p>
-                      Fruits and Vegetables
-                      <i class="fas fa-angle-left right" />
-                    </p>
-                  </a>
-                  <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                      <a href="mango.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Mango</p>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="cucomba.html" class="nav-link">
-                        <i class="far fa-circle nav-icon" />
-                        <p>Cucomba</p>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
+                  </Link>
+                 
+                </li>))}
+               
+         
               </ul>
             </nav>
             {/* /.sidebar-menu */}
           </div>
           {/* /.sidebar */}
         </aside>
-        <div class="header_overlay" />
+        <div class={overlayClasses.join(' ')} onClick={props.closed}>
+        </div>
         </div>
     );
 }
 
-export default Sidebar;
+export default withRouter(Sidebar);

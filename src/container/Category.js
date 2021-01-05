@@ -17,17 +17,17 @@ class Category extends Component {
 
     
     render() {
-        const cats =this.state.categories.map(category=>{
-return <SingleCategory title={category.name} src={category.image} />
+        const cats =this.state.categories.map((item,index)=>{
+return <SingleCategory data={item} key={index} />
 
         });
         return (<section class="category-section">
             <div class="container">
               <div class="row mb-4">
-                <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-md-6 col-sm-6 col-6">
                   <h2>Shop by Categories</h2>
                 </div>
-                <div class="col-md-6 col-sm-6 col-12">
+                <div class="col-md-6 col-sm-6 col-6">
                   <button class="btn btn-primary float-right">View All Category</button>
                 </div>
               </div>

@@ -1,0 +1,49 @@
+
+.date-container .nav .nav-item {
+    background-color: #f0f1f2;
+  
+  }
+  .date-container .nav-link.active {
+    background-color: var(--primary-color) !important;
+   
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #ffff;
+  }
+  .date-container .nav-link p {
+    
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(55, 71, 79, 0.72);
+  }
+  .date-container .nav-link.active p, .date-container .nav-link.active h4 {
+   
+    font-family: Poppins;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #fff;
+  }
+  .date-container .nav-link {
+    background: #F0F1F2;
+    border-radius: 8px;
+  }
+ 
+  .date-container .nav-item {
+   
+    width: 64px;
+    height: 76px;
+  }

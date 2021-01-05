@@ -37,7 +37,7 @@ ul li a {
     font-size: 0.9em;
     font-weight: 500;
     font-size: 16px;
-    //styleName: Mobile / Title / Meduim 16;
+ 
     font-family: Poppins;
     font-size: 16px;
     font-style: normal;
@@ -46,10 +46,7 @@ ul li a {
     letter-spacing: 0px;
     text-align: left;
 }
-header{
-    border: 1px solid #f6f6f6;
-    margin: 3px;
-}
+
 section {
     padding: 30px 0px;
 }
@@ -107,16 +104,17 @@ header .logo-holder .logo{
 .notification-btn{
     position: relative;
 }
-.notification-btn .notification-holder{
+.notification-btn .notification-holder {
     position: absolute;
     background-color: #FFFFFF;
-    padding: 20px 10px;
-    width: 15rem;
+    padding: 20px 20px;
+    width: 20rem;
     height: auto;
     z-index: 99983377;
     top: 31px;
     right: 0;
     border-radius: var(--border-radius);
+    box-shadow: 0px 24px 21px rgba(0, 0, 0, 0.11);
 }
 .notification-header{
     display: flex;
@@ -126,6 +124,7 @@ header .logo-holder .logo{
 .notification-list{
     border-bottom: 1px solid #f6f6f6;
     border-radius: var(--border-radius);
+    padding: 15px 20px !important;
 }
 .noti-message{
     display: flex;
@@ -147,7 +146,7 @@ header .logo-holder .logo{
 }
 .noti-unread{
     background-color: #E4F5D4;
-    padding: 8px 8xp !important;
+    /* padding: 8px 8px !important; */
 }
 
 .input-group.md-form.form-sm.form-2 input {
@@ -373,8 +372,16 @@ footer{
     border-bottom: none;
 
 }
+html{
+    width: 100vw;
+        overflow-x: hidden;
+}
 body{
-    position: relative;
+    
+        position: relative;
+        width: 100vw;
+        overflow-x: hidden;
+    
 }
 .loging-holder{
     width: 290px;
@@ -390,13 +397,13 @@ body{
     border-bottom: 1px solid #f6f6f6;
 }
 .floting-cart{
-    position: absolute;
+    position: fixed;
     right: 0;
     top: 350px;
     border-bottom-left-radius: var(--border-radius);
     border-top-left-radius: var(--border-radius);
     background-color: var(--secondary-color);
-    z-index: 9999;
+    z-index: 19;
     width: 110px;
     padding: 10px 10px;
 }
@@ -481,8 +488,8 @@ body{
     justify-content: center;
     align-items: center;
 }
-.show-quantity{
-    background-color: var(--primary-color);
+.show-quantity {
+    background-color: transparent;
     height: 30px;
     width: 30px;
     margin-left: 10px;
@@ -490,6 +497,10 @@ body{
     justify-content: center;
     align-items: center;
     border-radius: var(--border-radius);
+    background: #FFFFFF;
+    border: 1px solid rgba(55, 71, 79, 0.14);
+    box-sizing: border-box;
+    border-radius: 4px;
 }
 .total-price p{
     font-weight: 600;
@@ -1374,11 +1385,11 @@ body{
     width:100%;
     padding: 20px 0;
 }
-.fa-plus{
+/* .fa-plus{
     position: fixed;
     left:50px;
     margin-top:6px;
-}
+} */
 .title-work{
     width:100%;
     margin-top:20px;

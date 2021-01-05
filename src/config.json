@@ -1,0 +1,13 @@
+{
+  "BASE_URL": "https://api.dailyplus.store",
+  "MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoibmFmaXMwMDAxIiwiYSI6ImNqOW1rNnhxbTB0N2Yyd250cXJxeGxiMWQifQ.D6rR_E-7XO_OJMsMDUPLXw",
+  "DINGI_MAP_ACCESS_TOKEN": "74f06b42-5561-487d-b8a4-f9f8baa019c6",
+  "DINGI_MAP_ENG": "https://tilesbd.dingi.live/styles/TeamWork-English/style.json",
+  "MAPBOX_MAP_ENG": "http://tilesv3.dingi.live/styles/Combined-Bangla/style.json",
+  "DINGI_MAP_ENG_TEXT_FONT": ["Klokantech Noto Sans Regular"],
+  "KIT_APP_ID": "328584447758149",
+  "KIT_API_VERSION": "v1.0",
+  "KIT_APP_SECRET": "950e923b59dc6afb39a70a11a99a51bb",
+  "KIT_CSRF_TOKEN": "1cef1322dd531894056deaaf5640a00b"
+
+}
