@@ -104,6 +104,9 @@
      
       width: 320px;
       }
+      .ctb {
+        display: none;
+    }
   }  
   
 @media only screen and (max-width: 600px) {
@@ -116,3 +119,8 @@
 }
 
 
+@media (min-width:990px){
+  .custom_page.preorder .modal-dialog {
+    max-width: 65%;
+  }
+}

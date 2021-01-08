@@ -7,13 +7,17 @@ import SinglePopuler from "../component/SinglePopuler";
 
 const ProductId = (props) => {
 
-    const[product,setProduct]=useState()
-    const [loading,setLoading]=useState(false)
+  
+   
     const dispatch=useDispatch()
     // const onCatProduct=(id)=>dispatch(productActions.initFetchCatProducts(id))
     const onProduct=(id)=>dispatch(productActions.onSingleProducFetch(id))
     const productIn=useSelector(state=>state.products.singleProduct)
     const catProductLists=useSelector(state=>state.products.CatProducts)
+    
+    const loading=useSelector(state=>state.products.loading)
+    const catloading=useSelector(state=>state.products.catloading)
+    const error=useSelector(state=>state.products.error)
     const productId = props.match.params.id;
     // let catid=productIn.category
     useEffect(()=>{
@@ -23,8 +27,10 @@ const ProductId = (props) => {
     },[productId])
 
  
-    let content=<Spinner />
-    if(productIn){
+    let content=""
+    if (loading) {
+        content=<Spinner />
+    }else if(!loading && error==null && productIn){
         content=<> <div className="col-md-6 col-sm-6 col-12">
         <div className="single-product-img">
           {<img className="img-fluid" src={productIn.image_list &&productIn.image_list[0].image_url} alt="" />}
@@ -86,6 +92,8 @@ const ProductId = (props) => {
         </div>
       </div>
 </>
+    }else if( error!=null && !loading){
+        content=<h2>{error}</h2>
     }
     return (  <section className="custom_page">
   <div className="container">
@@ -93,12 +101,12 @@ const ProductId = (props) => {
        {content}
           </div>
           <div className="row"> 
-          {catProductLists && catProductLists.filter(el=>el.id!=productIn.id).map((product,index)=>(
+          {catProductLists && !catloading && error==null ? catProductLists.filter(el=>el.id!=productIn.id).map((product,index)=>(
             <SinglePopuler
             
              data={product} key={index}/>
        
-          ))}  
+          )) :catloading && error==null ? <Spinner />:<h1>{error}</h1>}  
           </div>
         </div>
     </section>);

@@ -1,13 +1,20 @@
 import { useEffect ,useState} from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import SinglePopuler from '../component/SinglePopuler'
 import * as productActions from '../store/actions/actionProducts'
 import ProductModal from '../component/ProductModal'
 import  Spinner from '../container/Spinner/Spinner'
+import { useHistory } from "react-router";
 const CategoryPage = (props) => {
     console.log(props.match.params.id)
-    const [modShow, setModShow] = useState(false);
 
+    const dispatch=useDispatch()
+    const [modShow, setModShow] = useState(false);
+    const catloading=useSelector(state=>state.products.catloading)
+    const catProductLists=useSelector(state=>state.products.CatProducts)
+    const error=useSelector(state=>state.products.error)
+    const onCatProduct=(id)=>dispatch(productActions.initFetchCatProducts(id))
+    const onProductDetails=(details)=>dispatch(productActions.productDetails(details))
     const productHandler=(item)=>{
  
       props.onProductDetails(item)
@@ -15,14 +22,16 @@ const CategoryPage = (props) => {
      }
      const modClosedHandler=()=>{
       setModShow(false)
-      props.onProductDetails([])
+      onProductDetails([])
      }
      const productId = props.match.params.id;
     useEffect(()=>{
-      props.onCatProduct(productId)},[productId])
+      onCatProduct(productId)},[productId])
+
+
 let catProducts=<Spinner />
-if(props.catProductLists ){
-catProducts=  props.catProductLists.map((item,index) =>(
+if(!catloading && catProductLists && error==null){
+catProducts=  catProductLists.map((item,index) =>(
     <SinglePopuler
    clicked={()=>productHandler(item)}
     data={item} key={index}/>
@@ -38,7 +47,11 @@ catProducts=  props.catProductLists.map((item,index) =>(
             </div>
           </div>
           <div className="row">
-            { catProducts}
+            {catloading && error==null ? <Spinner />: !catloading && catProductLists && error==null ? catProductLists.map((item,index) =>(
+    <SinglePopuler
+   clicked={()=>productHandler(item)}
+    data={item} key={index}/>
+ )) :  <h2>{error}</h2>}
            
          
           </div>
@@ -49,20 +62,8 @@ catProducts=  props.catProductLists.map((item,index) =>(
        );
 }
 
-const mapStateToProps=state=>{
-    return{
-      
-        catProductLists:state.products.CatProducts,
-        // catName:state.products.catName,
-    }
-  }
 
  
+ 
   
-  const mapDispatchToProps=dispatch=>{
-    return{
-      onCatProduct:(id)=>dispatch(productActions.initFetchCatProducts(id)),
-      onProductDetails:(details)=>dispatch(productActions.productDetails(details))
-    }
-  }
-export default connect(mapStateToProps,mapDispatchToProps) (CategoryPage);
+export default CategoryPage;

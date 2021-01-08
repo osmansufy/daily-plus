@@ -27,8 +27,8 @@ const Sidebar=props=>{
     overlayClasses=[classes.header_overlay,classes.active]
   }
     return (
-        <div>
-            <aside class={attachClasses.join(' ')} style={{background: '#FFFF', width:'35%' }}>
+       <>
+            <aside class={attachClasses.join(' ')} style={{background: '#FFFF', width:'380px' }}>
           {/* Brand Logo */}
           {/* Sidebar */}
           <div class="sidebar">
@@ -51,7 +51,7 @@ const Sidebar=props=>{
                     <img src={cat.image} alt="User Avatar" class="img-size-50 mr-3 img-circle" />
                     <p>
                       {cat.name}
-                      <i class="fas fa-angle-left right" />
+                      <i class="fas fa-angle-right right" />
                     </p>
                   </Link>
                  
@@ -66,7 +66,7 @@ const Sidebar=props=>{
         </aside>
         <div class={overlayClasses.join(' ')} onClick={props.closed}>
         </div>
-        </div>
+        </>
     );
 }
 

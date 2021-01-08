@@ -1,0 +1,94 @@
+.genieImg {
+  
+    max-width: 165.0224151611328px;
+    
+    width: 100%;
+    height: auto;
+}
+
+.genieinfo h5 {
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1.2rem;
+    line-height: 30px;
+    text-align: center;
+    color: #37474F;
+    width: 311px;
+    margin: 10px auto 20px auto;
+    border-radius: nullpx;
+    margin-bottom: 10px !important;
+}
+
+.genieinfo p {
+
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: center;
+    max-width: 270px;
+    color: rgb(55,71,79,0.72);
+
+    margin: 0 auto;
+}
+
+p.genip {
+   
+    width: 222px;
+    margin-bottom: 20px !important;
+   
+  
+}
+
+.geniebtn{
+    
+    width: 320px;
+}
+
+.geniebtn span {
+    flex: 1;
+}
+.imgbtn {
+    background: #F0F1F2;
+    border: 1px dashed rgba(55, 71, 79, 0.54);
+    box-sizing: border-box;
+    /* border-radius: 8px; */
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    height: 150px;
+    align-items: center;
+    margin: 0 auto;
+    border-radius: 10px;
+    cursor: pointer;
+    max-width: 588px;
+    flex-direction: column;
+}
+.noc{
+    position: relative;
+    cursor: inherit; ;
+}
+.noc span {
+    position: absolute;
+    content: "";
+    /* left: 50px; */
+    top: 3%;
+    right: 4%;
+    font-size: 22px;
+    color: red;
+    cursor: pointer;
+    font-weight: 600;
+}
+.imgbtn.noc img {
+    max-height: 100%;
+}
+@media(min-width:990px){
+.genieFormModal {
+    /* max-width: 50%; */
+    max-width: 688px;
+}
+
+}

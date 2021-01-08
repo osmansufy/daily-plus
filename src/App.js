@@ -29,23 +29,19 @@ import AddAddress from './component/Map/AddAddress';
 import PreOrderInfo from './pages/order/PreOrderInfo';
 import PreOrderDetails from './component/PreOrder/PreOrderDetails';
 import ProductId from './pages/ProductId';
+import Genie from './pages/Genie/Genie';
+import GenieForm from './component/Genie/GenieForm';
 
 
 const App=(props)=> {
 
-const  [showSidebar,setShowSidebar]=useState(false)
+
 const history = createBrowserHistory();
   useEffect(()=>props
   ,[props,history])
 
-  const btnClickHandler=()=>{
-    setShowSidebar(true)
-   
-    
-  }
-  const shideberClosed=()=>{
-    setShowSidebar(false)
-  }
+ 
+
   
 
   let routes=(
@@ -64,6 +60,8 @@ const history = createBrowserHistory();
   <Route path='/user' exact component={User} />
   <Route path='/order' exact component={Orders} />
   <Route path='/order/preorder' exact component={PreOrderInfo} />
+  <Route path='/genie' exact component={Genie} />
+  <Route path='/genie/form' exact component={GenieForm} />
   <Route path='/order/preorder/info' exact component={PreOrderDetails} />
   
   <Route path='/logout' exact component={Logout} />
@@ -74,9 +72,10 @@ const history = createBrowserHistory();
   return  (
    
   <div class="wrapper">
-    <Sidebar show={showSidebar} closed={shideberClosed} />
+    
     <div class="content-wrapper">
-    <Header btnClicked={btnClickHandler} />
+    
+    <Header  />
     
    
   

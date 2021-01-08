@@ -7,6 +7,7 @@ import * as productActions from '../store/actions/actionProducts'
 import * as cartActions from '../store/actions/actionCart'
 import SinglePopuler from './SinglePopuler'
 import ButtonQuantity from '../UI/Button/ButtonQtn'
+import Spinner from '../container/Spinner/Spinner'
 import {Modal} from 'react-bootstrap'
 const Product=props=>{
 
@@ -15,6 +16,7 @@ const Product=props=>{
  const catProductLists=useSelector(state=>state.products.CatProducts)
  const error=useSelector(state=>state.products.error)
  const details=useSelector(state=>state.products.productDetails)
+ const catLoading=useSelector(state=>state.products.catloading)
  console.log(details.unit_quantity)
  const catid=details.category
  const dispatch=useDispatch()
@@ -161,12 +163,12 @@ const OnSubHandler =(item)=>{
             </div>
           </div>
           <div className="row"> 
-          {catProductLists && catProductLists.filter(el=>el.id!=details.id).map((product,index)=>(
+          {catProductLists && !catLoading && error==null ? catProductLists.filter(el=>el.id!=details.id).map((product,index)=>(
             <SinglePopuler
             
              data={product} key={index}/>
        
-          ))}  
+          )) :catLoading && error==null ?<Spinner />:<h2>{error}</h2>}  
           </div>
         </div>
         </Modal.Footer>

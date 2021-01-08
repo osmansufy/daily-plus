@@ -8,7 +8,9 @@ import * as cartActions from '../../store/actions/actionCart'
 import PreOrderCheckout from '../../component/PreOrder/PreOrderChckout';
 import PreOngoing from '../../component/PreOrder/PreOrderOngoing';
 import PreHistory from '../../component/PreOrder/PreOrderHistory';
-const PreOrderInfo = () => {
+import GenieList from '../../component/Genie/GenieList';
+import GenieOngoing from '../../component/Genie/GenieOngoing';
+const Genie = () => {
 
     return (
 <div className="custom_page preorder mb-5">
@@ -20,7 +22,7 @@ const PreOrderInfo = () => {
     <Modal.Body >
      <Tab.Container id="left-tabs-example" defaultActiveKey="first">
   <Row>
-  <Col sm={12}>
+  <Col sm={12} >
   <Nav  className="">
         <Nav.Item>
           <Nav.Link eventKey="first">New</Nav.Link>
@@ -36,10 +38,10 @@ const PreOrderInfo = () => {
     <Col sm={12}>
       <Tab.Content>
         <Tab.Pane eventKey="first">
-       <PreOrderCheckout />
+       <GenieList />
         </Tab.Pane>
         <Tab.Pane eventKey="second">
-        <PreOngoing />      
+        <GenieOngoing />      
         </Tab.Pane>
         <Tab.Pane eventKey="third">
       <PreHistory />
@@ -57,4 +59,4 @@ const PreOrderInfo = () => {
       );
 }
  
-export default PreOrderInfo;
+export default Genie;

@@ -523,9 +523,7 @@ i.fas.fa-user {
   margin-bottom: 20px;
   justify-content: space-around;
 }
-.custom_page.preorder .modal-dialog {
-  max-width: 90%;
-}
+
 .order .nav-link,.preorder .nav-link {
   font-family: Poppins;
   font-size: 14px;

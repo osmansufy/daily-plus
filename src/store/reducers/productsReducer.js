@@ -7,7 +7,8 @@ const initialState={
     CatProducts:null,
     catName:null,
     loading:false,
-    error:false
+    catloading:false,
+    error:null
 }
 const reducer=(state=initialState,action)=>{
 
@@ -26,25 +27,46 @@ const reducer=(state=initialState,action)=>{
             
             }
           
+        case actionTypes.FETCH_CAT_PRODUCTS_START:
+            return {
+            ...state,
+            CatProducts:[],
+            catloading:true
+            
+            }
         case actionTypes.FETCH_CAT_PRODUCTS:
             return {
             ...state,
             CatProducts:action.products,
-            // catName:action.name
-            
+            catloading:false
             }
         case actionTypes.FAIL_CAT_PRODUCTS:
             return {
             ...state,
-            error:true,
-            // catName:action.name
+            error:action.error,
+            catloading:false
+            
+            }
+        case actionTypes.SINGLE_PRODUCT_START:
+            return {
+            ...state,
+            loading:true,
+            error:null
             
             }
         case actionTypes.SINGLE_PRODUCT:
             return {
             ...state,
             singleProduct:action.product,
-            // catName:action.name
+            error:null,
+            loading:false
+            
+            }
+        case actionTypes.SINGLE_PRODUCT_FAIL:
+            return {
+            ...state,
+            loading:false,
+            error:action.error
             
             }
           

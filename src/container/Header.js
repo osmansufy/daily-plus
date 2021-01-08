@@ -20,6 +20,7 @@ import lampIcon from '../assets/img/lamp-icon.svg'
 import * as actionAddress from '../store/actions/actionAddress'
 import {DropdownButton,ButtonGroup,Dropdown} from 'react-bootstrap'
 import axios from '../axios'
+import Sidebar from './Sidebar';
 const Header=(props) =>{
   const [smShow, setSmShow] = useState(false);
 const isSignUp=useSelector(state=>state.auth.accessToken)
@@ -27,10 +28,18 @@ const [cartShow,setCartShow]=useState(false)
 const [notishow,setNotiShow]=useState(false)
 const [searchShow,setSearchShow]=useState(false)
 const [addressShow,setAddresshShow]=useState(false)
-
+const  [showSidebar,setShowSidebar]=useState(false)
 const dispatch =useDispatch()
 const onAddress=(isSignUp)=>dispatch(actionAddress.onUserAddress(isSignUp))
 
+const shideberClosed=()=>{
+  setShowSidebar(false)
+}
+const btnClickHandler=()=>{
+  setShowSidebar(true)
+ 
+  
+}
 useEffect(()=>{
   if (isSignUp) {
     onAddress(isSignUp)
@@ -98,11 +107,7 @@ const addressClicked=()=>{
                   <div className="top-right">
                     <Search show={searchShow}  closed={searchClose}/>
                     <div className="notification-btn">
-                      {/* <div  onClick={notificationHandler}>
-                        <svg width={22} height={28} viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path fillRule="evenodd" clipRule="evenodd" d="M20.9694 20.8923L19.2053 19.1282V12.2906C19.2053 8.09231 16.9626 4.57778 13.0514 3.64786V2.71795C13.0514 1.5829 12.1352 0.666664 11.0002 0.666664C9.86512 0.666664 8.94888 1.5829 8.94888 2.71795V3.64786C5.02409 4.57778 2.79503 8.07863 2.79503 12.2906V19.1282L1.03093 20.8923C0.169389 21.7538 0.771098 23.2308 1.98819 23.2308H19.9984C21.2292 23.2308 21.8309 21.7538 20.9694 20.8923ZM5.53007 20.4957V12.2906C5.53007 8.89914 7.59503 6.13675 11.0002 6.13675C14.4053 6.13675 16.4702 8.89914 16.4702 12.2906V20.4957H5.53007ZM13.7352 24.5983C13.7352 26.1026 12.5044 27.3333 11.0002 27.3333C9.48221 27.3333 8.26511 26.1026 8.26511 24.5983H13.7352Z" fill="#37474F" />
-                        </svg>
-                      </div> */}
+                   
                        <Dropdown as={ButtonGroup}   title="Dropdown "  
  
  >
@@ -165,7 +170,9 @@ const addressClicked=()=>{
             
                 <div className="col-md-4 col-sm-4 col-4">
                   <div className="bottom-right">
-                    <ButtonLink clicked={props.btnClicked} ><i className="fas fa-bars" style={{padding: '5px', color: '#5EC401'}} />Category</ButtonLink>
+                    <ButtonLink clicked={btnClickHandler} ><i className="fas fa-bars" style={{padding: '5px', color: '#5EC401'}} />
+                    <span className="ctb">Category</span>
+                    </ButtonLink>
                   </div>
                 </div>
                 <div className="col-md-8 col-sm-8 col-8">
@@ -174,7 +181,7 @@ const addressClicked=()=>{
                       <Link to='/offers' className="header-bottom-btn">
                        <img className="mr-2" src={offerIcon} />
                         {/* <i className="fa fa-percent"></i> */}
-                        Offers</Link>
+                       <span>Offers</span> </Link>
                     </div>
                     <div className="contact-btn">
                       <a href="#" className="header-bottom-btn">
@@ -224,6 +231,7 @@ const addressClicked=()=>{
         
           <CartBag clicked={cartClickHandler} />
         <MyBag cartShow={cartShow} closed={cartClosed} />
+        <Sidebar show={showSidebar} closed={shideberClosed} />
         </>
     );
 }
