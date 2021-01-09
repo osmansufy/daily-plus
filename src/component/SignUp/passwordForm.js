@@ -1,6 +1,7 @@
 import lockicon from '../../assets/img/lock.png'
 import {InputGroup,FormControl,Button,Image} from 'react-bootstrap'
 import imgPass from '../../assets/img/password.png'
+import next from '../../assets/img/arrow_forward_24px.svg'
 const PasswordForm = (props) => {
     return ( <>
     <div className="text-danger">{props.error ? "Password Is inValid" :''}</div>

@@ -1,12 +1,13 @@
 import lockicon from '../../assets/img/lock.png'
 import {InputGroup,FormControl,Button,Image} from 'react-bootstrap'
+import next from '../../assets/img/arrow_forward_24px.svg'
 import imgPass from '../../assets/img/password.png'
 import OtpInput from 'react-otp-input';
 
 const OtpForm = (props) => {
     return ( 
         <>
-        
+        <div id="recaptcha_container"></div>
         <div className="text-danger">{props.error ? "Password Is inValid" :''}</div>
     
         <div className="row justify-content-center">

@@ -123,4 +123,11 @@
   .custom_page.preorder .modal-dialog {
     max-width: 65%;
   }
+
+  .signup .modal-dialog {
+    max-width: 690px;
+}
+  .signup .modal-content {
+   padding: 30px;
+}
 }

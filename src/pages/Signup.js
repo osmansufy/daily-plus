@@ -1,5 +1,5 @@
 import firebase from '../../src/firebaseConfig'
-import { useReducer } from "react"
+import { useReducer,useState } from "react"
 import { Container,Modal } from "react-bootstrap"
 import ConfimPasswordForm from "../component/SignUp/ConfirmPass"
 import NameForm from "../component/SignUp/NameForm"
@@ -8,13 +8,15 @@ import PasswordForm from '../component/SignUp/passwordForm'
 import PhoneForm from "../component/SignUp/PhoneForm"
 import { useDispatch, useSelector } from "react-redux";
 import * as authAction from '../store/actions/actionAuth'
+import {Redirect} from 'react-router-dom'
 import axios from "axios";
+import EmailForm from '../component/SignUp/EmailForm'
 const Signup = () => {
     const dispatch=useDispatch()
     const isAuth=useSelector(state=>state.auth.accessToken)
     const isError=useSelector(state=>state.auth.error)
     const loginAction=(userdetails)=>dispatch(authAction.userLoginAction(userdetails))
-    
+    const [inputerror,setInputError]=useState("")
 
     
  const formType={
@@ -41,7 +43,7 @@ const Signup = () => {
    },
    otp:'',
    confirmOtp:"",
-   form:formType.PHONE
+   form:formType.NAME
   }
  
   const formReducer=(cuurentState,action)=>{
@@ -57,6 +59,12 @@ const Signup = () => {
           form:action.form
          }
       case formType.NAME:
+        return {
+          ...cuurentState,
+        
+          form:action.form
+         }
+      case formType.EMAIL:
         return {
           ...cuurentState,
         
@@ -193,11 +201,62 @@ const oldUserSubmit=()=>{
     
   
   }
+
+
+  const newUserInfo={
+    'access_token':formState.userInfo.accessToken,
+    'display_name':formState.userInfo.fullName,
+    'email':formState.userInfo.email,
+    'password':formState.userInfo.password
+  }
+ 
+
+  const phoneValid=(value)=>{
+    if (value.match(/12345/)) {
+      return 'Invalid value: '+value
+    } 
+    
+    else if (value.match(/1234/)) {
+      return false;
+    }
+    else if (value==="") {
+      return 'Please Enter Phone Number'
+    }
+    else if (value===880) {
+      return 'Please Enter Your Phone Number'
+    }
+    return true;
+     
+  }
   const onPhone=()=>{
-    onSignInSubmit()
+   const valid=phoneValid(formState.userInfo.phone)
+    if (valid==true ) {
+      onSignInSubmit()
+    }else{
+      console.log(phoneValid(formState.userInfo.phone))
+    }
+      
+    
+      
   }
   const onName=()=>{
-      formDispatch({type:formType.NAME,form:formType.PASSWORD})
+    if (formState.userInfo.fullName!="") {
+      setInputError("")
+      formDispatch({type:formType.NAME,form:formType.EMAIL})
+    }else{
+      setInputError("Please Enter YourName")
+    }
+      
+  }
+  const onEmail=()=>{
+
+    if (formState.userInfo.email!="") {
+      setInputError("")
+      formDispatch({type:formType.EMAIL,form:formType.CONFIRM_PASSWORD})
+    }else{
+      setInputError("Please Enter Your Email")
+    }
+      
   }
   const onLogPass=()=>{
     oldUserSubmit()
@@ -207,22 +266,27 @@ const oldUserSubmit=()=>{
   }
 
 
+
+
   let formContent=""
   switch (formState.form) {
       case formType.PHONE:
-        formContent=<PhoneForm containerClass="phoneField signupInput" value={formState.userInfo.phone}  change={(phone)=>formDispatch({type:formType.CHANGE_INPUT,field:'phone',value:phone})} clicked={onPhone}/>
+        formContent=<PhoneForm containerClass="phoneField signupInput" valid={  (value, country) => phoneValid(value, country)} value={formState.userInfo.phone}  change={(phone)=>formDispatch({type:formType.CHANGE_INPUT,field:'phone',value:phone})} clicked={onPhone}/>
         break;
       case formType.PASSWORD:
         formContent=<PasswordForm value={formState.userInfo.password} clicked={onLogPass} change={onInputChange("password")} />
         break;
       case formType.NAME:
-        formContent=<NameForm  value={formState.userInfo.fullName} change={onInputChange("fullName")}  /> 
+        formContent=<NameForm  value={formState.userInfo.fullName} error={inputerror} clicked={onName} change={onInputChange("fullName")}  /> 
+        break;
+      case formType.EMAIL:
+        formContent=<EmailForm  value={formState.userInfo.email} error={inputerror} clicked={onEmail} change={onInputChange("email")}  /> 
         break;
       case formType.OTP:
         formContent=<OtpForm value={formState.otp} clicked={onOtpInSubmit} change={(value)=>formDispatch({type:formType.CHANGE_OTP,otp:value})} />
         break;
       case formType.CONFIRM_PASSWORD:
-        formContent=<ConfimPasswordForm  value1={formState.userInfo.password} change1={onInputChange("password") } 
+        formContent=<ConfimPasswordForm userInfo={newUserInfo}  value1={formState.userInfo.password} change1={onInputChange("password") } 
         value2={formState.userInfo.confirmPassword} change2={onInputChange("confirmPassword") }
         
         />
@@ -231,17 +295,29 @@ const oldUserSubmit=()=>{
           break;
   }
   console.log(formState)
+
+  let authRedirect=""
+if (isAuth!=null) {
+  authRedirect=<Redirect to="/" />
+}
     return ( 
-        <div className="custom_page">
-            <Container>
-            <Modal.Dialog>
-            <Modal.Body className="p-4 text-center">
-            <div id="recaptcha_container"></div>
+        <div className="custom_page signup">
+          {authRedirect}
+          
+          
+  <div className="modal-dialog">
+    <div class="modal-content">
+  
+      <div class="modal-body">
+      
 {formContent}
-</Modal.Body>
-</Modal.Dialog>
+      </div>
      
-     </Container>
+    </div>
+  </div>
+
+
+           
         </div>
 
      );

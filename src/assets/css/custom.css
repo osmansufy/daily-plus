@@ -759,4 +759,105 @@ button#dropdown-custom-2 i {
   display: none;
 }
 
+
 /*Product Modal*/
+
+/*Input*/
+.input-group-text {
+  border: none;
+  background: #F0F1F2;
+  /* border-radius: inherit; */
+  border-radius: 8px 0 0 8px;
+  cursor: pointer;
+}
+
+.form-label-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.form-label-group > input,
+.form-label-group > label,
+.input-group > input,
+.input-group > label {
+  height: 3.125rem;
+  padding: .75rem;
+}
+.form-label-group > label, .input-group > label {
+  position: absolute;
+  top: 0;
+  left: 45px;
+  display: block;
+  /* width: 100%; */
+  margin-bottom: 0;
+  line-height: 1.5;
+  color: rgb;
+  color: rgba(55, 71, 79, 0.54);
+  pointer-events: none;
+  font-weight: 400 !important;
+  cursor: text;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  z-index: 3;
+  transition: all .1s ease-in-out;
+}
+.form-label-group input::-webkit-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input:-ms-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::-ms-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::-moz-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::placeholder {
+  color: transparent;
+}
+
+.form-label-group input:not(:placeholder-shown) {
+  padding-top: 1.25rem;
+  padding-bottom: .25rem;
+}
+
+.form-label-group input:not(:placeholder-shown) ~ label {
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+  font-size: 12px;
+  color: #5EC401;
+  font-weight: 700;
+  font-family: Poppins;
+}
+.inBR{
+border-radius: 0 8px 8px 0 !important;  
+}
+
+.imageCamera {
+  background: rgba(55, 71, 79, 0.14);
+  /* padding: 16px; */
+  border-radius: 50%;
+  width: 138px;
+  height: 138px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0 40px 0;
+}
+
+.signup p {
+  /* font-family: Poppins;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 21px; */
+  text-align: center;
+  color: rgba(55, 71, 79, 0.72);
+  /* max-width: 343px; */
+  margin: 20px 0 ;
+}
