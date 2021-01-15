@@ -1,60 +1,88 @@
-import React,{useEffect, useState} from 'react';
+import React,{useCallback, useEffect, useState} from 'react';
 
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import * as cartActions from '../store/actions/actionCart'
+import * as productActions from '../store/actions/actionProducts'
 import ButtonQuantity from '../UI/Button/ButtonQtn';
+import ProductModal from '../component/ProductModal'
 const SinglePopuler=props=>{
 
   // const [show, setShow] = useState(false);
+  const [itemCount,setItemCount]=useState(0)
+  const catid=props.data.category
+  const dispatch=useDispatch()
+  const onCatProduct=((id)=>dispatch(productActions.initFetchCatProducts(id)))
+
   const cartHandler=(item)=>{
-    item.unit_quantity=1
     props.onCartAction(item)
-    
+    setItemCount(1)
   }
   const addCartHandler =(item)=>{
     console.log(item)
-    
-props.onUpdateCartUnits({id:item.id, unit_quantity:parseInt(item.unit_quantity +1)})
+  
+props.onUpdateCartUnits({id:item.id, count:bagItem.count+1})
   }
+  const [modalShow, setModalShow] = useState(false);
+  const productHandler=(item)=>{
+    onCatProduct(item.category)
+    props.onProductDetails(item)
+    setModalShow(true)
+  
+   }
+   const modalClosedHandler=()=>{
+    setModalShow(false)
+   
+   }
+  const isCart=(product) =>{
+    return product.id === props.data.id;
+  }
+ const bagItem=props.bagLists.find(isCart)
+  // console.log(findProductIndex(props))
+  console.log(props.data)
+  console.log(props.bagLists.find(isCart))
   const subHandler =(item)=>{
     console.log(item)
-
-    if(item.unit_quantity===1){
-      props.onDeleteCartProduct({id:item.id,unit_quantity:0})
+    
+    if(bagItem.count===1){
+   
+      props.onDeleteCartProduct({id:item.id,count:0})
+      
     }else{
-      props.onUpdateCartUnits({id:item.id, unit_quantity: item.unit_quantity -1})
+      props.onUpdateCartUnits({id:item.id, count: bagItem.count-1})
+      
     }
   }
 
- let cartButton=<a onClick={()=>cartHandler(props.data)} class="btn add-to-bag-btn">
- {/* <i class="fa fa-shopping-bag"></i> */}
+ let cartButton=<a onClick={()=>cartHandler(props.data)} className="btn add-to-bag-btn">
+ {/* <i className="fa fa-shopping-bag"></i> */}
  <svg width={20} height={21} viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
    <rect width={20} height={20} transform="translate(0 0.25)" fill="none" />
    <path fillRule="evenodd" clipRule="evenodd" d="M15.42 5.06663L16.664 16.9135C16.6784 17.0507 16.6339 17.1877 16.5414 17.2904C16.4491 17.3929 16.3175 17.4515 16.1794 17.4515H2.98717C2.84918 17.4515 2.71756 17.3929 2.62515 17.2904C2.53287 17.1877 2.48828 17.0507 2.50264 16.9135L3.74669 5.06663C3.77279 4.81862 3.98183 4.6303 4.23122 4.6303H6.56945V4.0972C6.56945 2.43544 7.92151 1.08337 9.58339 1.08337C11.2452 1.08337 12.5972 2.43544 12.5972 4.0972V4.6303H14.9354C15.1848 4.6303 15.3939 4.81862 15.42 5.06663ZM7.83542 4.0972C7.83542 3.13376 8.61981 2.34934 9.58339 2.34934C10.5468 2.34934 11.3312 3.13375 11.3312 4.0972V4.33864H7.83542V4.0972ZM15.3146 16.1855H3.85205L4.93256 5.89627H6.27778V6.67819C6.27778 7.10826 6.62653 7.45701 7.0566 7.45701C7.48667 7.45701 7.83542 7.10826 7.83542 6.67819V5.89627H11.3312V6.67819C11.3312 7.10826 11.68 7.45701 12.1101 7.45701C12.5401 7.45701 12.8889 7.10826 12.8889 6.67819V5.89627H14.2341L15.3146 16.1855Z" fill="#5EC401" />
  </svg>
  Add to Bag</a>
 
- if (props.data.unit_quantity>=1) {
+ if (bagItem && bagItem.count>0) {
    cartButton=<ButtonQuantity subClicked={() =>subHandler(props.data)} addClicked={() =>addCartHandler(props.data) } >
    <div  className="show-quantity">
-<h6>{props.data.unit_quantity}</h6>
+<h6>{bagItem && bagItem.count}</h6>
 </div>
      </ButtonQuantity>
  }
   return (
-        <div class="col-md-2 col-sm-6 col-12 mt-4">
-        <div class="product-card">
-          <div class="custom-card">
-          <a  onClick={props.clicked}>
+    <>
+        <div className="col-md-3 col-lg-2 col-sm-6 col-6 mt-4">
+        <div className="product-card">
+          <div className="custom-card">
+          <a  onClick={()=>productHandler(props.data)}>
           <img src={props.data.image_list[0] && props.data.image_list[0].thumbnail_image_url} alt="" />
       </a>
       
       
           </div>
-    <h6 class="mt-3 pro-title mb-2">{props.data.name}</h6>
-          <div class="price">
-            <h6 class="sell-price">{props.data.inventory_list[0].unit_price_final} <span class="regular-price">{props.data.inventory_list[0].unit_price}</span></h6>
-            <div class="sell-icon">
+    <h6 className="mt-3 pro-title mb-2">{props.data.name}</h6>
+          <div className="price">
+            <h6 className="sell-price">{props.data.inventory_list[0].unit_price_final} <span className="regular-price">{props.data.inventory_list[0].unit_price}</span></h6>
+            <div className="sell-icon">
               <svg width={24} height={25} viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7.53759 9.28747C6.55568 10.2695 6.00282 11.6006 6.00001 12.9893C5.9972 14.3781 6.54467 15.7114 7.52259 16.6974C8.62508 14.1474 10.5901 12.0175 13.0425 10.75C10.9257 12.5411 9.49681 15.0119 9.00007 17.7399C10.9501 18.6624 13.35 18.3249 14.9625 16.7124C17.5725 14.1024 18 6.25 18 6.25C18 6.25 10.1476 6.6775 7.53759 9.28747Z" fill="#37474F" fillOpacity="0.54" />
               </svg>
@@ -70,11 +98,14 @@ props.onUpdateCartUnits({id:item.id, unit_quantity:parseInt(item.unit_quantity +
 
         </div>
       </div>
+       <ProductModal count={bagItem && bagItem.count} modalClosed={modalClosedHandler}  show={modalShow}
+       onHide={() => setModalShow(false)}  />
+      </>
     );
 }
 const mapStateToProps=state=>{
   return {
-    bagLists:state.carts,
+    bagLists:state.carts.cartProducts,
     
   }
 }
@@ -84,6 +115,7 @@ const mapDispatchToProps=dispatch=>{
     onCartAction:(item)=>dispatch(cartActions.cartAction(item)),
     onUpdateCartUnits:(id, units)=>dispatch(cartActions.updateCartUnits(id, units)),
     onDeleteCartProduct:(id, unit_quantity)=>dispatch(cartActions.deleteCartProduct(id, unit_quantity)),
+    onProductDetails:(details)=>dispatch(productActions.productDetails(details))
      }
 }
 export default connect(mapStateToProps,mapDispatchToProps) (SinglePopuler)

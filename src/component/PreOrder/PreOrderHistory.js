@@ -2,7 +2,7 @@ import { useEffect, useReducer, useState } from "react"
 import { useSelector } from "react-redux"
 import axios from '../../axios'
 import Spinner from '../../container/Spinner/Spinner';
-// import emptyImg from '../ assets/img/empty.png'
+import emptyImg from '../../assets/img/empty.png'
 import cartIcon from '../../assets/img/cart.png'
 import moment from 'moment'
 import { Container, Row } from "react-bootstrap";
@@ -74,6 +74,7 @@ if (loading) {
   contentPreHistory=<Spinner />
 }else if(!loading && preAllOrder.length >0){
   contentPreHistory= preAllOrder.filter(order=>order.status!=1).map(order=>{
+    // statDispatch({type:order.status})
     return <a onClick={()=>onPreOrderDetails(order.id)}>    <div className="row order-info">
     <div className="info-left">
         
@@ -83,7 +84,7 @@ if (loading) {
 {order.order_identifier}
               </h4>
               <h5>{statusOrder(order.status)}</h5>
-              <h5>{moment(order.ts_delivery).utc().format('MMM DD.YYYY')}</h5>
+              <h5>{moment(order.ts_created).utc().format('MMM DD.YYYY')}</h5>
           </div>
           </div>  
           <span>ট{order.total_bill} </span></div> 
@@ -92,7 +93,7 @@ if (loading) {
   
   
 }else{
-  contentPreHistory=<div className="row ongoing justify-content-center"><img />
+  contentPreHistory=<div className="row ongoing justify-content-center"><img src={emptyImg} />
   <p>There is no ongoing order right now. You can order from home</p>
   </div>
 }

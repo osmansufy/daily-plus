@@ -35,6 +35,28 @@ export const onUserAddress=(token)=>{
     })
 }
 }
+
+const addressDelete=(id)=>{
+return{
+    type:actionsTypes.ADDRESS_DELETE,
+    id:id
+}
+}
+export const onAddressDelete=(token,id)=>{
+    return dispatch=>{
+    axios.delete(`location/user/address/${id}/`,{
+        headers: {
+            Authorization: `JWT ${token}`,
+            "Content-Type": "application/json"
+          }
+    }).then(response=>{
+        dispatch (addressDelete(id))
+        console.log(response)
+    }).catch(error=>{
+        console.log(error)
+    })
+}
+}
 const onAddressSuccessId=(data)=>{
     return{ 
         type:actionsTypes.ADDRESS_ID,
@@ -83,12 +105,39 @@ export const onEditAddress=(edit)=>{
         isEdit:edit,
     }
 }
+export const onAddressCheckout=()=>{
+    return{
+        type:actionsTypes.ADDRESS_ADD_FROM_CHECKOUT,
+        
+    }
+}
 export const onAddressEditSubmit=(eId,address)=>{
  
     return dispatch=> {
         axios.patch('location/user/address/'+eId+'/',address)
         .then(response=>{
             dispatch(onEditSuccess(response.data))
+        })
+        .catch(error=>{
+            console.log(error.message)
+        })
+    }
+
+}
+export const onAddSubmit=()=>{
+    return{
+        type:actionsTypes.ADDRESS_ADD_SUBMIT,
+        
+    }
+}
+export const onNewAddressSubmit=(addressDteails,token)=>{
+ 
+    return dispatch=> {
+        axios.post("/location/user/address/",addressDteails)
+        .then(response=>{
+            console.log(response)
+            dispatch(onUserAddress(token))
+            dispatch(onAddSubmit())
         })
         .catch(error=>{
             console.log(error.message)

@@ -16,9 +16,10 @@ const baseURL = `${config['BASE_URL']}/v0`
 
 const Map = props => {
   const currentAddress =useSelector(state=>state.address.adreessCurrent)
-  const [searchEnter,setSearchEnter]=useState(currentAddress.address)
+  const [searchEnter,setSearchEnter]=useState('')
+  const [query,setQuery]=useState("")
   const mapContainerRef = useRef(null);
-  const token =useSelector(state=>state.auth.accessToken)
+  const userToken =useSelector(state=>state.auth.accessToken)
   const [lng, setLng] = useState(90.42303124459973);
   const [lat, setLat] = useState(23.78113301384171); 
   const [zoom, setZoom] = useState(8);
@@ -135,106 +136,94 @@ useEffect(()=>{
 setSearchEnter(currentAddress.address)
 
 },[currentAddress])
-
-
-const getPreOrders=()=>{
-
- 
-}
-const {regions}=mapinfo
-useEffect(()=>{
-  if (searchEnter!='') {
+// const {regions}=mapinfo
+// useEffect(()=>{
+//   if (searchEnter!='') {
     
   
-    const timer=  setTimeout(()=>{ 
-        if (searchEnter===inputRef.current.value) {
-            const query=searchEnter.length ===0?'':searchEnter
-            console.log(token)
-            setMapinfo({
-              ...mapinfo,
+//     const timer=  setTimeout(()=>{ 
+//         if (searchEnter===inputRef.current.value) {
+//             const query=searchEnter.length ===0?'':searchEnter
+//             console.log(token)
+//             setMapinfo({
+//               ...mapinfo,
           
-            show_regions: false,
-            loader:true
+//             show_regions: false,
+//             loader:true
           
-          })
-            axios.get(`${baseURL}/location/search/all/?token=${query}`, {
-              headers: {
-                Authorization: `JWT ${token}`,
-                "Content-Type": "application/json"
-              }
-            }).then((res)=>{
-              console.log(res)
-              if (res.status === 200) {
-                setMapinfo({
-                    ...mapinfo,
-                  regions: res.data.result,
-                  show_regions: true,
-                  loader:false
-                })
-                console.log(mapinfo)
-              }
+//           })
+//             axios.get(`${baseURL}/location/search/all/?token=${query}`, {
+//               headers: {
+//                 Authorization: `JWT ${token}`,
+//                 "Content-Type": "application/json"
+//               }
+//             }).then((res)=>{
+//               console.log(res)
+//               if (res.status === 200) {
+//                 setMapinfo({
+//                     ...mapinfo,
+//                   regions: res.data.result,
+//                   show_regions: true,
+//                   loader:false
+//                 })
+//                 console.log(mapinfo)
+//               }
         
              
-            } 
-            ).catch ((error)=>{
-            console.log(error.response)
-            setMapinfo({...mapinfo, loader: false })
-          })
-        }  
-        },200)
+//             } 
+//             ).catch ((error)=>{
+//             console.log(error.response)
+//             setMapinfo({...mapinfo, loader: false })
+//           })
+//         }  
+//         },200)
     
-        return ()=>{
-            clearTimeout(timer)
-            setMapinfo({
-              ...mapinfo,
+//         return ()=>{
+//             clearTimeout(timer)
+//             setMapinfo({
+//               ...mapinfo,
           
-            show_regions: false,
-            loader:true
+//             show_regions: false,
+//             loader:true
           
-          })
+//           })
+//         }
+//       }
+// },[searchEnter])
+
+
+
+  const onInputChange =  (e)=> {
+   
+      // e.preventDefault()
+      
+       const value=e.target.value 
+      //  setQuery(value)
+        if (value.length >0) {
+       axios.get(`${baseURL}/location/search/all/?token=${value}`,{
+       headers:{
+        Authorization: `JWT ${userToken}`,
+      }}).then((res)=>{
+        console.log(res)
+        if (res.status === 200) {
+          setMapinfo({
+            ...mapinfo,
+          regions: res.data.result,
+          show_regions: true,
+          loader:false
+        })
+          console.log(mapinfo)
         }
-      }
-},[searchEnter])
-  // const onInputChange =  e => {
-   
-  //   console.log("search input")
- 
-   
-  
-  
-  //       setMapinfo({
-  //           ...mapinfo, 
-  //           loader: true ,
-  //         query: e.target.value })
-  //       const query = mapinfo.query
-  //       console.log(query)
-  //       if (e.target.value !="") {
-          
-        
-  //      axios.get(`${baseURL}/location/search/all?token=${query}`, {
-  //         Authorization: `JWT ${token}`
-  //     }).then((res)=>{
-  //       console.log(res)
-  //       if (res.status === 200) {
-  //         setMapinfo({
-  //             ...mapinfo,
-  //           regions: res.data.result,
-  //           show_regions: true,
-  //           loader:false
-  //         })
-  //         console.log(mapinfo)
-  //       }
   
        
-  //     } 
-  //     ).catch ((error)=>{
-  //     console.log(error.response)
-  //     setMapinfo({...mapinfo, loader: false })
-  //   })
-  // }
+      } 
+      ).catch ((error)=>{
+      setMapinfo({...mapinfo, loader: false })
+    })
+  }
 
     
-  // }
+  }
   const flyToLocation =(selected_location) => {
     console.log(selected_location)
     // console.log(viewport)
@@ -243,16 +232,9 @@ useEffect(()=>{
     console.log(location)
   
    
-    // const marker =(new mapboxgl.Marker({color: "red",
-    //                  draggable: true,
-    //                }))
+ 
 marker.on('dragend', ()=>onDragEnd(marker));    
-    // const map = new mapboxgl.Map({
-    //     container: mapContainerRef.current,
-    //     style: 'http://tilesv3.dingi.live/styles/Combined-Bangla/style.json',
-    //     center: [lng, lat],
-    //     zoom: zoom
-    //   });;
+ 
     map.flyTo({
       center: [location.location[1], location.location[0]],
       zoom: 13
@@ -294,7 +276,7 @@ marker.on('dragend', ()=>onDragEnd(marker));
 
        axios.get(`${baseURL}/location/search/all?token=${query}`, {
         headers: {
-          Authorization: `JWT ${token}`,
+          Authorization: `JWT ${userToken}`,
           "Content-Type": "application/json"
         }
       }).then(response=>{
@@ -337,14 +319,14 @@ marker.on('dragend', ()=>onDragEnd(marker));
 >
   
   <input
-    type="text"
+    type="search"
     id="searchMap"
     // name="query"
-    // defaultValue={mapinfo.address}
-    ref={inputRef}
-    value={searchEnter}
-    onChange={(event)=>setSearchEnter(event.target.value)}
-    // onChange={onInputChange}
+    defaultValue={searchEnter}
+    // ref={inputRef}
+    // value={query}
+    // onChange={(event)=>setSearchEnter(event.target.value)}
+    onChange={onInputChange}
     className="form-control"
     placeholder="Searh on map "
     autocomplete="off"

@@ -1,6 +1,7 @@
 import React, { useEffect ,useState} from 'react';
 import axios from 'axios'
 import classes from './Sidebar.Module.css'
+import logo from '../assets/img/logo.png'
 import { Link,withRouter} from 'react-router-dom';
 const Sidebar=props=>{
  const [categories,setCategories]=useState([])
@@ -28,30 +29,30 @@ const Sidebar=props=>{
   }
     return (
        <>
-            <aside class={attachClasses.join(' ')} style={{background: '#FFFF', width:'380px' }}>
+            <aside className={attachClasses.join(' ')} style={{background: '#FFFF', width:'380px' }}>
           {/* Brand Logo */}
           {/* Sidebar */}
-          <div class="sidebar">
+          <div className="sidebar">
             {/* Sidebar user panel (optional) */}
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-              <div class="image">
-                <a href> <img src="assets/dist/img/logo.png" style={{width: '150px'}} alt="User Image" /></a>
+            <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+              <div className="image">
+                <a> <img src={logo}style={{width: '150px'}} alt="User Image" /></a>
               </div>
-              <div class="info">
+              <div className="info">
               </div>
             </div>
             {/* Sidebar Menu */}
-            <nav class="mt-2">
-              <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <nav className="mt-2">
+              <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 {/* Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library */}
-               {categories.map(cat=>( <li class="nav-item has-treeview">
+               {categories.map((cat,index)=>( <li key={index} className="nav-item has-treeview">
               
                   <Link onClick={props.closed} to={"/category/"+cat.id+"/"+cat.name} className="nav-link" >
-                    <img src={cat.image} alt="User Avatar" class="img-size-50 mr-3 img-circle" />
+                    <img src={cat.image} alt="User Avatar" className="img-size-50 mr-3 img-circle" />
                     <p>
                       {cat.name}
-                      <i class="fas fa-angle-right right" />
+                      <i className="fas fa-angle-right right" />
                     </p>
                   </Link>
                  
@@ -64,7 +65,7 @@ const Sidebar=props=>{
           </div>
           {/* /.sidebar */}
         </aside>
-        <div class={overlayClasses.join(' ')} onClick={props.closed}>
+        <div className={overlayClasses.join(' ')} onClick={props.closed}>
         </div>
         </>
     );

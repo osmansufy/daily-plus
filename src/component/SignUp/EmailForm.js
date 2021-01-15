@@ -18,8 +18,8 @@ const EmailForm = (props) => {
               
                 {/* <div className="text-danger">{props.formError ? formError : ''}</div> */}
                 <div className="text-danger">{props.error ? props.error :''}</div>
-                <div class="form-label-group input-group">
-                <span className="input-group-text border-0" id="inputEmail"><img src={account_icon} /></span>
+                <div className="form-label-group input-group">
+                <span className="input-group-text input-start border-0" id="inputEmail"><img src={account_icon} /></span>
               <input
                placeholder="Full Name"
               

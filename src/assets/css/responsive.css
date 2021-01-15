@@ -7,6 +7,13 @@
   .modal-content h6 {
     font-size: 16px;
   }
+  .price h6 {
+    font-size: 12px;
+    /* color: #F37A20; */
+}
+h6.sell-price {
+  font-size: 12px;
+}
   
   }
   
@@ -39,10 +46,14 @@
       left: 0;
       padding: 0 0 5px 0;
       background-color:#000;
-      
+      max-height: inherit;
       transform: translateY(-100%);
       transition: 0.3s all ease-in-out;
     }
+
+  button.btn.search-btn.btn-primary img {
+    height: 20px;
+}
     span.search-close {
       font-size: 18px;
       color: red;
@@ -53,8 +64,22 @@
     .search.show {
       transform: translateY(0);
     }
-    .btn.btn-secondary {
-      padding: 5px 10px;
+
+    .search-container {
+  
+      top: 90px;
+      width: 343px;
+     
+      left: 10px;
+   
+      z-index: 77;
+   
+      padding: 10px 15px;
+  }
+  
+button.btn.search-btn.btn-primary {
+      padding:5px 8px;
+      width: 100%;
       line-height: inherit;
       font-size: 10px;
       border-radius: 5px;
@@ -62,6 +87,15 @@
     .contact-btn {
       display: none;
   }
+  .search-result-list-detail h6 {
+    font-size: 12px;
+}
+
+.sell-price {
+  font-size: 12px;
+}
+
+
   }
 
 
@@ -129,5 +163,16 @@
 }
   .signup .modal-content {
    padding: 30px;
+}
+.col{
+  max-width: 12.5%;
+}
+.user .modal-dialog {
+  max-width: 690px !important;
+}
+}
+@media (min-width:1200px){
+.col{
+  max-width: 12.5%;
 }
 }

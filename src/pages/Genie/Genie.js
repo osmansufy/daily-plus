@@ -5,11 +5,9 @@ import { useHistory } from 'react-router';
 import emptyImg from '../../assets/img/empty.png'
 import ButtonQuantity from '../../UI/Button/ButtonQtn';
 import * as cartActions from '../../store/actions/actionCart'
-import PreOrderCheckout from '../../component/PreOrder/PreOrderChckout';
-import PreOngoing from '../../component/PreOrder/PreOrderOngoing';
-import PreHistory from '../../component/PreOrder/PreOrderHistory';
 import GenieList from '../../component/Genie/GenieList';
 import GenieOngoing from '../../component/Genie/GenieOngoing';
+import GenieHistory from '../../component/Genie/GenieHistory';
 const Genie = () => {
 
     return (
@@ -17,7 +15,7 @@ const Genie = () => {
          <Container> 
 
        
-    <Modal.Dialog className="mx-auto my-0 " contentClassName="pt-5">
+    <Modal.Dialog className="mx-auto my-0 " contentClassName="py-4">
     
     <Modal.Body >
      <Tab.Container id="left-tabs-example" defaultActiveKey="first">
@@ -37,14 +35,14 @@ const Genie = () => {
   </Col>
     <Col sm={12}>
       <Tab.Content>
-        <Tab.Pane eventKey="first">
+        <Tab.Pane className="px-5" eventKey="first">
        <GenieList />
         </Tab.Pane>
         <Tab.Pane eventKey="second">
         <GenieOngoing />      
         </Tab.Pane>
         <Tab.Pane eventKey="third">
-      <PreHistory />
+      <GenieHistory />
       
         </Tab.Pane>
       </Tab.Content>

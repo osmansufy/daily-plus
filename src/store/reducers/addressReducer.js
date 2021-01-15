@@ -14,6 +14,7 @@ const initialState={
         address:"Dingi Technologies Limited"
     },
     isEdit:false,
+    redirectPath:'/'
 }
 
 const onUpdatedAddress=(state,action)=>{
@@ -60,7 +61,6 @@ const AddressReducer = (state=initialState,action) => {
         return {
             ...state,
             userAddress:action.address,
-            adreessCurrent:action.address[0],
             loading:false,
             error:null
         };
@@ -71,12 +71,26 @@ const AddressReducer = (state=initialState,action) => {
             loading:false,
             error:action.error
         };
+       case actionsTypes.ADDRESS_DELETE:
+
+       const onAfterDelete=state.userAddress.filter(address=>address.id!=action.id)
+           
+        return {
+            ...state,
+            userAddress:onAfterDelete
+        };
        case actionsTypes.ADDRESS_ID:
            
         return {
             ...state,
             adreessCurrent:action.address
         };
+        case actionsTypes.ADDRESS_EDIT_START:
+           
+            return {
+                ...state,
+                isEdit:action.isEdit
+            }
        case actionsTypes.ADDRESS_EDIT:
            
         return onUpdatedAddress(state,action)
@@ -86,15 +100,23 @@ const AddressReducer = (state=initialState,action) => {
             ...state,
             adreessCurrent:action.editAddress
         }
-       case actionsTypes.ADDRESS_ADD:
-           
-        return onAddUpdatedAddress(state,action)
-       case actionsTypes.ADDRESS_EDIT_START:
+       case actionsTypes.ADDRESS_ADD_SUBMIT:
            
         return {
             ...state,
-            isEdit:action.isEdit
+            redirectPath:"/"
         }
+       case actionsTypes.ADDRESS_ADD_FROM_CHECKOUT:
+           
+        return {
+            ...state,
+            redirectPath:"/checkout",
+            isEdit:false
+        }
+       case actionsTypes.ADDRESS_ADD:
+           
+        return onAddUpdatedAddress(state,action)
+      
    
       
    

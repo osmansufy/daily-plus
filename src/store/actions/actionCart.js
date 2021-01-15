@@ -10,16 +10,16 @@ export const cartAction=(item)=>{
     // localStorage.setItem('cartItems',JSON.stringify(item)) 
 }
 
-export function updateCartUnits({id, unit_quantity}) {
+export function updateCartUnits({id, count}) {
     return {
       type: actionTypes.UPDATE_CART_UNITS,
-      payload: {id, unit_quantity}
+      payload: {id, count}
     }
   }
-export function deleteCartProduct({id, unit_quantity}) {
+export function deleteCartProduct({id, count}) {
     return {
       type: actionTypes.DELETE_PRODUCTS_CART,
-      payload: {id, unit_quantity}
+      payload: {id, count}
     }
   }
 

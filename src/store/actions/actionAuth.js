@@ -47,6 +47,19 @@ export const userLoginAction=(userdetails)=>{
     })
 }
 }
+export const userSignInAction=(userdetails)=>{
+    return dispatch=>{
+        dispatch(loginUserStart())
+    axios.post('user/signup/',userdetails)
+    .then(response=>{
+      dispatch (loginUserInit(response.data))
+      console.log(response.data)
+    }).catch(error=>{
+        console.log(error)
+        dispatch(loginUserFail(error.message))
+    })
+}
+}
 
 export const onCartChange=(isAuth)=>{
     return dispatch=>{

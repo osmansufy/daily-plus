@@ -37,7 +37,7 @@ const reducer=(state=initialState,action)=>{
         case actionTypes.FETCH_CAT_PRODUCTS:
             return {
             ...state,
-            CatProducts:action.products,
+            CatProducts:action.catProducts,
             catloading:false
             }
         case actionTypes.FAIL_CAT_PRODUCTS:

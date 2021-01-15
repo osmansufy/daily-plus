@@ -1,7 +1,7 @@
 
 import './assets/css/adminlte.min.css'
 
-import './assets/css/animate.css'
+// import './assets/css/animate.css'
 import './App.css';
 import './assets/css/style.css'
 import './assets/css/custom.css'
@@ -31,6 +31,7 @@ import PreOrderDetails from './component/PreOrder/PreOrderDetails';
 import ProductId from './pages/ProductId';
 import Genie from './pages/Genie/Genie';
 import GenieForm from './component/Genie/GenieForm';
+import GenieOrderDetails from './component/Genie/GenieOrderDetails';
 
 
 const App=(props)=> {
@@ -63,6 +64,7 @@ const history = createBrowserHistory();
   <Route path='/genie' exact component={Genie} />
   <Route path='/genie/form' exact component={GenieForm} />
   <Route path='/order/preorder/info' exact component={PreOrderDetails} />
+  <Route path='/genie/order/info' exact component={GenieOrderDetails} />
   
   <Route path='/logout' exact component={Logout} />
   <Route path='/location' exact component={Location} />
@@ -71,9 +73,9 @@ const history = createBrowserHistory();
   );
   return  (
    
-  <div class="wrapper">
+  <div className="wrapper">
     
-    <div class="content-wrapper">
+    <div className="content-wrapper">
     
     <Header  />
     

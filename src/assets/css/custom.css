@@ -20,6 +20,12 @@ img{
   object-fit: contain;
   object-position: center;
 }
+.dropdown-item{
+  white-space: inherit;
+}
+.dropdown-custom::after{
+  content: none;
+}
 .custom_page {
   margin-top: 200px;
 }
@@ -47,6 +53,10 @@ p , a , h1, h2 ,h3 ,h6,  span{
 h1, h2 ,h3 ,h6{
   /* font-weight: bold; */
 }
+.dropdown-item:active{
+  background-color: #5EC401;
+  color: #E1E1E1;
+}
 hr{
   margin: 0;
 }
@@ -66,8 +76,14 @@ hr{
   .input-group.md-form.form-sm.form-2.pl-0 {
     background: #E8F7DB;
   }
-  .form-control.my-0.py-1.red-border {
-    background: #E8F7DB;
+  .bg-search {
+    background: rgba(232,247,219,1) !important;
+  }
+  .bg-search:focus {
+    background: rgba(232,247,219,1) !important;
+  }
+  .bg-search:focus-visible {
+    background: rgba(232,247,219,1) !important;
   }
   .form-control.my-0.py-1.red-border {
     border: none !important;
@@ -89,8 +105,9 @@ hr{
   color: #F37A20;
 }
 .card.category-card {
-    padding: 15px 21px 59px 22px;
-    box-shadow: none;
+  padding: 15px;
+  box-shadow: none;
+  height: 180px;
 }
 .btn.btn-secondary {
   padding: 11px 35px;
@@ -178,7 +195,7 @@ hr{
   text-align: left;
 }
 
-.btn.btn-primary {
+.btn-padding {
   padding: 12px 34px 12px 34px;
 }
 .price {
@@ -197,15 +214,16 @@ hr{
   /* height: 210px; */
 }
 .category_img {
-  width: 100%;
-  height: 204px;
+  /* width: 100%; */
+  min-height: 103px;
   display: flex;
+  /* justify-self: self-start; */
 }
 .card.category-card img {
   
   width: 100%;
   
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 
@@ -330,22 +348,26 @@ banner Section
   margin-top: 150px;
 }
 
-
+/*
+CheckOut
+*/
 .date-container .nav {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
 
-.date-container .nav .nav-item {
-  background-color: #f0f1f2;
 
-}
 .date-container .nav-link.active {
   background-color: var(--primary-color) !important;
- height: 100%;
+  font-style: normal;
+  text-align: center;
+  color: #ffff;
+}
+.date-container .nav-link{
+
+  height: 100%;
   font-family: Poppins;
-  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 18px;
@@ -353,8 +375,10 @@ banner Section
   text-align: center;
   color: #ffff;
 }
-.date-container .nav-link p {
+.date-container .nav-link p,.date-container .nav-link  h4 {
   
+  margin: 0;
+  padding: 0;
   font-family: Poppins;
   font-size: 12px;
   font-style: normal;
@@ -366,20 +390,17 @@ banner Section
 }
 .date-container .nav-link.active p, .date-container .nav-link.active h4 {
  
-  font-family: Poppins;
-  /* font-size: 12px; */
-  font-style: normal;
-  font-weight: 400;
-  line-height: 18px;
-  letter-spacing: 0em;
-  text-align: center;
   color: #fff;
 }
-.date-container .nav-link {
+/* .date-container .nav-link {
   background: #F0F1F2;
   border-radius: 8px;
-}
+} */
+.date-container .nav .nav-item {
+  background-color: #f0f1f2;
+  border-radius: 8px;
 
+}
 .date-container .nav-item {
  
   width: 64px;
@@ -409,6 +430,12 @@ banner Section
 UserProfile
 */
 
+.userProfilePic img {
+  width: 138px !important;
+  height: 138px !important;
+  border-radius: 50%;
+  /* border: 1px solid red; */
+}
 .addressModal,.userModal {
   background: #FFFFFF;
   box-shadow: 0px 24px 21px rgba(0, 0, 0, 0.11);
@@ -657,6 +684,7 @@ margin-top: 5px;
   justify-content: left;
   align-items: center;
   margin: 35px 0;
+  max-height: 48px;
 }
 
 .btn-custom span {
@@ -732,9 +760,10 @@ color: #37474F
 
 /* NEW CSS*/
 
-
-button#dropdown-custom-1,button#dropdown-custom-2 {
+button#dropdown-custom-1, button#dropdown-custom-2 {
   background: none;
+  padding: 0;
+  margin: 0;
 }
 button#dropdown-custom-2 i {
   color: #000;
@@ -763,7 +792,7 @@ button#dropdown-custom-2 i {
 /*Product Modal*/
 
 /*Input*/
-.input-group-text {
+.input-start {
   border: none;
   background: #F0F1F2;
   /* border-radius: inherit; */
@@ -834,6 +863,9 @@ button#dropdown-custom-2 i {
   font-weight: 700;
   font-family: Poppins;
 }
+.form-label-group:focus-within {
+  border-bottom: 2px solid #5EC401;;
+}
 .inBR{
 border-radius: 0 8px 8px 0 !important;  
 }
@@ -860,4 +892,9 @@ border-radius: 0 8px 8px 0 !important;
   color: rgba(55, 71, 79, 0.72);
   /* max-width: 343px; */
   margin: 20px 0 ;
+  font-size: 14px;
+}
+
+.bg-none {
+  background: transparent;
 }

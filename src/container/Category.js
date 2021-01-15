@@ -21,17 +21,17 @@ class Category extends Component {
 return <SingleCategory data={item} key={index} />
 
         });
-        return (<section class="category-section">
-            <div class="container">
-              <div class="row mb-4">
-                <div class="col-md-6 col-sm-6 col-6">
+        return (<section className="category-section">
+            <div className="container">
+              <div className="row mb-4">
+                <div className="col-md-6 col-sm-6 col-6">
                   <h2>Shop by Categories</h2>
                 </div>
-                <div class="col-md-6 col-sm-6 col-6">
-                  <button class="btn btn-primary float-right">View All Category</button>
+                <div className="col-md-6 col-sm-6 col-6">
+                  <button className="btn btn-padding btn-primary float-right">View All Category</button>
                 </div>
               </div>
-              <div class="row category-items">
+              <div className="row category-items">
                 {cats}
               </div>
             </div>

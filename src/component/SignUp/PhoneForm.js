@@ -16,7 +16,8 @@ const PhoneForm = (props) => {
 
 
 </div>
-        <p>We need to verify you. We will send you a one time verification code. </p>
+        <h3 className="text-center">Enter your mobile number</h3>
+        <p className="w-50 mx-auto">We need to verify you. We will send you a one  time verification code. </p>
           {/* <div className="text-danger">{props.formError ? formError : ''}</div> */}
           <PhoneInput
         country={'bd'}
@@ -27,7 +28,7 @@ const PhoneForm = (props) => {
         onChange={props.change}
         isValid={props.valid}
         />
-<Button onClick={props.clicked} className="w-100 mt-3" variant="primary">Next</Button>
+        <Button type="submit" onClick={props.clicked}  className="w-100 mt-3 d-flex align-items-center" variant="primary"><span className="flex-grow-1"> Next </span><img src={next} /></Button>
         </>
      );
 }

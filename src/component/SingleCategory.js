@@ -12,15 +12,16 @@ function SingleCategory(props) {
 // }
     return (
         
-             <div class="col-md-3 col-sm-6 col-12 mt-2">
+             <div className="col-md-3  col-lg-3 col col-sm-6 col-6 mt-2">
                <Link to={"/category/"+props.data.id+"/"+props.data.name} >
-               <div class="card category-card">
+               <div className="card category-card">
                  <div className="category_img">
                  <img src={props.data.image} alt="" />
                  </div>
                       
                       <h6>{props.data.name}</h6>
                     </div>
+                   
                </Link >
                 
                 </div>

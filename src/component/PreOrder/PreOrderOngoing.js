@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import axios from '../../axios'
 import Spinner from '../../container/Spinner/Spinner';
-// import emptyImg from '../ assets/img/empty.png'
+import emptyImg from '../../assets/img/empty.png'
 import cartIcon from '../../assets/img/cart.png'
 import moment from 'moment'
 import { Container, Row } from "react-bootstrap";
@@ -23,7 +23,7 @@ const PreOngoing = () => {
          })
          .then(response=>{
              console.log(response)
-             setPreAllOrder(response.data)
+             setPreAllOrder(response.data.filter(order=>order.status==1))
              setLoading(false)
          })
          .catch(error=>{
@@ -39,13 +39,11 @@ const PreOngoing = () => {
     });
     }
 
-    let contentPreOngoing=<div className="row ongoing justify-content-center"><img />
-    <p>There is no ongoing order right now. You can order from home</p>
-    </div>
+    let contentPreOngoing=""
 if (loading) {
   contentPreOngoing=<Spinner />
 }else if(!loading && preAllOrder.length >0){
-  contentPreOngoing= preAllOrder.filter(order=>order.status==1).map(order=>{
+  contentPreOngoing= preAllOrder.map(order=>{
     return <a onClick={()=>onPreOrderDetails(order.id)}>    <div className="row order-info">
     <div className="info-left">
         
@@ -63,9 +61,12 @@ if (loading) {
   })
   
   
-}else{
-  contentPreOngoing=""
+}else if (!loading && preAllOrder.length==0){
+  contentPreOngoing=<div className="row ongoing justify-content-center"><img src={emptyImg} />
+  <p>There is no ongoing order right now. You can order from home</p>
+  </div>
 }
+console.log(preAllOrder)
     return ( 
         <Container>
 <Row>

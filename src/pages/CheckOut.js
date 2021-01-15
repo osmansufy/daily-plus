@@ -1,59 +1,95 @@
-import {Nav} from 'react-bootstrap'
+import {Nav,Dropdown,Tab,Row,Col} from 'react-bootstrap'
 import React, { useState,useEffect } from 'react';
 import axios from '../axios' 
 import moment from 'moment'
 import { useSelector ,useDispatch} from 'react-redux';
-import { withRouter} from 'react-router-dom'
+import classes from './CheckOut.Module.css'
+import { useHistory, withRouter} from 'react-router-dom'
 import * as authAction from '../store/actions/actionAuth'
+import * as addressAction from '../store/actions/actionAddress'
+import plusIcon from '../assets/img/plus-icon.png'
+import offerIcon from '../assets/img/offer_24px.png'
 const CheckOut = props=> {
 
-  const userInfo=useSelector(state=>state.auth.userdetails)
   const token=useSelector(state=>state.auth.accessToken)
+  const history=useHistory()
+  const dispatch=useDispatch()
+  // const userAddressAction=(token)=>dispatch(addressAction.onUserAddress(token))
+  const userInfo=useSelector(state=>state.auth.userdetails)
   const activeCart=useSelector(state=>state.auth.activeCart)
   const userAddress=useSelector(state=>state.address.userAddress)
+  const currentAddress =useSelector(state=>state.address.adreessCurrent)
+  const onAddressCheckout =()=>dispatch(addressAction.onAddressCheckout())
+  const [userLocation,setUserLocation]=useState({
+    lng:'',
+    lat:'',
+    address:'',
+    title:''
+  })
+  const [slots,setSlots]=useState([])
+  const [dates,setDates]=useState([])
+  const [currentSlots,setCurrentSlots]=useState()
+  const onNewLocation=()=>{
+    onAddressCheckout()
+    props.history.push('/location');
+}
+const latestAddress=userAddress.reduce((a, b) => new Date(a.ts_updated) > new Date(b.ts_updated) ? a : b) 
+
+const getTimeSlots=(lat,lng)=>{
+  const user=userInfo.id
+const query= `?lat=${lat}&lng=${lng}&user=${user}`
+axios.get("/order/delivery/slots/"+query,{
+ headers: {
+   Authorization: `JWT ${token}`,
+   "Content-Type": "application/json"
+ }
+}).then(response=>{
+ console.log(response)
+ setSlots(response.data.slots)
+ setDates(response.data.dates)
+ const newSlot=response.data.slots.filter(slot=>moment(slot.start).isSame(moment(),'day'))
+  setCurrentSlots(newSlot)
+})
+.catch(error=>{
+ console.log(error)
+})
+}
+
+  useEffect(()=>{
+   
+
+    console.log('latestAddress',latestAddress)
+    setUserLocation({
+      lng:latestAddress.location.lng,
+     lat:latestAddress.location.lat, 
+     address:latestAddress.address,
+     title:latestAddress.title,
+    })
+   
+    getTimeSlots(latestAddress.location.lng,latestAddress.location.lat)
+  
+   
+  },[])
+
+
   const [orderInformation,setOrderInformation]=useState(
     {
     
-      user:userInfo.id,
-     lng:userAddress[0].location.lng,
-     lat:userAddress[0].location.lat, 
-     address:userAddress[0].address,
-    deliveryTime:moment().toISOString(),
-    paymentMethod:1,
+    //   user:userInfo.id,
+    //  lng:userAddress[0].location.lng,
+    //  lat:userAddress[0].location.lat, 
+    //  address:userAddress[0].address,
+    // deliveryTime:moment().toISOString(),
+    // paymentMethod:1,
   }
   )
-  const dispatch=useDispatch()
 
-  const CartChange=(token)=>dispatch(authAction.onCartChange(token))
-//   const [slots,setSlots]=useState([])
-//  const getTimeSlots =()=>{
-//    const {user,lng,lat}=orderInformation
-// const query= `?lat=${lat}&lng=${lng}&user=${user}`
-// axios.get("/order/delivery/slots/"+query,{
-//   headers: {
-//     Authorization: `JWT ${token}`,
-//     "Content-Type": "application/json"
-//   }
-// }).then(response=>{
-//   console.log(response)
-//   setSlots(response.data.slots)
-// })
-// .catch(error=>{
-//   console.log(error)
-// })
-//  }
-
-//   useEffect(()=>{
-//     getTimeSlots()
-//   },[]
-// )
-
-  const [onDate,setOnDate]=useState()
-  const [onTime,setOnTime]=useState()
+  
+ 
   const time1="9:00"
   const time2="12:00"
   const time3="15:00"
-  console.log(orderInformation)
+  // console.log(orderInformation)
   const date=moment()
   let tomorrow  = moment().add(1,'days');
   let tomorrow2  = moment().add(2,'days');
@@ -61,22 +97,24 @@ const CheckOut = props=> {
   let tomorrow4  = moment().add(4,'days');
   let tomorrow5  = moment().add(5,'days');
   let tomorrow6  = moment().add(6,'days');
+  const CartChange=(token)=>dispatch(authAction.onCartChange(token))
+
+
   const dateHandler=(date)=>{
-  const newDate=date.toISOString()
-  setOnDate(newDate)
-  console.log(newDate)
-  setOrderInformation({
-    ...orderInformation,
-    deliveryTime:newDate
-  })
+  
+  const newSlot=slots.filter(slot=>moment(slot.start).isSame(date,'day'))
+  setCurrentSlots(newSlot)
+  console.log(date)
+  console.log(newSlot)
+ 
     // setTimeout(()=>{console.log(orderInformation)},2000)
   }
 
   // useEffect(dateHandler(),[orderInformation])
-  const timeHandler=(time)=>{
+//   const timeHandler=(time)=>{
   
-setOnTime(time)
-  }
+// setOnTime(time)
+//   }
 const onMethod=(event)=>{
   setOrderInformation({
     ...orderInformation,
@@ -133,6 +171,17 @@ if (orderInformation.paymentMethod==2) {
   console.log(error)
 })
   }
+  const adressChange=(address)=>{
+    setUserLocation({
+      lng:address.location.lng,
+      lat:address.location.lat, 
+      address:address.address,
+      title:address.title,
+    })
+    
+    getTimeSlots(address.location.lat,address.location.lng)
+  }
+  console.log('date',moment().date())
     return ( <section className="custom_page">
         <div className="container">
           <div className="row">
@@ -141,104 +190,102 @@ if (orderInformation.paymentMethod==2) {
              
             </div>
           </div>
-          <div className="row">
+          <div className="row flex-sm-nowrap">
+          
             <div className="col-md-6 col-sm-6 col-12 order-box mr-2">
               <h6 className="mb-3">Expected Date &amp; Time</h6>
-              <div className="date-container">
-              <Nav variant="pills" defaultActiveKey="link-1">
-  <Nav.Item onClick={()=>dateHandler(date)} >
-    <Nav.Link eventKey="link-1" ><p>{date.format('ddd')}</p>
-
-<h4>{date.format('DD')}</h4>
-<p>{date.format('MMM')}</p>
-</Nav.Link>
-  </Nav.Item>
-  <Nav.Item onClick={()=>dateHandler(tomorrow)} >
-    <Nav.Link eventKey="link-2">
-<p>{tomorrow.format('ddd')}</p>
-
-<h4>{tomorrow.format('DD')}</h4>
-<p>{tomorrow.format('MMM')}</p>
-</Nav.Link>
-  </Nav.Item>
+              
+              <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+              <div className="date-container my-3">
  
-  <Nav.Item onClick={()=>dateHandler(tomorrow2)}>
-    <Nav.Link eventKey="link-3" >
-    <p>{tomorrow2.format('ddd')}</p>
+    <Nav variant="tabs" defaultActiveKey="link-15">
+              {dates && dates.map((date,index)=>(
+                  <Nav.Item    className="mb-2"  as="a" >
+                  <Nav.Link  eventKey={`link-${moment(date.date).utc().format('DD')}`} ><p>{moment(date.date).utc().format('ddd')}</p>
+              
+              <h4>{moment(date.date).utc().format('DD')}</h4>
+              <p>{moment(date.date).utc().format('MMM')}</p>
+              </Nav.Link>
+                </Nav.Item>
+                ))}
 
-<h4>{tomorrow2.format('DD')}</h4>
-<p>{tomorrow2.format('MMM')}</p>
-</Nav.Link>
-  </Nav.Item>
-  
-  <Nav.Item onClick={()=>dateHandler(tomorrow3)}>
-    <Nav.Link eventKey="link-4" >
-    <p>{tomorrow3.format('ddd')}</p>
-
-<h4>{tomorrow3.format('DD')}</h4>
-<p>{tomorrow3.format('MMM')}</p>
-
-    </Nav.Link>
-  </Nav.Item>
-  <Nav.Item onClick={()=>dateHandler(tomorrow4)}>
-    <Nav.Link eventKey="link-5" >
-    <p>{tomorrow4.format('ddd')}</p>
-
-<h4>{tomorrow4.format('DD')}</h4>
-<p>{tomorrow4.format('MMM')}</p>
-
-    </Nav.Link>
-  </Nav.Item>
-  <Nav.Item onClick={()=>dateHandler(tomorrow5)}>
-    <Nav.Link eventKey="link-6" >
-    <p>{tomorrow5.format('ddd')}</p>
-
-<h4>{tomorrow5.format('DD')}</h4>
-<p>{tomorrow5.format('MMM')}</p>
-
-    </Nav.Link>
-  </Nav.Item>
-  <Nav.Item onClick={()=>dateHandler(tomorrow6)}>
-    <Nav.Link eventKey="link-7">
-    <p>{tomorrow6.format('ddd')}</p>
-
-<h4>{tomorrow6.format('DD')}</h4>
-<p>{tomorrow6.format('MMM')}</p>
-</Nav.Link>
-  </Nav.Item>
 </Nav>
-                </div>
-                <Nav variant="pills" className="flex-lg-nowrap" defaultActiveKey="date-1">
-                <Nav.Item className="time-container mt-3" onClick={()=>timeHandler(time1)} >
-    <Nav.Link  className="times  mr-3" eventKey="date-1">
-    <p>9AM - 12PM</p>
-</Nav.Link>
-  </Nav.Item>
-                <Nav.Item className="time-container mt-3" onClick={()=>timeHandler(time2)} >
-    <Nav.Link className="times  mr-3"  eventKey="date-2">
-    <p>3 pm - 6PM</p>
-</Nav.Link>
-  </Nav.Item>
-                <Nav.Item className="time-container mt-3" onClick={()=>timeHandler(time3)} >
-    <Nav.Link className="times  mr-3" eventKey="date-3">
-    <p>3 pm - 6PM</p>
-</Nav.Link>
-  </Nav.Item>
+</div>
+    <Tab.Content>
 
-                </Nav>
+
+{dates && dates.map((date,index)=>(
+ <Tab.Pane className="w-100" id={moment(date.date).utc().format('DD')} eventKey={`link-${moment(date.date).utc().format('DD')}`} >
+   <Nav variant="pills" className="" defaultActiveKey="date-0">
+{slots && slots.length>0 && slots.filter(slot=>moment(slot.start).isSame(date.date,'day')).map((slot,index)=>(
+    <>
+    {slot.is_available ? <Nav.Item disabled={!slot.is_available}  className="time-container mt-3"  >
+<Nav.Link eventKey={`date-${index}`}  className="times  mr-3"  >
+<p>{moment(slot.start).utc().format('h:mm A')}-{moment(slot.end).utc().format('h:mm A')}</p>
+</Nav.Link>
+</Nav.Item>:""
+}
+    
+ </> ))}
+ </Nav>
+ </Tab.Pane>
+))}
+
+
+</Tab.Content>
+   
+  
+</Tab.Container>
+             
+               
+                
+               
+                 
+              
+
+               
             
-              <div className="delivery-address mt-4">
-                <h6>Delivery Address <span className="addresschange-link ml-4"><a href="#">Change Address</a></span></h6>
+              <div className="delivery-address justify-content-around w-100 d-flex mt-4">
+                <h6>Delivery Address  </h6>
+                <Dropdown className="addresschange-link " >
+                
+                
+  <Dropdown.Toggle as="a" variant="success" id="dropdown-basic">
+   Change Address
+  </Dropdown.Toggle>
+
+  <Dropdown.Menu as="ul" className={classes.checkoutAddress} style={{width:"100px"}}>
+    {userAddress.map((address,index)=>(
+      <Dropdown.Item as="li" href="#/action-1">
+        <a onClick={()=>adressChange(address)}>
+          <p className="m-0 p-0">
+          {address.title}
+          </p>
+          <small>
+          {address.address}
+          </small>
+        </a>
+        
+        
+        </Dropdown.Item>
+    ))}
+    <Dropdown.Item as="li">
+    <a  onClick={onNewLocation} type="button" className="btn btn-primary btn-custom btn-lg btn-block"><img src={plusIcon} /> <span>
+           Add New Address </span></a>
+           </Dropdown.Item>
+  </Dropdown.Menu>
+</Dropdown>
+</div>         
                 <div className="address mt-3">
                   <div className="address-icon mr-3">
                     <i className="fa fa-map-marker" aria-hidden="true" />
                   </div>
                   <div className="address-right">
-                    <h6>{userAddress[0].title}</h6>
-                    <p>{userAddress[0].address}</p>
+                    <h6>{userLocation.title}</h6>
+                    <p>{userLocation.address}</p>
                   </div>
                 </div>
-              </div>
+              
               <div className="payment-method mt-4">
                 <h6>Payment Method</h6>
                 <div className="payment-radio-btn mt-3">
@@ -268,9 +315,21 @@ if (orderInformation.paymentMethod==2) {
                 <h6>Total <span className="float-right">BDT 1,049</span></h6>
               </div>
               <div className="promo-code-container mt-3">
-                <a href><h6><img src="dist/img/default-150x150.png" className="mr-2" alt="" /> Add Promo Code <span className="float-right"><i className="fa fa-angle-right" /></span></h6></a>
-                <a href><h6><img src="dist/img/default-150x150.png" className="mr-2" alt="" /><span style={{color: '#5EC401'}}>New100</span> Promo Added <span className="float-right"><i className="fa fa-trash-o" /></span></h6></a>
+                <a><h6><img src={offerIcon} className="mr-2" alt="" /> Add Promo Code <span className="float-right"><i className="fa fa-angle-right" /></span></h6></a>
+               
               </div>
+              <Dropdown className="promo-code-container mt-3">
+  <Dropdown.Toggle as="a" className="dropdown-custom" variant="success" id="dropdown-basic">
+  <h6><img src={offerIcon} className="mr-2" alt="" /> Add Promo Code <span className="float-right"><i className="fa fa-angle-right" /></span></h6>
+  </Dropdown.Toggle>
+
+  <Dropdown.Menu className="p-3">
+    
+<h6 className="text-center"> Add Promo Code</h6>
+      <input className="mx-auto w-100 " type="text" />
+      <button className="btn w-100 mt-2 mx-auto btn-primary">Add Promo Code</button>
+  </Dropdown.Menu>
+</Dropdown>
               <div className="order-note-container mt-3">
                 <h6>Additional Note</h6>
                 <form action className="mt-2">

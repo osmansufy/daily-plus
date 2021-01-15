@@ -99,7 +99,8 @@ header .logo-holder .logo{
 }
 .search {
     flex: 0.7;
-    max-width: 400px;
+    /* max-width: 400px; */
+    max-height: 45px;
 }
 .notification-btn{
     position: relative;
@@ -228,7 +229,7 @@ header .logo-holder .logo{
     margin-top: 10px;
   
     font-family: Poppins;
-    font-size: 16px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 500;
     line-height: 21px;
@@ -1018,7 +1019,7 @@ body{
 /* Search CSS */
 .search .input-group input{
     position: relative;
-    text-indent: 35px;
+    /* text-indent: 35px; */
     border: 1px solid var(--primary-color);
     border-radius: var(--border-radius) !important;
 }
@@ -1359,9 +1360,9 @@ body{
 .fa-briefcase{
      padding-right:8px;
 }
-.fa-map-marker{
+/* .fa-map-marker{
      padding-right:8px;
-}
+} */
 .title-work{
     width:100%;
     padding: 20px 0;
@@ -1378,12 +1379,6 @@ body{
 .contents hr{
     color:gray;
     width: 100%;
-}
-.btn-danger{
-    position: absolute;
-    right: 0;
-    top:0;
-    z-index: 9999;
 }
 
 .fa-ellipsis-v {

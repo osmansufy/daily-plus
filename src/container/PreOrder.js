@@ -15,13 +15,13 @@ getPreOrders()
   },[])
     return (
         <section>
-            <div class="container">
-              <div class="row">
-                <div class="col-md-12 col-sm-12 col-12">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-12 col-sm-12 col-12">
                   <h2>Pre-Order Products</h2>
                 </div>
               </div>
-              <div class="row">
+              <div className="row">
                 {preOrders && preOrders.map((item,index)=>(
                   <SinglePreOrder data={item} key={index} />
 

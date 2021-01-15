@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import Axios from 'axios';
 import './search.css'
 import bagIcon from '../assets/img/bag_white.png'
+import genieImg from '../assets/img/Genie.png'
+import genielamp from '../assets/img/genie-lamp.png'
+import GenieSmall from '../assets/img/GenieSmall.png'
+import info from '../assets/img/info_24px.png'
 import Spinner from '../container/Spinner/Spinner'
 import { useHistory } from "react-router";
 const Search = (props) => {
@@ -35,10 +39,19 @@ const history=useHistory()
         }
       }
   }
+  const onGenieForm=()=>{
+    history.push('/genie/form')
+    // setShowResult(false)
+    setSearchEnter('')
+  }
   useEffect(()=>{
 getPreOrders()
   },[searchEnter,inputRef])
 
+  const onSearchClose=()=>{
+    setShowResult(false)
+    props.closed()
+  }
 const onProductSelect=(id)=>{
   setShowResult(false)
   history.push('/product/'+id)
@@ -50,52 +63,88 @@ const onProductSelect=(id)=>{
  
       <div className="search-result" id="searchResult">
         <h6>Search Result </h6>
-        
-       
-        <ul>
+        {searchResult.length>0 ? <ul>
             {searchResult.map(product=>(
+              <>
      <li>
        <a onClick={()=>onProductSelect(product.id)}>
      <div className="search-result-list">
        <div className="search-result-list-img mr-2">
          <img src={ product.image_list[0] && product.image_list[0].thumbnail_image_url} alt="" />
        </div>
-       <div className="search-result-list-detail my-3">
+       <div className="search-result-list-detail my-md-3">
          {/* <button className="btn recommended-btn mb-2">Recommended</button> */}
             <h6>{product && product.name}--{product && product.unit_name}</h6>
-         <p className="regular-price mt-2"></p>
-         <div className="sell-price mt-2">ট { product.image_list[0] && product.inventory_list[0].unit_price_final}</div>
+         <p className="regular-price m-0 mt-md-2"></p>
+         <div className="sell-price m-0 mt-md-2">ট { product.inventory_list[0] && product.inventory_list[0].unit_price_final}</div>
        </div>
        <div className="search-result-list-btns">
        
          <div className="search-result-list-btn-cart">
            <i className="fa fa-heart-o mr-2" />
-           <button className="btn search-btn btn-primary"><img className="mr-3" src={bagIcon} /> Add</button>
+           <button className="btn search-btn btn-primary mb-1"><img className="mr-md-3" src={bagIcon} /> <span className="flex-grow-1">Add</span> </button>
          </div>
        </div>
      </div>
      </a>
      <hr />
     </li>
+    { product.inventory_list[0] && product.inventory_list[0].status==3 || product.inventory_list[0] && product.inventory_list[0].status==4? <li >
+      <a onClick={onGenieForm} className="d-flex justify-content-between">
+        <img src={GenieSmall} className="mr-3" />
+        <div className="newGenieInfo">
+          <h4>Didn’t find the product you’re looking for? Ask Genie!</h4>
+          <p>Genie will deliver it to your address.</p>
+          <div className="d-flex justify-content-around">
+          <button type="button" className="btn btn-genie w-75 btn-warning"><img src={genielamp}/>
+          
+          <span className="flex-grow-1">Ask Genie</span> </button>
+        <img src={info}/>
+          </div>
+         
+        </div>
+       
+      </a>
+      </li> : ""}
+    </>
+    
             ))}
          
           
-        </ul>
+        </ul> :
+         <div className="d-flex flex-column justify-content-center align-items-center">
+         <div className="genieImg my-2">
+             <img  src={genieImg} />
+         </div>
+         <div className="genieinfo">
+          <h5>Didn’t find the product you’re looking for? Ask Genie!</h5>
+          <p>Genie will deliver it to your address.</p>
+          <p className="genip">You can also add out of stock product to Genie List.</p>
+         </div>
+         <button onClick={onGenieForm} className="btn geniebtn w-80 mx-auto d-flex  align-items-center btn-primary"><i className="fas fa-plus mr-2"></i><span>Add to Genie List</span></button>
+        </div>
+          
+        }
+       
+        
       </div>
       {/* Search End */}
     </div>
   }
     return ( <div className={props.show? "search show" : "search"}>
-    <span onClick={props.closed} className="search-close">×</span>
-    <div className="input-group md-form form-sm form-2 pl-0">
-      <input className="form-control my-0 py-1 red-border" 
+    <span onClick={onSearchClose} className="search-close">×</span>
+    <div className="input-group md-form form-sm form-2 bg-none border-0 pl-0">
+    <div className="input-group-prepend">
+        <span className="input-group-text border-0 bg-none" id="basic-addon1"><i className="fa fa-search text-grey" aria-hidden="true" /></span>
+      </div>
+      <input className=" form-control my-0 py-md-1 border-0  bg-search" 
       ref={inputRef}
       value={searchEnter}
       onChange={(event)=>setSearchEnter(event.target.value)}
-      type="text" placeholder="Search Products (examples: Egg, Rice etc.)" />
-      <span className="custom-serach" id="basic-text1"><i className="fa fa-search text-grey" aria-hidden="true" /></span>
+      type="search" placeholder="Search Products" />
+      {/* <span className="custom-serach" id="basic-text1"><i className="fa fa-search text-grey" aria-hidden="true" /></span>
       <div className="input-group-append">
-      </div>
+      </div> */}
       
     </div>
     {/* Search Result */}

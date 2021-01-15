@@ -51,7 +51,7 @@ const PreOrderCheckout = () => {
         allPreProducts(token)
   
     },[])
-
+console.log(preProducts)
     const placePreOrder=(event)=>{
         event.preventDefault()
        const preOrderSend={
@@ -97,7 +97,7 @@ const PreOrderCheckout = () => {
      <div className="col-md-10 col-sm-10 col-12  my-4 mx-auto">
     {preProducts.length>0 && preProducts.map((item, index)=>(
             <div  className="cart-product mx-auto col-md-10">
-                <div  className="">
+                <div  className="gOimage">
                 <img  className="img-fluid" src={item.prod_image_list[0].thumbnail_image_url} alt="" />
                 </div>
                 <div  className="quantity">
@@ -130,7 +130,7 @@ const PreOrderCheckout = () => {
             ))}
 
      <div className="delivery-address mt-4">
-                  <h6>Delivery Address <span className="addresschange-link ml-4"><a href="#">Change Address</a></span></h6>
+                  <h6>Delivery Address <span className="addresschange-link ml-4"><a >Change Address</a></span></h6>
                   <div className="address mt-3">
                     <div className="address-icon mr-3">
                       <i className="fa fa-map-marker" aria-hidden="true" />

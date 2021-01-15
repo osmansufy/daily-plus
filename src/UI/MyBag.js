@@ -4,19 +4,22 @@ import axios from '../axios'
 import * as cartActions from '../store/actions/actionCart'
 import ButtonQuantity from './Button/ButtonQtn';
 import CommonBtn from './Button/CommonBtn';
-import { withRouter} from 'react-router-dom'
+import { useHistory, withRouter} from 'react-router-dom'
 import  classes from './MyBag.Module.css'
+import SuccessModal from './Modal/SuccessModal';
+import {Button} from 'react-bootstrap'
 
 const MyBag=(props)=> {
 console.log(props)
 
 
-  
-
+  const history=useHistory()
+  const [smShow, setSmShow] = useState(false);
 
   const isSignUp=useSelector(state=>state.auth.accessToken)
   const userdetails=useSelector(state=>state.auth.userdetails)
   const activeCart=useSelector(state=>state.auth.activeCart)
+  const userAddress=useSelector(state=>state.address.userAddress)
 
   // useEffect(()=>{ 
   //   if (isSignUp) {
@@ -33,22 +36,31 @@ console.log(props)
   //  })
   //   }
   //  },[])
+  const onAddress=()=>{
+    setSmShow(false)
+    history.push('/location')
+    
+   }
  const orderCheckoutHandler =()=>{
 const carts=[]
    props.bagLists.map((item,index)=>{
 carts.push({
   cart_id:activeCart,
   product_id:item.id,
-  item_count: item.unit_quantity,
+  item_count: item.count,
   item_discount:item.inventory_list[0].discount,
   unit_price: item.inventory_list[0].unit_price_final,
-  total_price: item.inventory_list[0].unit_price *item.unit_quantity
+  total_price: item.inventory_list[0].unit_price *item.count
 })
    })
    console.log(carts)
    
+ 
    if (isSignUp) {
-   
+   if (userAddress.length==0) {
+     console.log(userAddress)
+     setSmShow(true)
+   }else{
     axios.post("/order/active_cart/",carts,{
       headers: {
         Authorization: `JWT ${isSignUp}`,
@@ -61,6 +73,8 @@ carts.push({
       console.log(error)
     })
     props.history.push('/checkout')
+   }
+  
    }else{
      props.history.push('/signup')
    }
@@ -79,21 +93,21 @@ carts.push({
   const onCartHandler =(item)=>{
     console.log(item)
     const num =parseInt(1)
-props.onUpdateCartUnits({id:item.id, unit_quantity:parseInt(item.unit_quantity +1)})
+props.onUpdateCartUnits({id:item.id, count:item.count +1})
   }
   const subCartHandler =(item)=>{
     console.log(item)
     const num =parseInt(1)
 
-if(item.unit_quantity===1){
-  props.onDeleteCartProduct({id:item.id,unit_quantity:0})
+if(item.count===1){
+  props.onDeleteCartProduct({id:item.id,count:0})
 }else{
-  props.onUpdateCartUnits({id:item.id, unit_quantity: item.unit_quantity -parseInt(num)})
+  props.onUpdateCartUnits({id:item.id, count: item.count -1})
 }
   }
   const onDeleteHandler = (item)=>{
     console.log(item.id)
-    props.onDeleteCartProduct({id:item.id,unit_quantity:0})
+    props.onDeleteCartProduct({id:item.id,count:0})
   }
     return (<><div id="cart-holder" className="cart-holder"  className={attachClasses.join(' ')}>
         <div  className="cart-header">
@@ -112,7 +126,7 @@ if(item.unit_quantity===1){
             <div  className="quantity-group">
             <ButtonQuantity subClicked={() =>subCartHandler(item)} addClicked={() =>onCartHandler(item)} >
             <div  className="show-quantity">
-                <h6>{item.unit_quantity}</h6>
+                <h6>{item.count}</h6>
               </div>
             </ButtonQuantity>
             </div>
@@ -162,8 +176,12 @@ if(item.unit_quantity===1){
              
         </div>
        
-      <div class={overlayClasses.join(' ')} onClick={props.closed} >
+      <div className={overlayClasses.join(' ')} onClick={props.closed} >
         </div>
+        <SuccessModal show={smShow} hide={() => setSmShow(false)} >You hove to set a Address to  procees Order
+      <Button onClick={onAddress}  className="w-100 mt-3 d-flex align-items-center" variant="primary"><i class="fas fa-arrow-left"></i><span className="flex-grow-1"> Add Address </span></Button>
+      
+      </SuccessModal>
         </>
     );
 }

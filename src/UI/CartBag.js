@@ -14,12 +14,12 @@ const CartBag = (props) => {
 
 
     
-    return ( <div onClick={props.clicked} class="floting-cart">
-    <div  class="floting-cart-top">
-      <i class="fa fa-shopping-bag pr-2" />
+    return ( <div onClick={props.clicked} className="floting-cart">
+    <div  className="floting-cart-top">
+      <i className="fa fa-shopping-bag pr-2" />
       <p>{carts.length}</p>
     </div>
-<button class="btn">{price}</button>
+<button className="btn">{price}</button>
   </div> );
 }
  

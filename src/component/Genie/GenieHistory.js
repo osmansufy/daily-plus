@@ -9,7 +9,7 @@ import { Container, Row } from "react-bootstrap";
 import { useHistory } from "react-router";
 import {statusOrder} from '../../utility/orderStatus'
 
-const GenieOngoing = () => {
+const GenieHistory = () => {
     const usersToken=useSelector(state=>state.auth.accessToken)
     const [loading,setLoading]=useState(false)
     const [genieAllOrder,setGenieAllOrder]=useState([])
@@ -39,13 +39,7 @@ const GenieOngoing = () => {
         throw new Error('Should not get there!');
     }
   }
-  const onGenieOrderDetails=(id)=>{
-    history.push({
-      pathname: '/genie/order/info',
-     //  search: `?id=${id}`,
-      state: { id: id}
-  });
-  }
+
   const [status,statDispatch]=useReducer(statusReducer,"")
     useEffect(()=>{
         if (usersToken) {
@@ -72,10 +66,10 @@ const GenieOngoing = () => {
       if (loading) {
         contentGenieHistory=<Spinner />
       }else if(!loading && genieAllOrder.length >0){
-        contentGenieHistory= genieAllOrder.filter(order=>order.status==1).map(order=>{
+        contentGenieHistory= genieAllOrder.filter(order=>order.status!=1).map(order=>{
           // statDispatch({type:order.status})
           return <a 
-          onClick={()=>onGenieOrderDetails(order.id)}
+        //   onClick={()=>onPreOrderDetails(order.id)}
           >    <div className="row order-info">
           <div className="info-left">
               
@@ -110,4 +104,4 @@ const GenieOngoing = () => {
       </Container> );
 }
  
-export default GenieOngoing;
+export default GenieHistory;

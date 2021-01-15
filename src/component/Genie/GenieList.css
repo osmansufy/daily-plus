@@ -85,6 +85,20 @@ p.genip {
 .imgbtn.noc img {
     max-height: 100%;
 }
+.geineItems .unit {
+    color: rgba(55, 71, 79, 0.72);
+}
+.gOimage {
+    max-width: 92px;
+    height: 92px;
+}
+.geineItems p {
+    font-size: 14px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    color: #37474F;
+}
 @media(min-width:990px){
 .genieFormModal {
     /* max-width: 50%; */

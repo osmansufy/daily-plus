@@ -4,28 +4,38 @@ import {useEffect, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as addressAction from '../../store/actions/actionAddress'
+import SuccessModal from '../../UI/Modal/SuccessModal';
+import { useHistory } from 'react-router';
 const AddAddress = props => {
     const [show, setShow] = useState(false);
-   
+    const [smShow, setSmShow] = useState(false);
     const[addressName,setAddressName]=useState()
     const[addressArea,setAddressArea]=useState()
     const dispatch=useDispatch()
-
     
-  const onSetAddressArea=(e)=>{
+    const history=useHistory()
+    
+    const onSetAddressArea=(e)=>{
     setAddressArea(e.target.value)
   }
-  const onSetAddressName=(e)=>{
+    const onSetAddressName=(e)=>{
     setAddressName(e.target.value)
   }
   const userdetails=useSelector(state=>state.auth.userdetails)
   const token=useSelector(state=>state.auth.accessToken)
   const editedAddress=useSelector(state=>state.address.adreessCurrent)
   const isEdit=useSelector(state=>state.address.isEdit)
-  const onEditSubmit=dispatch((token,address)=>addressAction.onAddressEditSubmit(token,address))
-  const onAddAddress=()=>{
+  const redirectPath=useSelector(state=>state.address.redirectPath)
+  const onEditSubmit=(token,address)=>dispatch(addressAction.onAddressEditSubmit(token,address))
+  const userNewAddress=(addressDteails,token)=>dispatch(addressAction.onNewAddressSubmit(addressDteails,token))
 
-      
+  
+
+  const onHome=()=>{
+    history.push(redirectPath)
+  }
+
+  const onAddAddress=()=>{
       if(isEdit){
         const eId=editedAddress.id
         const editInfo={
@@ -33,6 +43,7 @@ const AddAddress = props => {
           address:addressArea,
         }
         onEditSubmit(eId,editInfo)
+        setSmShow(true)
       }else{
         const addressDteails={
           user:userdetails.id,
@@ -44,13 +55,8 @@ const AddAddress = props => {
           // is_home:editedAddress.is_home
                 }
       console.log(addressDteails)
-      axios.post("/location/user/address/",addressDteails)
-      .then(res=>{
-          console.log(res)
-      })
-      .catch(error=>{
-          console.log(error)
-      })
+      userNewAddress(addressDteails,token)
+      setSmShow(true)
     }
   }
   useEffect(()=>{
@@ -72,8 +78,8 @@ const AddAddress = props => {
     </InputGroup.Prepend>
     <FormControl
    onChange={onSetAddressName}
-    value={addressName}
-    readOnly 
+    defaultValue={addressName}
+    // readOnly 
       // aria-label="Default"
       // aria-describedby="inputGroup-sizing-default"
       // {...editedAddress && editedAddress.is_home? "readonly" : ""}
@@ -103,6 +109,10 @@ const AddAddress = props => {
         </Modal.Footer>
       </Modal.Dialog> 
       </div>
+      <SuccessModal show={smShow} hide={() => setSmShow(false)} >Your Address is Added SuccessFully
+      <Button onClick={onHome}  className="w-100 mt-3 d-flex align-items-center" variant="primary"><i class="fas fa-arrow-left"></i><span className="flex-grow-1"> Go Back </span></Button>
+      
+      </SuccessModal>
       </section>
       );
 }

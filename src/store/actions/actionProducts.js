@@ -25,10 +25,10 @@ export const setCatProductsStart=()=>{
 
     }
 }
-export const setCatProducts=(products)=>{
+export const setCatProducts=(catProducts)=>{
     return{
     type:actionTypes.FETCH_CAT_PRODUCTS,
-    products:products,
+    catProducts:catProducts,
     }
 }
 export const failCatProducts=(error)=>{

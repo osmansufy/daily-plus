@@ -2,11 +2,12 @@ import homeIcon from '../../assets/img/home.png'
 import changeIcon from '../../assets/img/change.png'
 import plusIcon from '../../assets/img/plus-icon.png'
 import { Link, Redirect,withRouter } from 'react-router-dom';
-import { useEffect,useCallback, useState } from 'react';
+import { useEffect,useCallback, useState, useRef } from 'react';
 import axios from '../../axios';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actionAddress from '../../store/actions/actionAddress'
-import {DropdownButton,ButtonGroup,Dropdown} from 'react-bootstrap'
+import {Modal,Popover,Tooltip,Button,Dropdown} from 'react-bootstrap'
+import RemoveModal from '../Modal/RemoveModal';
 const Address = props => {
     const dispatch=useDispatch()
     const address =useSelector(state=>state.address.userAddress)
@@ -15,8 +16,11 @@ const Address = props => {
     // const addAddress=dispatch(()=>actionAddress.onAddAddress())
     const addAddress= (edit) => dispatch(actionAddress.onAddAddress(edit))
     const editAddressStart= (edit) => dispatch(actionAddress.onEditAddress(edit))
+    const deleteAddress= (token,id) => dispatch(actionAddress.onAddressDelete(token,id))
     const [isOffice,setIsoffice]=useState(false)
-
+    const [smShow, setSmShow] = useState(false);
+    const [adShow, setAdSmShow] = useState(false);
+    const target = useRef(null);
    const editAddress =(add)=>{
 
 onAddress(add.id)
@@ -28,34 +32,22 @@ const onAddLocation=()=>{
     addAddress(false)
     props.history.push('/location');
 }
-    return (<Dropdown.Menu className="super-colors addressModal" >
+const onDeleted=(token,add)=>{
+    deleteAddress(token,add.id) 
+    setSmShow(false)
+}
+const onHome=(token,add)=>{
+   
+    setSmShow(false)
+}
+    return (<Dropdown.Menu  className="super-colors addressModal" >
 
     <div className="container">
         { address.map(add=>(
         
-//         <div className="row address address-active ">
-//         <img src={homeIcon}/> 
-//         <div className="address-info">
-//             <h4 className="name">
-// {add.title}
-//             </h4>
-//             <h4 className="address-area">
-//             {add.address}
-//             </h4>
-//             <h5 className="address-status">
-//             Currently selected as delivery address
-//             </h5>
-//         </div>
-// <div onClick={()=>editAddress(add)} className="changeAddress">
-// <img src={changeIcon} />
-// </div>
-//         </div>
-
-
-
-<Dropdown.Item eventKey="1"className="row text-left address"  >
-
-<img src={homeIcon}/> 
+        <Dropdown.Item className="row address " as="div">
+        
+        <img src={homeIcon}/> 
         <div className="address-info">
             <h4 className="name">
 {add.title}
@@ -67,18 +59,26 @@ const onAddLocation=()=>{
             Currently selected as delivery address
             </h5>
         </div>
-<div onClick={()=>editAddress(add)} className="changeAddress">
+        <a onClick={()=>editAddress(add)}  className="changeAddress">
 <img src={changeIcon} />
-</div>
+</a>
+        <a className="mr-2" onClick={() => setSmShow(true)}><i class="fa fa-trash-o"></i></a>
 
-       </Dropdown.Item>
+     <RemoveModal show={smShow} onHome={onHome} onDelete={()=>onDeleted(token,add)} hide={() => setSmShow(false)} >
+
+     <h5 className="w-100">Are You Sure to delete this Address</h5>
+     </RemoveModal>
+
+        </Dropdown.Item>
+
+
         )
 
         )
         
 }
 
-        <a  onClick={onAddLocation} type="button" class="btn btn-primary btn-custom btn-lg btn-block"><img src={plusIcon} /> <span>
+        <a  onClick={onAddLocation} type="button" className="btn btn-primary btn-custom btn-lg btn-block"><img src={plusIcon} /> <span>
            Add New Address </span></a>
            </div>
 </Dropdown.Menu>

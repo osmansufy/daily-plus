@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {connect, useDispatch, useSelector} from 'react-redux'
 import './ProductModal.css'
 import bagIcon from '../assets/img/bag_white.png'
@@ -12,57 +12,54 @@ import {Modal} from 'react-bootstrap'
 const Product=props=>{
 
   // const {details}=props
-
+  const [itemCount,setItemCount]=useState(0)
  const catProductLists=useSelector(state=>state.products.CatProducts)
  const error=useSelector(state=>state.products.error)
  const details=useSelector(state=>state.products.productDetails)
  const catLoading=useSelector(state=>state.products.catloading)
  console.log(details.unit_quantity)
- const catid=details.category
  const dispatch=useDispatch()
- const onCatProduct=(id)=>dispatch(productActions.initFetchCatProducts(id))
+
  const onCartAdd=(item)=>dispatch(cartActions.cartAction(item))
  const onCartUpdate=(id, units)=>dispatch(cartActions.updateCartUnits(id, units))
  const onCartDel=(id, unit_quantity)=>dispatch(cartActions.deleteCartProduct(id, unit_quantity))
- useEffect(()=>{
-  if(catid){
-    onCatProduct(catid)
-  }
-  
-},[catid])
+
+
+console.log(details)
  const onCartHandler=(item)=>{
-  item.unit_quantity=1
   onCartAdd(item)
-  props.onHide()
+ 
 }
 const onAddCartHandler =(item)=>{
   console.log(item)
   
-  onCartUpdate({id:item.id, unit_quantity:parseInt(item.unit_quantity +1)})
-  props.onHide()
+
+  onCartUpdate({id:item.id, count:props.count+1})
 }
 const OnSubHandler =(item)=>{
   console.log(item)
-
-  if(item.unit_quantity===1){
-    onCartDel({id:item.id,unit_quantity:0})
+  if(props.count===1){
+    
+    onCartDel({id:item.id,count:0})
+    
   }else{
-    onCartUpdate({id:item.id, unit_quantity: item.unit_quantity -1})
+    
+    onCartUpdate({id:item.id, count: props.count-1})
+    
   }
-  props.onHide()
 }
   
 
   
- let cartButton=<a id="bag" onClick={()=>onCartHandler(details)} class="btn add-to-bag-btn">
+ let cartButton=<a id="bag" onClick={()=>onCartHandler(details)} className="btn add-to-bag-btn">
 
 <img src={bagIcon} />
  Add to Bag</a>
 
- if (details.unit_quantity>=1) {
+ if (props.count>=1) {
    cartButton=<ButtonQuantity id="cart" subClicked={() =>OnSubHandler(details)} addClicked={() =>onAddCartHandler(details) } >
    <div  className="show-quantity">
-<h6>{details.unit_quantity}</h6>
+<h6>{props.count}</h6>
 </div>
      </ButtonQuantity>
  }
@@ -119,8 +116,8 @@ const OnSubHandler =(item)=>{
                     <img src={tagIcon} />
                   </div>
                   <div className="tags">
-                    <a className="btn tag-btn" href="category.html">Daily Products</a>
-<a className="btn tag-btn" href="category.html">{details.brand}</a>
+                    <a className="btn tag-btn">Daily Products</a>
+<a className="btn tag-btn" >{details.brand}</a>
                   </div>
                 </div>
                 <div className="product-info">
@@ -175,7 +172,7 @@ const OnSubHandler =(item)=>{
 
   
 {/* </div> */}
-{/* <div class={overlayClasses.join(' ')}onClick={props.modalClosed} >
+{/* <div className={overlayClasses.join(' ')}onClick={props.modalClosed} >
   </div> */}
 
 </Modal>

@@ -18,8 +18,8 @@ const NameForm = (props) => {
         
           {/* <div className="text-danger">{props.formError ? formError : ''}</div> */}
           <div className="text-danger">{props.error ? props.error:''}</div>
-          <div class="form-label-group input-group">
-          <span className="input-group-text border-0" id="floatingInput"><img src={account_icon} /></span>
+          <div className="form-label-group input-group">
+          <span className="input-group-text input-start input-start border-0" id="floatingInput"><img src={account_icon} /></span>
         <input
          placeholder="Full Name"
          id="floatingInput"
@@ -33,7 +33,7 @@ const NameForm = (props) => {
       </div>
 
 
-  <Button type="submit" onClick={props.clicked}  className="w-100 mt-3 d-flex align-items-center" variant="primary"><span className="flex-grow-1"> Next </span><img src={next} /></Button>
+  <Button type="submit"  className="w-100 mt-3 d-flex align-items-center" variant="primary"><span className="flex-grow-1"> Next </span><img src={next} /></Button>
   </>
      );
 }

@@ -132,7 +132,7 @@ axios.get('order/preorder/items/',{
       // { proceedTo=="proceed" ? <>
       
       //        <div className="delivery-address mt-4">
-      //           <h6>Delivery Address <span className="addresschange-link ml-4"><a href="#">Change Address</a></span></h6>
+      //           <h6>Delivery Address <span className="addresschange-link ml-4"><a>Change Address</a></span></h6>
       //           <div className="address mt-3">
       //             <div className="address-icon mr-3">
       //               <i className="fa fa-map-marker" aria-hidden="true" />

@@ -84,7 +84,13 @@ const cartReducer=(state = initialState, action )=> {
   
         return {
           ...state,
-          cartProducts:[...carts, product],
+          cartProducts:[...carts,
+            
+            {...product,
+            count:1
+            }
+          
+          ],
           totalPrice:state.totalPrice + product.inventory_list[0].unit_price_final
         }
       }
@@ -97,7 +103,8 @@ const cartReducer=(state = initialState, action )=> {
   
         if (existingProductIndex >= 0) {
           let product = carts[existingProductIndex];
-          product.unit_quantity = payload.unit_quantity;
+          // product.unit_quantity = payload.unit_quantity;
+          product.count = payload.count;
   
           carts[existingProductIndex] = product;
         }
@@ -105,7 +112,7 @@ const cartReducer=(state = initialState, action )=> {
         return {
           ...state,
           cartProducts:[...carts],
-          totalPrice:carts.length>0? carts.map(cart=>cart.inventory_list[0].unit_price_final*cart.unit_quantity).reduce(reducer):0
+          totalPrice:carts.length>0? carts.map(cart=>cart.inventory_list[0].unit_price_final*cart.count).reduce(reducer):0
         } 
   
       }
@@ -114,7 +121,8 @@ const cartReducer=(state = initialState, action )=> {
         const carts = state.cartProducts;
   carts.map(c=>{
     if(c.id===payload.id){
-      c.unit_quantity=0
+      // c.unit_quantity=0
+      c.count=0
     }
   })
         const existingProductIndex = findProductIndex(carts, payload.id);
@@ -122,7 +130,7 @@ const cartReducer=(state = initialState, action )=> {
       return {
         ...state,
         cartProducts:[...carts],
-        totalPrice:carts.length>0? carts.map(cart=>cart.inventory_list[0].unit_price_final*cart.unit_quantity).reduce(reducer):0
+        totalPrice:carts.length>0? carts.map(cart=>cart.inventory_list[0].unit_price_final*cart.count).reduce(reducer):0
       } 
       
       

@@ -7,9 +7,10 @@ import geneInput from '../../assets/img/genieImg.png'
 import cammera from '../../assets/img/cammera.png'
 import { useSelector } from 'react-redux'
 import axios from '../../axios'
+import { useHistory } from 'react-router'
 const GenieForm = () => {
 
-
+    const history=useHistory()
     const userInfo=useSelector(state=>state.auth.userdetails)
     const token=useSelector(state=>state.auth.accessToken)
     const [orderForm,setOrderForm]= useState( {
@@ -108,6 +109,7 @@ const GenieForm = () => {
 
        })
        .then(res=>{
+        history.push('/genie')
            console.log(res)
        })
        .catch(err=>{
@@ -182,7 +184,7 @@ const GenieForm = () => {
             
                <Modal.Footer>
                    
-               <button type="submit"  className="btn geniebtn w-100 mx-auto d-flex  align-items-center btn-primary"><i class="fas fa-plus mr-2"></i><span>Add to Genie List</span></button>
+               <button type="submit"  className="btn geniebtn w-100 mx-auto d-flex  align-items-center btn-primary"><i className="fas fa-plus mr-2"></i><span>Add to Genie List</span></button>
                    {/* <Button disabled={!formIsvalid} btnType="Success">ORDER</Button> */}
                    
                    </Modal.Footer>
@@ -192,9 +194,10 @@ const GenieForm = () => {
     return (
        
         <section className="custom_page genieForm">
-        <Modal.Dialog className="genieFormModal">
+         <h2 className="text-center">Genie / Add Product</h2>   
+        <Modal.Dialog className="genieFormModal ">
   
-  <Modal.Body>
+  <Modal.Body className="my-4">
     {form}
   
   </Modal.Body>

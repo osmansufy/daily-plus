@@ -2,47 +2,47 @@ import React, { useEffect, useState} from 'react';
 
 import SinglePopuler from '../component/SinglePopuler';
 import Spinner from '../container/Spinner/Spinner'
- import * as productActions from '../store/actions/actionProducts'
+import * as productActions from '../store/actions/actionProducts'
 import {connect} from 'react-redux'
 import ProductModal from '../component/ProductModal'
 import { Route, Router, useHistory } from 'react-router';
 
 const PopulerProducts=props =>{
-  const [modalShow, setModalShow] = useState(false);
+  // const [modalShow, setModalShow] = useState(false);
   const history=useHistory()
  useEffect(() => {
   props.onInItProducts()
   
     }, []);
 
-   const productHandler=(item)=>{
+  //  const productHandler=(item)=>{
  
-    props.onProductDetails(item)
-    setModalShow(true)
+  //   props.onProductDetails(item)
+  //   setModalShow(true)
   
-   }
-   const modalClosedHandler=()=>{
-    setModalShow(false)
-    props.onProductDetails([])
-   }
+  //  }
+  //  const modalClosedHandler=()=>{
+  //   setModalShow(false)
+  //   props.onProductDetails([])
+  //  }
 return ( <>
 
 <section>
-            <div class="container">
-              <div class="row">
-                <div class="col-md-6 col-sm-6 col-6">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-6 col-sm-6 col-6">
                   <h2>Popular Items</h2>
                 </div>
-                <div class="col-md-6 col-sm-6 col-6">
-                  <button class="btn btn-primary float-right">View All Products</button>
+                <div className="col-md-6 col-sm-6 col-6">
+                  <button className="btn btn-padding btn-primary float-right">View All Products</button>
                 </div>
               </div>
-              <div class="row populer-items">
+              <div className="row populer-items">
 
                 
               {props.productLists && props.productLists.map((item, index) => {
                return <SinglePopuler
-               clicked={()=>productHandler(item)}
+              //  clicked={()=>productHandler(item)}
                data={item} key={index}/>
               }
                 
@@ -55,8 +55,7 @@ return ( <>
         
     
         
-          <ProductModal modalClosed={modalClosedHandler}  show={modalShow}
-        onHide={() => setModalShow(false)}  />
+         
 
           </>
         
