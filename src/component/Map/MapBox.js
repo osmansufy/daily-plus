@@ -78,11 +78,7 @@ const map = new mapboxgl.Map({
     // setLat(currentAddress.location.lat.toFixed(4));
   
  
-      map.on('move', () => {
-        setLng(map.getCenter().lng.toFixed(4));
-        setLat(map.getCenter().lat.toFixed(4));
-        setZoom(map.getZoom().toFixed(2));
-      });
+    
 // Set options
 
 
@@ -101,18 +97,33 @@ const map = new mapboxgl.Map({
     marker.setLngLat([lng, lat])
     });
   
+    map.on('move', () => {
+      setLng(map.getCenter().lng.toFixed(4));
+      setLat(map.getCenter().lat.toFixed(4));
+      setZoom(map.getZoom().toFixed(2));
+    });
+
+
+const position= navigator.geolocation.getCurrentPosition(render)
+function render(pos) {
+  var lat = pos.coords.latitude;
+  var lon = pos.coords.longitude;
+  setLng(lon.toFixed(4));
+  setLat(lat.toFixed(4));
+  setZoom(25)
+  map.flyTo({
+    center: [lon, lat],
+    zoom: 13
+  })
+  marker.setLngLat([lon, lat])
+};
 
 
 
-
-   
-
-
- 
 
  
   
-console.log(map)
+console.log(position)
 markerChange(marker,map)
 marker.on('dragend', ()=>onDragEnd(marker));
 setMarker(marker)
@@ -124,18 +135,18 @@ setMap(map)
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
  
 
-useEffect(()=>{
-  if(currentAddress.location.lat){
-    setLat(currentAddress.location.lat)
-  }
-  if(currentAddress.location.lat){
-    setLng(currentAddress.location.lng)
-  }
+// useEffect(()=>{
+//   if(currentAddress.location.lat){
+//     setLat(currentAddress.location.lat)
+//   }
+//   if(currentAddress.location.lat){
+//     setLng(currentAddress.location.lng)
+//   }
   
  
-setSearchEnter(currentAddress.address)
+// setSearchEnter(currentAddress.address)
 
-},[currentAddress])
+// },[currentAddress])
 // const {regions}=mapinfo
 // useEffect(()=>{
 //   if (searchEnter!='') {

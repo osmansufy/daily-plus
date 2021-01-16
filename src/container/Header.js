@@ -26,7 +26,7 @@ const Header=(props) =>{
 const isSignUp=useSelector(state=>state.auth.accessToken)
 const [cartShow,setCartShow]=useState(false)
 const [notishow,setNotiShow]=useState(false)
-const [notiCount,setNotiCount]=useState([])
+const [notiCount,setNotiCount]=useState('')
 const [searchShow,setSearchShow]=useState(false)
 const [addressShow,setAddresshShow]=useState(false)
 const  [showSidebar,setShowSidebar]=useState(false)
@@ -55,6 +55,9 @@ useEffect(()=>{
     .catch(error=>{
       console.log(error)
     })
+  }
+  else{
+    setNotiCount('')
   }
   
 },[isSignUp])

@@ -22,6 +22,8 @@ const Notification = (props) => {
       .catch(error=>{
         console.log(error)
       })
+    }else{
+      setNotificationItems([])
     }
     
   },[isSignUp])

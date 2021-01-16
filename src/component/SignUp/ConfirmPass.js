@@ -82,7 +82,7 @@ setshowPass(!showPss)
                className="border-0 form-control"
                id="inputEmail" />
               <label for="inputEmail">Password</label>
-              <span className="input-group-text inBR"><img src={visibility} /></span>
+              <span className="input-group-text border-0 inBR"><img src={visibility} /></span>
             </div>
             
 
@@ -98,7 +98,7 @@ setshowPass(!showPss)
                className="border-0 form-control"
                id="inputEmail" />
               <label for="inputEmail">Confirm Password</label>
-              <span className="input-group-text inBR " onClick={onTogglePass}><img src={visibility} /></span>
+              <span className="input-group-text border-0 inBR " onClick={onTogglePass}><img src={visibility} /></span>
             </div>
           {/* <div className="text-danger">{props.formError ? formError : ''}</div> */}
 
