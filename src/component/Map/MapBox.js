@@ -15,7 +15,7 @@ mapboxgl.accessToken =config.MAPBOX_ACCESS_TOKEN;
 const baseURL = `${config['BASE_URL']}/v0`
 
 const Map = props => {
-  const currentAddress =useSelector(state=>state.address.adreessCurrent)
+  const currentAddress =useSelector(state=>state.address.addreessCurrent)
   const [searchEnter,setSearchEnter]=useState('')
   const [query,setQuery]=useState("")
   const mapContainerRef = useRef(null);
@@ -43,165 +43,110 @@ const history=useHistory()
   const[marker,setMarker]=useState(null)
   // Initialize map when component mounts
 
-  function onDragEnd(marker) {
-    var lngLat = marker.getLngLat();
-    setLng(lngLat.lng );
-    setLat(lngLat.lat);
-    console.log(marker)
-    console.log(this)
-    }
+ 
     function markerChange(marker,map){
         marker.setLngLat([lng, lat])
         .addTo(map);   
     }
  
+    const getReverseGeoCode=(latitude,longitude)=>{
+      axios.get(`https://api.dailyplus.store/v0/location/geocode/reverse/?lat=${latitude}&lng=${longitude}&lang=en`,{
+        headers: {
+          Authorization: `JWT ${userToken}`,
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response=>{
+        console.log(response)
+        setSearchEnter(response.data.result.address)
+      })
+      .catch(error=>{
+        console.log(error)
+      })
+    }
+    function onDragEnd(marker) {
+      var lngLat = marker.getLngLat();
+      setLng(lngLat.lng );
+      setLat(lngLat.lat);
+      console.log(marker)
+      console.log(this)
+      getReverseGeoCode(lngLat.lat,lngLat.lng)
+      }
+
+      
+       
+    //     useEffect(()=>{
+    //    const geolocate = new mapboxgl.GeolocateControl({
+    //     positionOptions: {
+    //     enableHighAccuracy: true
+    //     },
+    //     trackUserLocation: true
+    //     });  
+    // map.addControl(geolocate);   
+    // geolocate.on('geolocate', function(e) {
+    //   const longitude = e.coords.longitude;
+    //   const latitude = e.coords.latitude
+    //   const position=[longitude,latitude]
+    //   console.log(position)
+      
+    // });
+    //     },[])
   useEffect(() => {
-
-
- 
-// marker.setLngLat([lng, lat])
-// .addTo(map);
-console.log(this)
-const map = new mapboxgl.Map({
-  container: mapContainerRef.current,
-  style: 'http://tilesv3.dingi.live/styles/Combined-Bangla/style.json',
-  center: [lng, lat],
-  zoom: zoom
-});
+   
+    const map = new mapboxgl.Map({
+      container: mapContainerRef.current,
+      style: "http://tilesv3.dingi.live/styles/Combined-Bangla/style.json",
+      center: [lng, lat],
+      zoom: zoom,
+    });
     // Add navigation control (the +/- zoom buttons)
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right'); 
-    const marker = (new mapboxgl.Marker({color: "red",
-    draggable: true,
-    }))
-  
-    // setLng(currentAddress.location.lng.toFixed(4));
-    // setLat(currentAddress.location.lat.toFixed(4));
-  
+    map.addControl(new mapboxgl.NavigationControl(), "top-right");
+    const marker = new mapboxgl.Marker({ color: "red", draggable: true });
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 50000,
+      maximumAge: 0,
+    };
+
+    const render = (pos) => {
+      const { latitude, longitude } = pos.coords;
+      setLng(longitude.toFixed(4));
+      setLat(latitude.toFixed(4));
+      setZoom(10);
+      getReverseGeoCode(latitude, longitude);
+      map.flyTo({
+        center: [longitude, latitude],
+        zoom: 13,
+      });
+      marker.setLngLat([longitude, latitude]);
+    };
+    const notFound = () => {};
  
     
-// Set options
-
-
-  var geolocate = new mapboxgl.GeolocateControl({
-    positionOptions: {
-    enableHighAccuracy: true
-    },
-    trackUserLocation: true
-    });
-    // Add the control to the map.
-    map.addControl(geolocate);
-    // Set an event listener that fires
-    // when a trackuserlocationend event occurs.
-    geolocate.on('trackuserlocationstart', function() {
-    console.log('A trackuserlocationend event has occurred.')
-    marker.setLngLat([lng, lat])
-    });
-  
-    map.on('move', () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(render, notFound, options);
+    } else {
+      getReverseGeoCode(lat, lng);
+    }
+    map.on("move", () => {
       setLng(map.getCenter().lng.toFixed(4));
       setLat(map.getCenter().lat.toFixed(4));
       setZoom(map.getZoom().toFixed(2));
     });
-
-
-const position= navigator.geolocation.getCurrentPosition(render)
-function render(pos) {
-  var lat = pos.coords.latitude;
-  var lon = pos.coords.longitude;
-  setLng(lon.toFixed(4));
-  setLat(lat.toFixed(4));
-  setZoom(25)
-  map.flyTo({
-    center: [lon, lat],
-    zoom: 13
-  })
-  marker.setLngLat([lon, lat])
-};
-
-
-
-
- 
   
-console.log(position)
-markerChange(marker,map)
-marker.on('dragend', ()=>onDragEnd(marker));
-setMarker(marker)
-setMap(map)
+    markerChange(marker, map);
+    marker.on("dragend", () => onDragEnd(marker));
+    setMarker(marker);
+    setMap(map);
     // Clean up on unmount
     return () => map.remove();
-    
-    
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
  
 
-// useEffect(()=>{
-//   if(currentAddress.location.lat){
-//     setLat(currentAddress.location.lat)
-//   }
-//   if(currentAddress.location.lat){
-//     setLng(currentAddress.location.lng)
-//   }
-  
  
-// setSearchEnter(currentAddress.address)
 
-// },[currentAddress])
-// const {regions}=mapinfo
-// useEffect(()=>{
-//   if (searchEnter!='') {
-    
   
-//     const timer=  setTimeout(()=>{ 
-//         if (searchEnter===inputRef.current.value) {
-//             const query=searchEnter.length ===0?'':searchEnter
-//             console.log(token)
-//             setMapinfo({
-//               ...mapinfo,
-          
-//             show_regions: false,
-//             loader:true
-          
-//           })
-//             axios.get(`${baseURL}/location/search/all/?token=${query}`, {
-//               headers: {
-//                 Authorization: `JWT ${token}`,
-//                 "Content-Type": "application/json"
-//               }
-//             }).then((res)=>{
-//               console.log(res)
-//               if (res.status === 200) {
-//                 setMapinfo({
-//                     ...mapinfo,
-//                   regions: res.data.result,
-//                   show_regions: true,
-//                   loader:false
-//                 })
-//                 console.log(mapinfo)
-//               }
-        
-             
-//             } 
-//             ).catch ((error)=>{
-//             console.log(error.response)
-//             setMapinfo({...mapinfo, loader: false })
-//           })
-//         }  
-//         },200)
-    
-//         return ()=>{
-//             clearTimeout(timer)
-//             setMapinfo({
-//               ...mapinfo,
-          
-//             show_regions: false,
-//             loader:true
-          
-//           })
-//         }
-//       }
-// },[searchEnter])
-
 
 
   const onInputChange =  (e)=> {

@@ -12,25 +12,30 @@ const Address = props => {
     const dispatch=useDispatch()
     const address =useSelector(state=>state.address.userAddress)
     const token =useSelector(state=>state.auth.accessToken)
-    const onAddress=useCallback((id)=>dispatch(actionAddress.onAddressId(id)),[])
+    const onAddress=useCallback((add)=>dispatch(actionAddress.onAddressSelected(add)),[])
     // const addAddress=dispatch(()=>actionAddress.onAddAddress())
     const addAddress= (edit) => dispatch(actionAddress.onAddAddress(edit))
-    const editAddressStart= (edit) => dispatch(actionAddress.onEditAddress(edit))
+   
     const deleteAddress= (token,id) => dispatch(actionAddress.onAddressDelete(token,id))
+    const onSelectedAddress= (address) => dispatch(actionAddress.onAddressSelected(address))
     const [isOffice,setIsoffice]=useState(false)
     const [smShow, setSmShow] = useState(false);
     const [adShow, setAdSmShow] = useState(false);
     const target = useRef(null);
    const editAddress =(add)=>{
 
-onAddress(add.id)
-editAddressStart(true)
-// document.querySelector('.addressModal').style.display='none'
+onAddress(add)
+
+
 props.history.push('/location');
    }
 const onAddLocation=()=>{
     addAddress(false)
     props.history.push('/location');
+}
+const onSignIn=()=>{
+    
+    props.history.push('/signup');
 }
 const onDeleted=(token,add)=>{
     deleteAddress(token,add.id) 
@@ -40,12 +45,20 @@ const onHome=(token,add)=>{
    
     setSmShow(false)
 }
-    return (<Dropdown.Menu  className="super-colors addressModal" >
+    return (
+    <Dropdown.Menu  className="super-colors addressModal" >
+{token ? <div className="container">
+    <Dropdown.Item>
+        <div onClick={props.onCurrent} className="d-flex align-items-center ">
 
-    <div className="container">
+        
+       <input type="radio" id="current" name="drone" checked value="current" />
+      <label for="current" className="my-0 mx-3">Current Location</label>
+      </div>
+    </Dropdown.Item>
         { address.map(add=>(
         
-        <Dropdown.Item className="row address " as="div">
+        <Dropdown.Item className="row address " onClick={()=>onSelectedAddress(add)} as="div">
         
         <img src={homeIcon}/> 
         <div className="address-info">
@@ -77,10 +90,15 @@ const onHome=(token,add)=>{
         )
         
 }
-
+<Dropdown.Item className="row address " as="div">
         <a  onClick={onAddLocation} type="button" className="btn btn-primary btn-custom btn-lg btn-block"><img src={plusIcon} /> <span>
            Add New Address </span></a>
-           </div>
+           </Dropdown.Item>
+           </div>: <Dropdown.Item className="row address " as="div">
+        <a  onClick={onSignIn} type="button" className="btn btn-primary btn-custom btn-lg btn-block"><img src={plusIcon} /> <span>
+           Please SignUp First</span></a>
+           </Dropdown.Item> }
+    
 </Dropdown.Menu>
     
     

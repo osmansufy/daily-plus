@@ -1,11 +1,14 @@
 
-import './assets/css/adminlte.min.css'
+// import './assets/css/adminlte.min.css'
 
 // import './assets/css/animate.css'
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import './assets/css/style.css'
 import './assets/css/custom.css'
 import './assets/css/responsive.css'
+
 import Home from './pages/Home'
 import Sidebar from './container/Sidebar'
 import Header from './container/Header'
@@ -32,6 +35,7 @@ import ProductId from './pages/ProductId';
 import Genie from './pages/Genie/Genie';
 import GenieForm from './component/Genie/GenieForm';
 import GenieOrderDetails from './component/Genie/GenieOrderDetails';
+import AboutUs from './pages/About';
 
 
 const App=(props)=> {
@@ -69,6 +73,7 @@ const history = createBrowserHistory();
   <Route path='/logout' exact component={Logout} />
   <Route path='/location' exact component={Location} />
   <Route path='/location/save' exact component={AddAddress} />
+  <Route path='/about' exact  component={AboutUs}/>
     </Switch>
   );
   return  (
@@ -77,6 +82,7 @@ const history = createBrowserHistory();
     
     <div className="content-wrapper">
     
+
     <Header  />
     
    

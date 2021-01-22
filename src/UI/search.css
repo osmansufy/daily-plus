@@ -39,3 +39,35 @@ button.btn.search-btn.btn-primary {
     color: ivory;
   
 }
+
+@media (max-width: 760px){
+button.btn.search-btn.btn-primary {
+    padding: 5px 8px;
+    width: 100%;
+    line-height: inherit;
+    font-size: 10px;
+    border-radius: 5px;
+}
+button.btn.search-btn.btn-primary img {
+    height: 20px;
+  }
+  .search-result-list-detail h6 {
+    font-size: 12px;
+  }
+}
+
+
+@media (max-width: 990px) {
+ 
+    .search-mobile .search-custom, .search-mobile .bg-search {
+      max-height: 36px;
+  }
+  .search-container {
+    top: 110%;
+    width: 80%;
+    left: 10%;
+    z-index: 77;
+
+    padding: 10px 15px;
+  }
+}

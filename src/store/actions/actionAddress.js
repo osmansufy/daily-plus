@@ -57,25 +57,15 @@ export const onAddressDelete=(token,id)=>{
     })
 }
 }
-const onAddressSuccessId=(data)=>{
+
+export const onAddressSelected=(address)=>{
+    
     return{ 
-        type:actionsTypes.ADDRESS_ID,
-        address:data
+        type:actionsTypes.ADDRESS_SELECTED,
+        address:address
      
      } 
-}
-export const onAddressId=(id)=>{
-    const Id=id
-    return dispatch=>{
-        
-    axios.get('location/user/address/'+Id+'/').then(response=>{
-        dispatch (onAddressSuccessId(response.data))
-        console.log(response)
-    }).catch(error=>{
-        
-        console.log(error)
-    })
-}
+
 }
 export const onAddressEdit=(location,address)=>{
     return {
@@ -99,12 +89,7 @@ export const onAddAddress=(edit)=>{
         
     }
 }
-export const onEditAddress=(edit)=>{
-    return{
-        type:actionsTypes.ADDRESS_EDIT_START,
-        isEdit:edit,
-    }
-}
+
 export const onAddressCheckout=()=>{
     return{
         type:actionsTypes.ADDRESS_ADD_FROM_CHECKOUT,
@@ -144,4 +129,36 @@ export const onNewAddressSubmit=(addressDteails,token)=>{
         })
     }
 
+}
+
+
+const onCurrentAddress=(latitude,longitude,address)=>{
+    return{
+        type:actionsTypes.ADDRESS_CURRENT,
+        latitude:latitude,
+        longitude:longitude,
+        address:address
+    }
+}
+
+export const getReverseGeoCode=(latitude,longitude,isSignUp)=>{
+ 
+ return dispatch=>{   axios
+    .get(
+      `location/geocode/reverse/?lat=${latitude}&lng=${longitude}&lang=en`,
+      {
+        headers: {
+          Authorization: `JWT ${isSignUp}`,
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response);
+      dispatch(onCurrentAddress(latitude,longitude,response.data.result.address))
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 }

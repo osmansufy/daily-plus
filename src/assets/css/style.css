@@ -6,12 +6,15 @@
     --icon-color: #3C4B52;
     --card-bg: #F4F4F5;
 }
-
+p{
+    margin: 0;
+}
 a{
     text-decoration: none !important;
 }
 h1,h2,h3,h4,h5,h6,p{
     color: var(--text-color);
+    margin: 0;
     /* margin-bottom: 0px !important; */
 }
 h2{
@@ -80,11 +83,7 @@ footer{
     color: #ffffff;
     background-color: var(--secondary-color);
 }
-.card{
-    border: none;
-    background-color: var(--card-bg);
-    border-radius: var(--border-radius);
-}
+
 
 .header-top{
     padding: 20px 0px;
@@ -128,9 +127,10 @@ header .logo-holder .logo{
     padding: 15px 20px !important;
     white-space: inherit;
 }
-.noti-message{
+.noti-message {
     display: flex;
     justify-content: space-between;
+    white-space: normal;
 }
 .noti-message-icon{
     height: 25px;
@@ -159,7 +159,7 @@ header .logo-holder .logo{
 .header-bottom{
     display: flex;
     align-items: center;
-    margin-top: 18px;
+    /* margin-top: 18px; */
 }
 .bottom-right{
     display: flex;
@@ -238,16 +238,14 @@ header .logo-holder .logo{
 }
 
 .add-to-bag-btn {
-    color: var(--primary-color);
+    color: var(--primary-color) ;
     background-color: transparent;
     border: 2px solid #f6f6f65c;
     width: 100%;
-    font-weight: 600;
-   
     font-family: Poppins;
     font-size: 18px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: normal;
     line-height: 30px;
     letter-spacing: 0em;
     
@@ -257,7 +255,7 @@ header .logo-holder .logo{
 }
 
 .add-to-bag-btn:hover{
-    color: #ffffff;
+    color: #ffffff ;
     background-color: var(--primary-color);
 }
 .add-to-bag-btn i{
@@ -267,11 +265,12 @@ header .logo-holder .logo{
     color: var(--secondary-color);
     margin-bottom: 10px;
     font-weight: 500;
+    font-size: 12px;
 }
 .regular-price{
     color: var(--text-color);
     text-decoration: line-through;
-    margin-left: 7px;
+    /* margin-left: 7px; */
 }
 .delivery-price{
     display: flex;
@@ -409,22 +408,20 @@ body{
 .login-header{
     border-bottom: 1px solid #f6f6f6;
 }
-.floting-cart{
+.floting-cart {
     position: fixed;
     right: 0;
-    top: 350px;
+    top: 60%;
     border-bottom-left-radius: var(--border-radius);
     border-top-left-radius: var(--border-radius);
     background-color: var(--secondary-color);
     z-index: 19;
-    width: 110px;
+    width: 80px;
     padding: 10px 10px;
+    cursor: pointer;
 }
-.floting-cart button{
-    background-color: #FFF;
-    color: var(--secondary-color);
-    display: block;
-    margin: 0 auto;
+.bg-custom-warning{
+    background-color: var(--secondary-color);  
 }
 .floting-cart-top{
     display: flex;
@@ -432,8 +429,13 @@ body{
     align-items: center;
     color: #FFFFFF;
 }
-.floting-cart-top p{
-    color: #FFF;
+.floting-cart-top .badge {
+    position: absolute;
+    right: 12px;
+
+    font-size: 10px;
+    top: 11px;
+  
 }
 .cart-holder{
     padding: 20px;

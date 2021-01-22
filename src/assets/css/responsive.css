@@ -1,122 +1,36 @@
 
-@media(max-width:990px){
-    button.btn.add-to-bag-btn.single-product-btn {
-      width: 90%;
-      font-size: 16px;
+@media (max-width: 560px) {
+  .notification-btn .notification {
+    width: 320px;
   }
-  .modal-content h6 {
-    font-size: 16px;
+  .ctb {
+    display: none;
   }
-  .price h6 {
-    font-size: 12px;
-    /* color: #F37A20; */
-}
-h6.sell-price {
-  font-size: 12px;
-}
-  
-  }
-  
-
-  
-@media(max-width:760px){
-    .search_toggler{
-      display: block;
-    }
-   
-    section h2 {
-      font-size: 18px;
-  }
-  .search_toggler .fa-search {
-    font-size: 20px;
-    font-weight: 500;
-  }
-  .search_toggler {
-   
-    top: 5px;
-    left: auto;
-    right: 22px;
-  }
-    .search {
-      width: 100%;
-      max-width: 100%;
-      position: fixed;
-      z-index: 100;
-      top: 0;
-      left: 0;
-      padding: 0 0 5px 0;
-      background-color:#000;
-      max-height: inherit;
-      transform: translateY(-100%);
-      transition: 0.3s all ease-in-out;
-    }
-
-  button.btn.search-btn.btn-primary img {
-    height: 20px;
-}
-    span.search-close {
-      font-size: 18px;
-      color: red;
-      display: flex;
-      justify-content: center;
-      font-weight: bold;
-  }
-    .search.show {
-      transform: translateY(0);
-    }
-
-    .search-container {
-  
-      top: 90px;
-      width: 343px;
-     
-      left: 10px;
-   
-      z-index: 77;
-   
-      padding: 10px 15px;
-  }
-  
-button.btn.search-btn.btn-primary {
-      padding:5px 8px;
-      width: 100%;
-      line-height: inherit;
-      font-size: 10px;
-      border-radius: 5px;
-    }
-    .contact-btn {
-      display: none;
-  }
-  .search-result-list-detail h6 {
-    font-size: 12px;
 }
 
-.sell-price {
-  font-size: 12px;
+@media only screen and (max-width: 600px) {
+  .cart-holder {
+    position: absolute;
+    min-height: 100vh;
+    width: 100%;
+  }
 }
 
-
-  }
-
-
+@media (max-width: 640px) {
   
-@media(max-width:640px){
-    .user .modal-content {
-      padding: 0;
+  .user .modal-content {
+    padding: 0;
   }
-    .category_img {
-      
-      height: auto;
-     
+  .category_img {
+    height: auto;
   }
-  .notification-btn{
+  .notification-btn {
     position: inherit;
   }
   p#contentcshow {
     display: none;
   }
   .header-bottom {
-    
     margin-top: 5px;
   }
   .header-top {
@@ -130,49 +44,85 @@ button.btn.search-btn.btn-primary {
   .category-section h2 {
     font-size: 16px;
   }
+}
+
+@media (max-width: 760px) {
   
+
+  
+  
+
+
+  .contact-btn {
+    display: none;
   }
-
-  @media(max-width:560px){
-    .notification-btn .notification{
-     
-      width: 320px;
-      }
-      .ctb {
-        display: none;
-    }
-  }  
   
-@media only screen and (max-width: 600px) {
 
-    .cart-holder{
-        position: absolute;
-        min-height: 100vh;
-        width: 100%;
-    }
+  .sell-price {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 990px) {
+  button.btn.add-to-bag-btn.single-product-btn {
+    width: 90%;
+    font-size: 16px;
+  }
+ 
+.banner_sec,.custom_page {
+  margin-top: 110px;
+}
+  .modal-content h6 {
+    font-size: 16px;
+  }
+  .add-to-bag-btn{
+    font-size: 12px;
+  }
+  .price h6 {
+    font-size: 12px;
+
+  }
+  h6.sell-price {
+    font-size: 10px;
+    display: flex;
+  }
+  .mobile-hide{
+    display: none;
+  }
+ 
+  .nav-sizings {
+    font-size: 12px;
+}
+
+.notification-holder {
+  left: -170%;
+  max-width: 300px;
+}
 }
 
 
-@media (min-width:990px){
+@media (min-width: 990px) {
   .custom_page.preorder .modal-dialog {
     max-width: 65%;
   }
-
+  .mobile-show{
+    display: none;
+  }
   .signup .modal-dialog {
     max-width: 690px;
-}
+  }
   .signup .modal-content {
-   padding: 30px;
+    padding: 30px;
+  }
+  .col {
+    max-width: 12.5%;
+  }
+  .user .modal-dialog {
+    max-width: 690px !important;
+  }
 }
-.col{
-  max-width: 12.5%;
-}
-.user .modal-dialog {
-  max-width: 690px !important;
-}
-}
-@media (min-width:1200px){
-.col{
-  max-width: 12.5%;
-}
+@media (min-width: 1200px) {
+  .col {
+    max-width: 12.5%;
+  }
 }

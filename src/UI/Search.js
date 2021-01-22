@@ -168,10 +168,10 @@ const Search = (props) => {
     );
   }
   return (
-    <div className={props.show ? "search show" : "search"}>
-      <span onClick={onSearchClose} className="search-close">
+    <div className={props.className}>
+      {/* <span onClick={onSearchClose} className="search-close">
         ×
-      </span>
+      </span> */}
       <div className="input-group search-custom md-form form-sm form-2 border-0 pl-0">
         <div className="input-group-prepend">
           <span className="input-group-text border-0 bg-none" id="basic-addon1">

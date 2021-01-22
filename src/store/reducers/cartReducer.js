@@ -137,12 +137,19 @@ const cartReducer=(state = initialState, action )=> {
       
   
       }
+      case actionTypes.AFTER_ORDER: 
+       return {
+         ...state,
+         cartProducts:[],
+         totalPrice:0
+       }
 
       case actionTypes.ADDTO_PRE_ORDER: 
        return {
          ...state,
          cartPreOrders:action.item
        }
+      
       
 
       case actionTypes.UPDATE_PRE_ORDER_UNITS: {

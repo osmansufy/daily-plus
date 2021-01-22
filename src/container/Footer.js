@@ -4,13 +4,14 @@ import play from '../assets/img/play.png'
 import app from '../assets/img/app.png'
 import bkash from '../assets/img/bkash.svg'
 import visa from '../assets/img/visa-logo.svg'
+import { Link } from 'react-router-dom';
 
 function Footer(props) {
     return (
         <footer>
         <div className="container">
           <div className="row">
-            <div className="col-md-5 col-sm-5 col-12">
+            <div className="col-md-3 mt-4 col-sm-6 ">
               <div className="logo">
                 <img src={logo} alt="" className="img-fluid" />
               </div>
@@ -26,16 +27,16 @@ function Footer(props) {
                 </div>
               </div>
             </div>
-            <div className="col-md-2 col-sm-2 col-12">
+            <div className="col-md-3 mt-4 col-sm-6 ">
               <h3>About Daily Plus</h3>
               <ul className="mt-3 p-0">
-                <li><a  >About US</a></li>
+                <li><Link to="/about"> About US</Link></li>
                 <li><a  >FAQ</a></li>
-                <li><a  >Terms of Services</a></li>
-                <li><a  >Privacy Policy</a></li>
+                <li><a href="http://dailyplus.store/terms_of_service.html" target="_blank"  >Terms of Services</a></li>
+                <li><a href="http://dailyplus.store/privacy_policy.html" target="_blank"  >Privacy Policy</a></li>
               </ul>
             </div>
-            <div className="col-md-3 col-sm-3 col-12">
+            <div className="col-md-3 mt-4 col-sm-6 ">
               <h3>Contact Us</h3>
               <ul className="mt-3 p-0">
                 <li><a><i className="fa fa-phone pr-3" />+0198737343</a></li>
@@ -43,7 +44,7 @@ function Footer(props) {
                 <li><a><i className="fa fa-map-marker pr-3" />Floor 4, Wakil Tower</a></li>
               </ul>
             </div>
-            <div className="col-md-2 col-sm-2 col-12">
+            <div className="col-md-3 mt-4 col-sm-6 ">
               <h3>App Download</h3>
               <ul className="mt-3 p-0">
                 <li><a  ><img className="img-fluid" src={play } alt="" /></a></li>

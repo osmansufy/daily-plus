@@ -7,6 +7,7 @@ import classes from "./CheckOut.Module.css";
 import { useHistory, withRouter } from "react-router-dom";
 import * as authAction from "../store/actions/actionAuth";
 import * as addressAction from "../store/actions/actionAddress";
+import * as actionsCart from "../store/actions/actionCart";
 import plusIcon from "../assets/img/plus-icon.png";
 import offerIcon from "../assets/img/offer_24px.png";
 import SuccessModal from "../UI/Modal/SuccessModal";
@@ -18,9 +19,15 @@ const CheckOut = (props) => {
   const userInfo = useSelector((state) => state.auth.userdetails);
   const activeCart = useSelector((state) => state.auth.activeCart);
   const userAddress = useSelector((state) => state.address.userAddress);
-  const currentAddress = useSelector((state) => state.address.adreessCurrent);
+  const currentAddress = useSelector((state) => state.address.addreessCurrent);
+  const totalPrice = useSelector((state) => state.carts.totalPrice);
+  const afterOrderAction=()=>dispatch(actionsCart.afterOrder())
+  const onSelectedAddress = (address) =>
+    dispatch(addressAction.onAddressSelected(address));
   const [smShow, setSmShow] = useState(false);
   const onAddressCheckout = () => dispatch(addressAction.onAddressCheckout());
+  const onCurrentAddressAction = (latitude, longitude, token) =>
+    dispatch(addressAction.getReverseGeoCode(latitude, longitude, token));
   const [information, setInformation] = useState({
     lng: "",
     lat: "",
@@ -36,9 +43,31 @@ const CheckOut = (props) => {
     onAddressCheckout();
     props.history.push("/location");
   };
-  const latestAddress = userAddress.reduce((a, b) =>
-    new Date(a.ts_updated) > new Date(b.ts_updated) ? a : b
-  );
+  const currentPosition = () => {
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 50000,
+      maximumAge: 0,
+    };
+
+    const render = (pos) => {
+      const { latitude, longitude } = pos.coords;
+
+      onCurrentAddressAction(latitude, longitude, token);
+    };
+    const notFound = (err) => {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    };
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(render, notFound, options);
+    } else {
+      setInformation({
+        ...information,
+        address: "Your browser not support to get current location",
+      });
+    }
+  };
 
   const getTimeSlots = (lat, lng) => {
     const user = userInfo.id;
@@ -63,13 +92,13 @@ const CheckOut = (props) => {
   useEffect(() => {
     setInformation({
       ...information,
-      lng: latestAddress.location.lng,
-      lat: latestAddress.location.lat,
-      address: latestAddress.address,
-      title: latestAddress.title,
+      lng: currentAddress.location.lng,
+      lat: currentAddress.location.lat,
+      address: currentAddress.address,
+      title: currentAddress.title,
     });
 
-    getTimeSlots(latestAddress.location.lng, latestAddress.location.lat);
+    getTimeSlots(currentAddress.location.lng, currentAddress.location.lat);
   }, []);
 
   const CartChange = (token) => dispatch(authAction.onCartChange(token));
@@ -80,11 +109,12 @@ const CheckOut = (props) => {
       paymentMethod: event.target.value,
     });
   };
- 
-  const onAfterOrder=()=>{
-    setSmShow(false)
-    history.push('/')
-  }
+
+  const onAfterOrder = () => {
+    setSmShow(false);
+    history.push("/");
+    afterOrderAction()
+  };
 
   const onPlaceOrder = (event) => {
     event.preventDefault();
@@ -123,13 +153,13 @@ const CheckOut = (props) => {
             .then((res) => {
               console.log(res);
               window.location.replace(res.data.GatewayPageURL);
-              setSmShow(true)
+              setSmShow(true);
             })
             .catch((err) => {
               console.log(err);
             });
         } else {
-          setSmShow(true)
+          setSmShow(true);
         }
       })
       .catch((error) => {
@@ -137,12 +167,7 @@ const CheckOut = (props) => {
       });
   };
   const adressChange = (address) => {
-    setInformation({
-      lng: address.location.lng,
-      lat: address.location.lat,
-      address: address.address,
-      title: address.title,
-    });
+    onSelectedAddress(address);
 
     getTimeSlots(address.location.lat, address.location.lng);
   };
@@ -260,6 +285,23 @@ const CheckOut = (props) => {
                   className={classes.checkoutAddress}
                   style={{ width: "100px" }}
                 >
+                  <Dropdown.Item>
+                    <div
+                      onClick={currentPosition}
+                      className="d-flex align-items-center "
+                    >
+                      <input
+                        type="radio"
+                        id="current"
+                        name="drone"
+                        checked
+                        value="current"
+                      />
+                      <label for="current" className="my-0 mx-3">
+                        Current Location
+                      </label>
+                    </div>
+                  </Dropdown.Item>
                   {userAddress.map((address, index) => (
                     <Dropdown.Item
                       key={index}
@@ -290,8 +332,8 @@ const CheckOut = (props) => {
                 <i className="fa fa-map-marker" aria-hidden="true" />
               </div>
               <div className="address-right">
-                <h6>{information.title}</h6>
-                <p>{information.address}</p>
+                <h6>{currentAddress && currentAddress.title}</h6>
+                <p>{currentAddress && currentAddress.address}</p>
               </div>
             </div>
 
@@ -339,25 +381,16 @@ const CheckOut = (props) => {
           <div className="col-md-6 col-sm-6 col-12 order-box ml-2">
             <div className="order-price-container">
               <p>
-                Subtotal <span className="float-right">BDT 1,000</span>
+                Subtotal <span className="float-right">{totalPrice && totalPrice}</span>
               </p>
               <p>
                 Delivery Charge <span className="float-right">BDT 49</span>
               </p>
               <h6>
-                Total <span className="float-right">BDT 1,049</span>
+                Total <span className="float-right">{totalPrice +49}</span>
               </h6>
             </div>
-            <div className="promo-code-container mt-3">
-              <a>
-                <h6>
-                  <img src={offerIcon} className="mr-2" alt="" /> Add Promo Code{" "}
-                  <span className="float-right">
-                    <i className="fa fa-angle-right" />
-                  </span>
-                </h6>
-              </a>
-            </div>
+           
             <Dropdown className="promo-code-container mt-3">
               <Dropdown.Toggle
                 as="a"
@@ -395,7 +428,7 @@ const CheckOut = (props) => {
                   />
                 </div>
                 <button className="btn btn-primary" onClick={onPlaceOrder}>
-                  Place Order (1,049)
+                  Place Order ({totalPrice+49})
                 </button>
               </form>
             </div>
@@ -403,9 +436,9 @@ const CheckOut = (props) => {
         </div>
       </div>
       <SuccessModal show={smShow} hide={onAfterOrder}>
-     <h4 className="bg-light p-2">Thenks For Your Order We will contact verysoon</h4>
-        
-      
+        <h4 className="bg-light p-2">
+          Thenks For Your Order We will contact verysoon
+        </h4>
       </SuccessModal>
     </section>
   );

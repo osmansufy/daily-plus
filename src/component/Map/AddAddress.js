@@ -7,7 +7,7 @@ import * as addressAction from '../../store/actions/actionAddress'
 import SuccessModal from '../../UI/Modal/SuccessModal';
 import { useHistory } from 'react-router';
 const AddAddress = props => {
-    const [show, setShow] = useState(false);
+    
     const [smShow, setSmShow] = useState(false);
     const[addressName,setAddressName]=useState()
     const[addressArea,setAddressArea]=useState()
@@ -23,7 +23,7 @@ const AddAddress = props => {
   }
   const userdetails=useSelector(state=>state.auth.userdetails)
   const token=useSelector(state=>state.auth.accessToken)
-  const editedAddress=useSelector(state=>state.address.adreessCurrent)
+  const editedAddress=useSelector(state=>state.address.addreessCurrent)
   const isEdit=useSelector(state=>state.address.isEdit)
   const redirectPath=useSelector(state=>state.address.redirectPath)
   const onEditSubmit=(token,address)=>dispatch(addressAction.onAddressEditSubmit(token,address))

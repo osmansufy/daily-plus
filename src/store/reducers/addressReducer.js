@@ -6,7 +6,7 @@ const initialState={
     userAddress:[],
     loading:false,
     error:null,
-    adreessCurrent:{
+    addreessCurrent:{
         location:{
             lat:23.78113301384171, 
             lng:90.42303124459973
@@ -23,9 +23,9 @@ const onUpdatedAddress=(state,action)=>{
         address:action.address
     }
 
-    const updatedAddress=updateObject(state.adreessCurrent,upadteArea)
+    const updatedAddress=updateObject(state.addreessCurrent,upadteArea)
     const updatesState={
-        adreessCurrent:updatedAddress,
+        addreessCurrent:updatedAddress,
         
     }
     return updateObject(state,updatesState)
@@ -38,9 +38,9 @@ const onAddUpdatedAddress=(state,action)=>{
                  title:""
     }
 
-    const updatedAddress=updateObject(state.adreessCurrent,upadteArea)
+    const updatedAddress=updateObject(state.addreessCurrent,upadteArea)
     const updatesState={
-        adreessCurrent:updatedAddress,
+        addreessCurrent:updatedAddress,
         isEdit:action.isEdit,
     }
     return updateObject(state,updatesState)
@@ -79,11 +79,12 @@ const AddressReducer = (state=initialState,action) => {
             ...state,
             userAddress:onAfterDelete
         };
-       case actionsTypes.ADDRESS_ID:
+       case actionsTypes.ADDRESS_SELECTED:
            
         return {
             ...state,
-            adreessCurrent:action.address
+            addreessCurrent:action.address,
+            isEdit:true,
         };
         case actionsTypes.ADDRESS_EDIT_START:
            
@@ -98,7 +99,7 @@ const AddressReducer = (state=initialState,action) => {
            
         return {
             ...state,
-            adreessCurrent:action.editAddress
+            addreessCurrent:action.editAddress
         }
        case actionsTypes.ADDRESS_ADD_SUBMIT:
            
@@ -116,6 +117,18 @@ const AddressReducer = (state=initialState,action) => {
        case actionsTypes.ADDRESS_ADD:
            
         return onAddUpdatedAddress(state,action)
+       case actionsTypes.ADDRESS_CURRENT:
+           
+        return {
+            ...state,
+            addreessCurrent:{
+                location:{
+                    lat:action.latitude ,
+                    lng:action.longitude
+                },
+                address:action.address
+            },
+        }
       
    
       

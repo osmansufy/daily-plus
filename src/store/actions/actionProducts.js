@@ -7,6 +7,12 @@ export const setProducts=(products)=>{
     products:products
     }
 }
+export const afterOrderProduct=()=>{
+    return{
+    type:actionTypes.AFTER_ORDER_PRODUCTS,
+    
+    }
+}
 
 export const initFetchProducts=()=>{
     return dispatch=>{

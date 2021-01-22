@@ -76,7 +76,7 @@ const GenieList = () => {
         {loading ? <Spinner /> : genieItems.length>0 && !loading ? <div className="row">
        
         {genieItems.length>0 && genieItems.map((item, index)=>(
-        <div  className="d-flex geineItems mx-auto col-md-12">
+        <div key={index} className="d-flex geineItems mx-auto col-md-12">
             <div  className="gOimage">
             <img  className="w-100 h-100" src={item.image} alt="" />
             </div>

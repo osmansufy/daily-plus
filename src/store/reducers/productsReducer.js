@@ -19,6 +19,11 @@ const reducer=(state=initialState,action)=>{
             ...state,
                 products:action.products
             }
+        case actionTypes.AFTER_ORDER_PRODUCTS:
+            return {
+            ...state,
+                products:[]
+            }
            
         case actionTypes.PRODUCTS_DETAILS:
             return {

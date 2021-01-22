@@ -23,6 +23,14 @@ export function deleteCartProduct({id, count}) {
     }
   }
 
+export const afterOrder=()=>{
+  return {
+    type:actionTypes.AFTER_ORDER,
+    
+    
+}
+
+}
 export const addPreCart=(item)=>{
   return {
     type:actionTypes.ADDTO_PRE_ORDER,

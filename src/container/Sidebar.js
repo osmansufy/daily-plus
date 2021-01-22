@@ -34,11 +34,13 @@ const Sidebar=props=>{
           {/* Sidebar */}
           <div className="sidebar">
             {/* Sidebar user panel (optional) */}
-            <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div className="user-panel mt-3 pb-3 mb-3 justify-content-between d-flex">
               <div className="image">
-                <a> <img src={logo}style={{width: '150px'}} alt="User Image" /></a>
+                <Link onClick={props.closed} to="/"> <img src={logo}style={{width: '150px'}} alt="User Image" /></Link>
               </div>
+
               <div className="info">
+                <a onClick={props.closed} className="pr-4 text-denger">X</a>
               </div>
             </div>
             {/* Sidebar Menu */}
@@ -48,12 +50,19 @@ const Sidebar=props=>{
                with font-awesome or any other icon font library */}
                {categories.map((cat,index)=>( <li key={index} className="nav-item has-treeview">
               
-                  <Link onClick={props.closed} to={"/category/"+cat.id+"/"+cat.name} className="nav-link" >
-                    <img src={cat.image} alt="User Avatar" className="img-size-50 mr-3 img-circle" />
-                    <p>
+                  <Link onClick={props.closed} to={"/category/"+cat.id+"/"+cat.name} className="nav-link align-items-center justify-content-between d-flex" >
+                   <div className="d-flex align-items-center">
+                   <img src={cat.image} alt="User Avatar" className="img-size-50 mr-3 rounded-circle" />
+                    <p className="m-0">
                       {cat.name}
-                      <i className="fas fa-angle-right right" />
+                      
                     </p>
+                   </div>
+                   
+                    <bold>
+                      <i className="fas fa-angle-right ms-auto p-2 w-100" />
+                      </bold>
+                  
                   </Link>
                  
                 </li>))}

@@ -70,18 +70,21 @@ const User = () => {
           setSelectedImg(e.target.files[0])
               console.log(e.target.files[0])
             }
-     const profileUpdate=(event)=>{
-      event.preventDefault();
+     const profileUpdate=()=>{
+      
          const id=usersInformation.id
-
+const userImg=selectedImg
+console.log(userImg)
          let formdata = new FormData();
+         formdata.append("id", usersInformation.id);
          formdata.append("email", userDetails.email);
          formdata.append("phone", userDetails.phone);
          formdata.append("name", userDetails.name);
          formdata.append("image", selectedImg);
-         axios.patch('user/profile/'+id+'/',formdata,{
+         axios.patch(`user/profile/${id}/`,formdata,{
             headers: {
                 Authorization: `JWT ${usersToken}`,
+                'Content-Type': 'multipart/form-data'
               },
          })
          .then(response=>{
@@ -136,11 +139,11 @@ const User = () => {
   </Modal.Body>
 
   <Modal.Footer className="flex-column">
-    <Button variant="secondary" className="btn btn-secondary m-0 w-100 d-flex align-items-center  btn-custom btn-lg btn-block"> 
+    <Button variant="secondary" className="btn btn-secondary px-4 py-2 m-0 w-100 d-flex align-items-center  btn-custom btn-lg btn-block"> 
     <img src={lockicon} />
     <span className="flex-grow-1">Change Password </span>
      </Button>
-    <Button variant="primary" className="btn btn-primary btn-custom btn-lg btn-block" onClick={profileUpdate}>
+    <Button variant="primary" className="btn pl-4 mt-3 w-100 d-flex align-items-center  btn-custom btn-lg btn-block" onClick={profileUpdate}>
       <img src={saveIcon} />
       <span className="flex-grow-1">Save changes</span>
       </Button>

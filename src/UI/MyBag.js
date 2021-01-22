@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import axios from '../axios'
 import * as cartActions from '../store/actions/actionCart'
 import ButtonQuantity from './Button/ButtonQtn';
@@ -8,15 +8,17 @@ import { useHistory, withRouter} from 'react-router-dom'
 import  classes from './MyBag.Module.css'
 import SuccessModal from './Modal/SuccessModal';
 import {Button} from 'react-bootstrap'
-
+import * as actionsCart from "../store/actions/actionCart";
+import * as actionsProducts from "../store/actions/actionProducts";
 const MyBag=(props)=> {
 console.log(props)
 
-
+  const dispatch=useDispatch()
   const history=useHistory()
   const [smShow, setSmShow] = useState(false);
-
+  const onAfterOrderProduct=()=>dispatch(actionsProducts.afterOrderProduct())
   const isSignUp=useSelector(state=>state.auth.accessToken)
+  const totalPrice = useSelector((state) => state.carts.totalPrice);
   const userdetails=useSelector(state=>state.auth.userdetails)
   const activeCart=useSelector(state=>state.auth.activeCart)
   const userAddress=useSelector(state=>state.address.userAddress)
@@ -68,6 +70,7 @@ carts.push({
     })
     .then(response=>{
       console.log(response)
+      onAfterOrderProduct()
     })
     .catch(error=>{
       console.log(error)
@@ -152,7 +155,7 @@ if(item.count===1){
                Subtotal
                </p>
                <span>
-               BDT 1,000
+               BDT {totalPrice}
                </span>
                </div>
              <div className="delevery_fee">
@@ -160,7 +163,7 @@ if(item.count===1){
                Delivery Fee
                </p>
                <span>
-               15
+               49
                </span>
                </div>
              <div className="cart_total">
@@ -168,10 +171,10 @@ if(item.count===1){
                Total
                </p>
                <span>
-               BDT 1,015
+               BDT {totalPrice+49}
                </span>
                </div>
-               <CommonBtn clicked={orderCheckoutHandler} >Proceed (৳1,049)</CommonBtn>
+               <CommonBtn clicked={orderCheckoutHandler} >Proceed (BDT-{totalPrice+49})</CommonBtn>
              </div>
              
         </div>
