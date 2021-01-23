@@ -39,30 +39,30 @@ const UserModal = () => {
   
 <Dropdown.Menu className="userModal" >
 
-<div className="container">
+<div>
 
 <h4>User</h4>
-<Dropdown.Item onClick={onuser} eventKey="1"className="row userInfo userProfile "  >
+<Dropdown.Item onClick={onuser} eventKey="1"className="d-flex userInfo userProfile "  >
 
  <img src={proIcon}/><span>My Profile</span>
 
        </Dropdown.Item>
-<Dropdown.Item onClick={onOrder} eventKey="2"className="row userInfo userOrder  "  >
+<Dropdown.Item onClick={onOrder} eventKey="2"className="d-flex userInfo userOrder  "  >
 
 <img src={bagIcon}/><span>My Order</span>
 
        </Dropdown.Item>
-<Dropdown.Item onClick={onPreOrder} eventKey="3"className="row userInfo userOrder  "  >
+<Dropdown.Item onClick={onPreOrder} eventKey="3"className="d-flex userInfo userOrder  "  >
 
 <img src={bagIcon}/><span>PreOrder</span>
 
        </Dropdown.Item>
-<Dropdown.Item onClick={onGenie} eventKey="4"className="row userInfo userOrder  "  >
+<Dropdown.Item onClick={onGenie} eventKey="4"className="d-flex userInfo userOrder  "  >
 
 <img src={bagIcon}/><span>Genie List</span>
 
        </Dropdown.Item>
-<Dropdown.Item onClick={onlogout} eventKey="5"className="row userInfo userLogout "  >
+<Dropdown.Item onClick={onlogout} eventKey="5"className="d-flex userInfo userLogout "  >
 
 <img src={logIcon}/><span>Logout</span>
 

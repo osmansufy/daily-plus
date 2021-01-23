@@ -116,7 +116,11 @@ const AddressReducer = (state=initialState,action) => {
         }
        case actionsTypes.ADDRESS_ADD:
            
-        return onAddUpdatedAddress(state,action)
+        return {
+            ...state,
+            addreessCurrent:action.address,
+            isEdit:false,
+        }
        case actionsTypes.ADDRESS_CURRENT:
            
         return {

@@ -82,10 +82,10 @@ export const onEditSuccess=(data)=>{
         editAddress:data,
     }
 }
-export const onAddAddress=(edit)=>{
+export const onAddAddress=(address)=>{
     return{
         type:actionsTypes.ADDRESS_ADD,
-        isEdit:edit,
+        address:address,
         
     }
 }

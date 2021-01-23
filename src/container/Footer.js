@@ -39,16 +39,17 @@ function Footer(props) {
             <div className="col-md-3 mt-4 col-sm-6 ">
               <h3>Contact Us</h3>
               <ul className="mt-3 p-0">
-                <li><a><i className="fa fa-phone pr-3" />+0198737343</a></li>
-                <li><a><i className="fa fa-envelope pr-2" />contact@dailyplus.com</a></li>
+                <li><a  href="tel:+8809638111444" ><i className="fa fa-phone pr-3" />+8809638111444</a></li>
+                <li><a href="mailto:customers@dailyplus.store" ><i className="fa fa-envelope pr-2" />customers@dailyplus.store</a></li>
+                <li><i class="fab fa-facebook-messenger pr-2"></i>Messenger</li>
                 <li><a><i className="fa fa-map-marker pr-3" />Floor 4, Wakil Tower</a></li>
               </ul>
             </div>
             <div className="col-md-3 mt-4 col-sm-6 ">
               <h3>App Download</h3>
               <ul className="mt-3 p-0">
-                <li><a  ><img className="img-fluid" src={play } alt="" /></a></li>
-                <li><a  ><img className="img-fluid" src={app} alt="" /></a></li>
+                <li><a href="https://play.google.com/store/apps/details?id=com.dingi.dailyplus" target="_blank" ><img className="img-fluid" src={play } alt="" /></a></li>
+                <li><a href="https://apps.apple.com/us/app/id1520548400" target="_blank" ><img className="img-fluid" src={app} alt="" /></a></li>
               </ul>
             </div>
           </div>

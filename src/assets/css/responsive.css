@@ -7,13 +7,40 @@
     display: none;
   }
 }
-
+@media only screen and (min-width: 600px) {
+  .appShow{
+   
+    display: none;
+  }
+}
 @media only screen and (max-width: 600px) {
   .cart-holder {
     position: absolute;
     min-height: 100vh;
     width: 100%;
   }
+  .appShow{
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    display: block;
+  }
+  .appShow.close {
+    transform: translate(-100%);
+    transition: 0.3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+  }
+  span.appClose {
+    position: absolute;
+    content: "";
+    left: 13px;
+    top: 35%;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+}
 }
 
 @media (max-width: 640px) {
@@ -89,7 +116,9 @@
   .mobile-hide{
     display: none;
   }
- 
+ .nav-phone{
+   font-size: 22px;
+ }
   .nav-sizings {
     font-size: 12px;
 }
@@ -125,4 +154,7 @@
   .col {
     max-width: 12.5%;
   }
+  .container, .container-lg, .container-md, .container-sm, .container-xl {
+    max-width: 80%;
+}
 }

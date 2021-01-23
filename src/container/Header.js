@@ -10,7 +10,7 @@ import logo from "../assets/img/logo.png";
 import pro from "../assets/img/pro.png";
 import callIcon from "../assets/img/call.png";
 import offerIcon from "../assets/img/offer_24px.png";
-import placeIcon from "../assets/img/place_24px.png";
+import phoneApp from "../assets/img/banner-phone.png";
 import accountPic from "../assets/img/account.png";
 import Search from "../UI/Search";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,6 +29,7 @@ const Header = (props) => {
   const [notishow, setNotiShow] = useState(false);
   const [notiCount, setNotiCount] = useState("");
   const [searchShow, setSearchShow] = useState(false);
+  const [appHide, setAppHide] = useState(false);
   const [address, setAddress] = useState("");
   const [showSidebar, setShowSidebar] = useState(false);
   const dispatch = useDispatch();
@@ -123,10 +124,43 @@ const Header = (props) => {
   const notClosed = () => {
     setNotiShow(false);
   };
-
+  const isMobile = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+    },
+    any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    }
+};
+let appClasses=['appShow']
+if(appHide){
+  appClasses=['appShow','close']
+}
+let appLink="https://play.google.com/store/apps/details?id=com.dingi.dailyplus";
+if(isMobile.iOS()){
+  appLink="https://apps.apple.com/us/app/id1520548400"
+}
   return (
     <>
       <header>
+        <div className={appClasses.join(' ')}>
+          <div className="d-flex justify-content-center">
+         <span onClick={()=>setAppHide(true)} className="appClose">X</span>
+         <a href={appLink} target="_blank"> <img src={phoneApp} /></a> 
+          </div>
+        </div>
       <div className="mobile-show">
         {isSignUp ==null && (<div className="d-flex  bg-custom-warning pl-2 pr-5 align-items-center justify-content-between">
              <span>You are not logged in</span> <Link to="/signup">
@@ -220,14 +254,26 @@ const Header = (props) => {
                   <span className="text-success">Wishlist</span>
                 </Nav.Link>
       
-                <Nav.Link className="text-dark" href="#deets">
+                <Nav.Link className="text-dark" >
                   <img className="mr-4"  src={lampIcon} />
                   <span className="text-success">GeniList</span>
+                </Nav.Link>
+                <Nav.Link href="tel:+8809638111444" className="text-dark">
+                <i className="fa nav-phone fa-phone mr-4" /><span className="text-success">+8809638111444</span>
                 </Nav.Link>
 
                 <NavDropdown
                   className="text-dark nav-address"
-                  title="Delevery Address"
+                  title={(<><div className="d-flex align-items-center phoneAdelevery">
+                  {" "}
+                  <h6 className="mr-2">Delivery to</h6>
+                  <i class="fas fa-arrow-right"></i>
+                  <p >
+                    {deleverYaddress?.address?.substring(0, 20)}...
+                  </p>
+                </div>
+                </>
+                )}
                   id="collasible-nav-dropdown"
                 >
                   <Address />
@@ -386,7 +432,7 @@ const Header = (props) => {
                       {" "}
                       <h6>Delivery to</h6>
                       <p id="contentcshow" style={{ cursor: "pointer",margin:0 }}>
-                        {deleverYaddress && deleverYaddress.address.substring(0, 20)}...
+                        { deleverYaddress?.address?.substring(0, 20)}...
                       </p>
                     </div>
                     <img className="mt-md-4 ml-2" src={deliveryIcon} />

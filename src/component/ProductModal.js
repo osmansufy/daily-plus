@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
+import Slider from "react-slick";
 import "./ProductModal.css";
 import bagIcon from "../assets/img/bag_white.png";
 import tagIcon from "../assets/img/tag.png";
@@ -8,8 +9,8 @@ import * as cartActions from "../store/actions/actionCart";
 import SinglePopuler from "./SinglePopuler";
 import ButtonQuantity from "../UI/Button/ButtonQtn";
 import Spinner from "../container/Spinner/Spinner";
-import { Modal } from "react-bootstrap";
-import Slider from "react-slick";
+import { Modal } from "react-bootstrap"
+
 const Product = (props) => {
   // const {details}=props
   const [itemCount, setItemCount] = useState(0);
