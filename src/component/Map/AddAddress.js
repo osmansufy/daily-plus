@@ -48,6 +48,8 @@ const AddAddress = props => {
         const addressDteails={
           user:userdetails.id,
           title:addressName,
+          is_home:editedAddress.is_home,
+          is_office:editedAddress.is_office,
           location:`{"lat":${editedAddress.location.lat},"lng":${editedAddress.location.lng}}`,
           
           address:addressArea,
