@@ -1,7 +1,6 @@
 
 
-button.btn.search-btn.btn-primary {
-    padding: 10px 20px;
+.search-btn{
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -9,12 +8,10 @@ button.btn.search-btn.btn-primary {
 }
 
 .newGenieInfo h4 {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
-
-/* Black/Normal */
-    color: #37474F;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.2;
+  color: #37474F;
     /* white-space: break-spaces; */
 }
 

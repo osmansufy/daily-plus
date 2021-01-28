@@ -38,14 +38,12 @@ ul li{
 ul li a {
     color: rgba(55, 71, 79, 0.72);
     font-size: 0.9em;
-    font-weight: 500;
-    font-size: 16px;
- 
+    display: flex;
+    align-items: center;
     font-family: Poppins;
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
-    line-height: 24px;
     letter-spacing: 0px;
     text-align: left;
 }
@@ -104,17 +102,14 @@ header .logo-holder .logo{
 .notification-btn{
     position: relative;
 }
-.notification-btn .notification-holder {
-    position: absolute;
+.notification-holder {
+   
     background-color: #FFFFFF;
-    padding: 20px 20px;
-    width: 20rem;
+    max-height: 90vh;
     height: auto;
-    z-index: 99983377;
-    top: 31px;
-    right: 0;
-    border-radius: var(--border-radius);
-    box-shadow: 0px 24px 21px rgba(0, 0, 0, 0.11);
+    overflow: auto;
+    width: 20rem;
+   
 }
 .notification-header{
     display: flex;
@@ -261,16 +256,11 @@ header .logo-holder .logo{
 .add-to-bag-btn i{
     padding-right: 10px;
 }
-.sell-price{
-    color: var(--secondary-color);
-    margin-bottom: 10px;
-    font-weight: 500;
-    font-size: 12px;
-}
-.regular-price{
+
+.regular-price {
     color: var(--text-color);
     text-decoration: line-through;
-    /* margin-left: 7px; */
+    margin-left: 3px;
 }
 .delivery-price{
     display: flex;

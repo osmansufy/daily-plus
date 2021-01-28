@@ -64,7 +64,7 @@ class Category extends Component {
               infinite: true,
               swipeToSlide: true,
               centerMode: false,
-              
+              arrows: false,
             }
           }
         ]
@@ -79,10 +79,11 @@ return <SingleCategory data={item} key={index} />
             <div className="container">
               <div className="row mb-4">
                 <div className="col-md-6 col-sm-6 col-6">
-                  <h3>Shop by Categories</h3>
+                  <h3 className="section-title">Shop by Categories</h3>
                 </div>
                 <div className="col-md-6 col-sm-6 col-6">
-                  <button className="btn btn-padding btn-primary float-right">View All Category</button>
+                  <button className="btn btn-padding section-button btn-primary float-right">View All Category</button>
+                  <a className="mobile-link">See All</a>
                 </div>
               </div>
              

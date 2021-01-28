@@ -68,50 +68,117 @@
     font-size: 12px;
     font-weight: bold;
   }
+  .section-button{
+    display: none;
+  }
+  .mobile-link {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    font-size: 12px;
+    color: green;
+    font-weight: 500;
+}
   .category-section h2 {
     font-size: 16px;
+  }
+  .add-to-bag-btn{
+    background-color: #5EC401;
+    color: #fff !important;
+  }
+  .add-to-bag-btn svg path {
+  
+    fill: white;
+    transition: all ease 0.3s;
   }
 }
 
 @media (max-width: 760px) {
-  
+  h5.preOrderDate {
 
-  
-  
+    font-size: 10px;
 
+    line-height: 1.2;
+}
+p.prePoduct-name {
+    font-size: 10px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+p.prePoduct-unit {
+    font-size: 10px;
+    line-height: 1.2;
+}
+  footer {
+    padding: 0;
+  }
+  footer .logo,footer .social {
+    display: flex;
+  justify-content: center;
+  }
+
+  .footer-about,.footer-contact,.footer-app  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  .product-card .pro-title{
+    line-height: 1.5;
+    height: 32px;
+    color: black;
+    font-weight: 400;
+    font-size: 10px;
+  }
+  .footer-app ul {
+    display: flex;
+}
+.footer-app ul li {
+ width: 110px;
+}
+  .sell-icon {
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sell-icon svg {
+  width: 18px;
+  margin: 2px;
+}
+  .addressModal {
+    max-height: 40vh;
+  }
 
   .contact-btn {
     display: none;
   }
   
-
-  .sell-price {
-    font-size: 12px;
-  }
 }
 
 @media (max-width: 990px) {
+  section {
+    padding: 15px 0px;
+}
+.section-title {
+  font-size: 14px;
+  font-weight: 500;
+}
   button.btn.add-to-bag-btn.single-product-btn {
     width: 90%;
     font-size: 16px;
   }
  
-.banner_sec,.custom_page {
-  margin-top: 110px;
-}
+
   .modal-content h6 {
     font-size: 16px;
   }
   .add-to-bag-btn{
     font-size: 12px;
   }
-  .price h6 {
-    font-size: 12px;
-
-  }
   h6.sell-price {
     font-size: 10px;
     display: flex;
+    align-items: center;
   }
   .mobile-hide{
     display: none;
@@ -121,11 +188,21 @@
  }
   .nav-sizings {
     font-size: 12px;
+    border: none;
 }
-
+.bg-custom-warning span,.bg-custom-warning a {
+  font-weight: 400;
+ 
+  font-size: 12px;
+}
 .notification-holder {
   left: -170%;
   max-width: 300px;
+}
+.userModal {
+  left: inherit;
+  min-width: 320px;
+  right: -110%;
 }
 }
 
@@ -156,5 +233,6 @@
   }
   .container, .container-lg, .container-md, .container-sm, .container-xl {
     max-width: 80%;
+    margin: 0 auto;
 }
 }

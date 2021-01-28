@@ -7,7 +7,6 @@ import OtpInput from 'react-otp-input';
 const OtpForm = (props) => {
     return ( 
         <>
-        <div id="recaptcha_container"></div>
         <div className="text-danger">{props.error ? "Password Is inValid" :''}</div>
     
         <div className="row justify-content-center">
@@ -17,7 +16,7 @@ const OtpForm = (props) => {
     </div>
             <p>We need to verify you. We will send you a one time verification code. </p>
               {/* <div className="text-danger">{props.formError ? formError : ''}</div> */}
-              <div id="recaptcha_container"></div>
+              
 <OtpInput
   value={props.value}
   onChange={props.change}

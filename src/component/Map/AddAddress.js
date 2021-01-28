@@ -81,10 +81,8 @@ const AddAddress = props => {
     <FormControl
    onChange={onSetAddressName}
     defaultValue={addressName}
-    // readOnly 
-      // aria-label="Default"
-      // aria-describedby="inputGroup-sizing-default"
-      // {...editedAddress && editedAddress.is_home? "readonly" : ""}
+    readOnly={editedAddress?.is_home ||editedAddress?.is_office }
+    
     />
   </InputGroup>
         <InputGroup className="mb-3">

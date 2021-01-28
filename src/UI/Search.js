@@ -61,14 +61,14 @@ const Search = (props) => {
     products = (
       <div className="search-container" id="searchContainer">
         <div className="search-result" id="searchResult">
-          <h6>Search Result </h6>
+          <h6 className="mb-4">Search Result </h6>
           {searchResult.length > 0 ? (
             <ul>
               {searchResult.map((product) => (
                 <>
-                  <li>
-                    <a onClick={() => onProductSelect(product.id)}>
-                      <div className="search-result-list">
+                  <li >
+                    <a className="my-2" onClick={() => onProductSelect(product.id)}>
+                      <div className="search-result-list w-100">
                         <div className="search-result-list-img mr-2">
                           <img
                             src={
@@ -92,7 +92,7 @@ const Search = (props) => {
                           </div>
                         </div>
                         <div className="search-result-list-btns">
-                          <div className="search-result-list-btn-cart">
+                          <div className="search-result-list-btn-cart d-flex">
                             <i className="fa fa-heart-o mr-2" />
                             <button className="btn search-btn btn-primary mb-1">
                               <img className="mr-md-3" src={bagIcon} />{" "}
@@ -108,7 +108,7 @@ const Search = (props) => {
                     product.inventory_list[0].status == 3) ||
                   (product.inventory_list[0] &&
                     product.inventory_list[0].status == 4) ? (
-                    <li>
+                    <li className="my-2">
                       <a
                         onClick={onGenieForm}
                         className="d-flex justify-content-between"

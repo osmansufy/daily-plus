@@ -40,7 +40,13 @@ const GenieHistory = () => {
     }
   }
 
-  const [status,statDispatch]=useReducer(statusReducer,"")
+  const onGenieOrderDetails=(id)=>{
+    history.push({
+      pathname: '/genie/order/info',
+     //  search: `?id=${id}`,
+      state: { id: id}
+  });
+  }
     useEffect(()=>{
         if (usersToken) {
             
@@ -67,9 +73,8 @@ const GenieHistory = () => {
         contentGenieHistory=<Spinner />
       }else if(!loading && genieAllOrder.length >0){
         contentGenieHistory= genieAllOrder.filter(order=>order.status!=1).map(order=>{
-          // statDispatch({type:order.status})
           return <a 
-        //   onClick={()=>onPreOrderDetails(order.id)}
+          onClick={()=>onGenieOrderDetails(order.id)}
           >    <div className="row order-info">
           <div className="info-left">
               
@@ -82,13 +87,14 @@ const GenieHistory = () => {
                     <h5>{moment(order.ts_created).utc().format('MMM DD.YYYY')}</h5>
                 </div>
                 </div>  
-                <span>ট{order.total_bill} </span></div> 
+                <span>ট{order.final_bill} </span></div> 
                 </a>
         })
         
         
       }else{
-        contentGenieHistory=<div className="row ongoing justify-content-center"><img src={emptyImg} />
+        contentGenieHistory=<div className="row ongoing justify-content-center">
+          <img src={emptyImg} />
         <p>There is no ongoing order right now. You can order from home</p>
         </div>
       }

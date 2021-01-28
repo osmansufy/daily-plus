@@ -36,6 +36,7 @@ import Genie from './pages/Genie/Genie';
 import GenieForm from './component/Genie/GenieForm';
 import GenieOrderDetails from './component/Genie/GenieOrderDetails';
 import AboutUs from './pages/About';
+import ChangePass from './component/SignUp/ChangePass';
 
 
 const App=(props)=> {
@@ -58,12 +59,14 @@ const history = createBrowserHistory();
     <Route path='/product/:id' exact  component={ProductId}  />
 
   <Route path='/offers' exact component={OffersPage} />
-  <Route path='/order/info' exact component={OrderInfo} />
+  
   <Route path='/checkout' exact component={CheckOut} />
   <Route path='/checkout/success' exact component={Success} />
   <Route path='/signup' exact component={SignUp} />
   <Route path='/user' exact component={User} />
+  <Route path='/user/changepassword' exact component={ChangePass} />
   <Route path='/order' exact component={Orders} />
+  <Route path='/order/info' exact component={OrderInfo} />
   <Route path='/order/preorder' exact component={PreOrderInfo} />
   <Route path='/genie' exact component={Genie} />
   <Route path='/genie/form' exact component={GenieForm} />

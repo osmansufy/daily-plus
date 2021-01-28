@@ -1,3 +1,4 @@
+import paymentImg from '../assets/img/allPayment.png'
 const AboutUs = () => {
     return ( 
 <section className="custom_page">
@@ -105,6 +106,9 @@ const AboutUs = () => {
         <p>Floor 4, Wakil Tower, Ta 131, Gulshan Badda Link Road, Dhaka - 1212</p>
       </div>
     </div>
+  </section>
+  <section className="container">
+  <img src={paymentImg} />
   </section>
 </>
 

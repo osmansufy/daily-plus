@@ -11,7 +11,7 @@ import PreHistory from '../../component/PreOrder/PreOrderHistory';
 const PreOrderInfo = () => {
 
     return (
-<div className="custom_page preorder mb-5">
+<section className="custom_page preorder mb-5">
          <Container> 
 
        
@@ -52,7 +52,7 @@ const PreOrderInfo = () => {
 </Modal.Body>
 </Modal.Dialog>
 </Container>
-    </div> 
+    </section> 
 
       );
 }

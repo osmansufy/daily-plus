@@ -151,11 +151,11 @@ const Signup = () => {
       })
       .catch((error) => {
         console.log(error);
-        setloading(false)
+        
         setupRecaptcha();
         var phoneNumber = "+" + formState.userInfo.phone;
         console.log(phoneNumber);
-
+        setloading(false)
         var appVerifier = window.recaptchaVerifier;
         firebase
           .auth()
@@ -164,7 +164,7 @@ const Signup = () => {
             // SMS sent. Prompt user to type the code from the message, then sign the
             // user in with confirmationResult.confirm(code).
             window.confirmationResult = confirmationResult;
-
+            
             formDispatch({
               type: formType.SEND_OTP,
               confirmOtp: confirmationResult,
@@ -175,7 +175,7 @@ const Signup = () => {
           .catch(function (error) {
             // Error; SMS not sent
             // ...
-
+            
             console.log(error);
           });
       });
@@ -229,6 +229,7 @@ const Signup = () => {
     };
 
     loginAction(details);
+    
   };
 
   const newUserInfo = {
@@ -260,18 +261,20 @@ const Signup = () => {
   };
   const onName = () => {
     if (formState.userInfo.fullName != "") {
-      setInputError("");
+      
       formDispatch({ type: formType.NAME, form: formType.EMAIL });
+      setInputError("");
     } else {
       setInputError("Please Enter YourName");
     }
   };
   const onEmail = () => {
-    if (formState.userInfo.email != "") {
+    const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+    if (formState.userInfo.email != "" && pattern.test(formState.userInfo.email)) {
       setInputError("");
       formDispatch({ type: formType.EMAIL, form: formType.CONFIRM_PASSWORD });
     } else {
-      setInputError("Please Enter Your Email");
+      setInputError("Please Enter  A Valid Email Address");
     }
   };
   const onLogPass = () => {
@@ -314,6 +317,7 @@ const Signup = () => {
         password: formState.userInfo.password,
       };
       SignIninAction(newUserInfo);
+      
     }
   };
 
@@ -349,11 +353,10 @@ const Signup = () => {
   };
 
   let formContent = "";
-  if (loading || isloading) {
-    formContent=<Spinner />
-  }else{
+ 
   switch (formState.form) {
     case formType.PHONE:
+     
       formContent = (
         <PhoneForm
           containerClass="phoneField signupInput"
@@ -369,16 +372,22 @@ const Signup = () => {
           clicked={onPhone}
         />
       );
+        
       break;
     case formType.PASSWORD:
+      if (loading || isloading) {
+        formContent= <><div id="recaptcha_container"></div><Spinner /></>
+      }else{
       formContent = (
         <PasswordForm
           value={formState.userInfo.password}
           forGetClicked={onForgetPass}
           clicked={onLogPass}
+          onError={isError}
           change={onInputChange("password")}
         />
       );
+      }
       break;
     case formType.NAME:
       formContent = (
@@ -391,6 +400,7 @@ const Signup = () => {
       );
       break;
     case formType.EMAIL:
+      
       formContent = (
         <EmailForm
           value={formState.userInfo.email}
@@ -399,6 +409,7 @@ const Signup = () => {
           change={onInputChange("email")}
         />
       );
+      
       break;
     case formType.OTP:
       formContent = (
@@ -427,7 +438,7 @@ const Signup = () => {
     default:
       break;
   }
-}
+
   console.log(formState);
 
   let authRedirect = "";
@@ -435,15 +446,14 @@ const Signup = () => {
     authRedirect = <Redirect to="/" />;
   }
   return (
-    <div className="custom_page signup">
-      {authRedirect}
-
+    <section className="custom_page signup">
+{authRedirect}
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-body">{formContent}</div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

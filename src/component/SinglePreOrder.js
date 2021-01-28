@@ -11,16 +11,16 @@ function SinglePreOrder(props) {
   const history=useHistory()
   const userInfo=useSelector(state=>state.auth.userdetails)
   const token=useSelector(state=>state.auth.accessToken)
-
+console.log(props);
   // const onPreOrder=(item,token)=>dispatch(cartActions.cartPreAction(item,token))
     let freeDel= null 
-    let discount='৳'+props.data.inventory_list[0].unit_price
+    let discount=props.data.inventory_list[0].discount
     if (props.data.pre_order_details.is_free_delivery) {
         freeDel=(<h6 className="sell-price">Free Delivery</h6>)
     }
-    if (props.data.inventory_list[0].unit_price_final==props.data.inventory_list[0].unit_price) {
-        discount=null
-    }
+    // if (props.data.inventory_list[0].unit_price_final==props.data.inventory_list[0].unit_price) {
+    //     discount=null
+    // }
     const date=props.data.pre_order_details.delivery_date
     const onSignin =()=>{
       setModalShow(false)
@@ -58,13 +58,13 @@ function SinglePreOrder(props) {
     return (<>
         <div className="col-lg-2 col-sm-3 col-6 mt-4">
                   <div className="product-card">
-                    <div className="no-card">
-                      <a type="button" data-toggle="modal" data-target="#exampleModal"><img className="product-img img-fluid" src={props.data.image_list[0].image_url} alt="" /></a>
-                    </div>
+                    
+                     <img className="product-img" src={props.data.image_list[0].image_url} alt="" />
+                   
     <h6 className= "pro-title mt-2">{props.data.name}</h6>
                     <div className="delivery-price">
                       <div className="price">
-                        <h6 className="sell-price">৳{props.data.inventory_list[0].unit_price_final} <span className="regular-price">{discount}</span></h6>
+                        <h6 className="sell-price">৳{props.data.inventory_list[0].unit_price_final} <span className="regular-price">{discount? `৳ ${props?.data?.inventory_list[0]?.unit_price_final+discount}`:""}</span></h6>
                       </div>
                       {freeDel}
                       

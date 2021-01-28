@@ -8,11 +8,13 @@ import cammera from '../../assets/img/cammera.png'
 import { useSelector } from 'react-redux'
 import axios from '../../axios'
 import { useHistory } from 'react-router'
+import SuccessModal from '../../UI/Modal/SuccessModal'
 const GenieForm = () => {
 
     const history=useHistory()
     const userInfo=useSelector(state=>state.auth.userdetails)
     const token=useSelector(state=>state.auth.accessToken)
+    
     const [orderForm,setOrderForm]= useState( {
         name: {
             elementType: 'input',
@@ -85,43 +87,45 @@ const GenieForm = () => {
       }
     const orderHandler = ( event ) => {
          event.preventDefault();
-         
-         const formData = {};
-         for (let formElementIdentifier in orderForm) {
-             formData[formElementIdentifier] = orderForm[formElementIdentifier].value;
-         }
-        //  let formSubmit = new FormData();
-        //  formSubmit.append(formData)
-        let formdata = new FormData();
-        formdata.append("name", formData.name);
-        formdata.append("owner", userInfo.id);
-        formdata.append("description", formData.note);
-        formdata.append("unit_name", formData.weight);
-        formdata.append("image", selectedImg);
+  
+        const formData = {};
+        for (let formElementIdentifier in orderForm) {
+            formData[formElementIdentifier] = orderForm[formElementIdentifier].value;
+        }
+       //  let formSubmit = new FormData();
+       //  formSubmit.append(formData)
+       let formdata = new FormData();
+       formdata.append("name", formData.name);
+       formdata.append("owner", userInfo.id);
+       formdata.append("description", formData.note);
+       formdata.append("unit_name", formData.weight);
+       formdata.append("image", selectedImg);
 
-     
-       console.log(formdata)
+    
+      console.log(formdata)
 
-       axios.post('order/genielist/items/',formdata,{
-        headers: {
-            Authorization: `JWT ${token}`,
-          },
+      axios.post('order/genielist/items/',formdata,{
+       headers: {
+           Authorization: `JWT ${token}`,
+         },
 
-       })
-       .then(res=>{
-        history.push('/genie')
-           console.log(res)
-       })
-       .catch(err=>{
-           console.log(err)
-       })
+      })
+      .then(res=>{
+       history.push('/genie')
+          console.log(res)
+      })
+      .catch(err=>{
+          console.log(err)
+      })
+      
+        
      
      }
    
      const onCloseImg=()=>{
         setSelectedImg(null)
      }
- 
+
    const inputChangedHandler = (event,inputIdentifier) => {
          
  
@@ -206,6 +210,7 @@ const GenieForm = () => {
     
   
 </Modal.Dialog>
+
 </section>
      );
 }

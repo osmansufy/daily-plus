@@ -99,10 +99,15 @@ p.genip {
     line-height: 21px;
     color: #37474F;
 }
+
 @media(min-width:990px){
 .genieFormModal {
     /* max-width: 50%; */
     max-width: 688px;
 }
+
+}
+@media(max-width:600px){
+    
 
 }

@@ -8,11 +8,11 @@ function Banner(props) {
     setIndex(selectedIndex);
   };
     return (
-        <section className="banner_sec">
+        <section className="banner_sec pb-5">
      
 
 <Container>
-  <Carousel activeIndex={index} onSelect={handleSelect} nextIcon="" prevIcon="">
+  <Carousel activeIndex={index}  onSelect={handleSelect} nextIcon="" prevIcon="">
     <Carousel.Item>
       <img src={bannerImg} className="d-block w-100" alt="..." />
       <Carousel.Caption>

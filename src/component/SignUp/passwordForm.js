@@ -12,7 +12,7 @@ const PasswordForm = (props) => {
     setshowPass(!showPss)
       }
     return ( <>
-    <div className="text-danger">{props.error ? "Password Is inValid" :''}</div>
+   
 
     <div className="row justify-content-center">
 
@@ -23,7 +23,7 @@ const PasswordForm = (props) => {
 <div id="recaptcha_forget_container"></div>
         <h4 className="text-center mt-4">Enter the password</h4>
         <p className="text-center w-75 mx-auto">It looks like you already have an account in this  number. Please enter the password to proceed </p>
-          {/* <div className="text-danger">{props.formError ? formError : ''}</div> */}
+          <div className="text-danger">{props.onError ? "Password is invalid" : ''}</div>
           <div className="form-label-group mb-4 input-group">
                 <span className="input-group-text border-0 input-start" id="inputEmail"> <img src={locksvg} /></span>
               <input

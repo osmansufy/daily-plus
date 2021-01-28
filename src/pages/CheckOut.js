@@ -4,13 +4,14 @@ import axios from "../axios";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import classes from "./CheckOut.Module.css";
-import { useHistory, withRouter } from "react-router-dom";
+import { Redirect, useHistory, withRouter } from "react-router-dom";
 import * as authAction from "../store/actions/actionAuth";
 import * as addressAction from "../store/actions/actionAddress";
 import * as actionsCart from "../store/actions/actionCart";
 import plusIcon from "../assets/img/plus-icon.png";
 import offerIcon from "../assets/img/offer_24px.png";
 import SuccessModal from "../UI/Modal/SuccessModal";
+import Spinner from '../container/Spinner/Spinner'
 const CheckOut = (props) => {
   const token = useSelector((state) => state.auth.accessToken);
   const history = useHistory();
@@ -18,10 +19,12 @@ const CheckOut = (props) => {
   // const userAddressAction=(token)=>dispatch(addressAction.onUserAddress(token))
   const userInfo = useSelector((state) => state.auth.userdetails);
   const activeCart = useSelector((state) => state.auth.activeCart);
+  const [loading,setloading]=useState(false)
+  const [isError,setIsError]=useState('')
   const userAddress = useSelector((state) => state.address.userAddress);
   const currentAddress = useSelector((state) => state.address.addreessCurrent);
   const totalPrice = useSelector((state) => state.carts.totalPrice);
-  const afterOrderAction=()=>dispatch(actionsCart.afterOrder())
+  const afterOrderAction = () => dispatch(actionsCart.afterOrder());
   const onSelectedAddress = (address) =>
     dispatch(addressAction.onAddressSelected(address));
   const [smShow, setSmShow] = useState(false);
@@ -36,9 +39,12 @@ const CheckOut = (props) => {
     deliveryTime: moment().toISOString(),
     paymentMethod: 1,
     slot: 3,
+    promoId:''
   });
   const [slots, setSlots] = useState([]);
   const [dates, setDates] = useState([]);
+  const [promo,setPromo]=useState('')
+  const [discount,setDiscount]=useState(0)
   const onNewLocation = () => {
     onAddressCheckout();
     props.history.push("/location");
@@ -90,15 +96,19 @@ const CheckOut = (props) => {
   };
 
   useEffect(() => {
-    setInformation({
-      ...information,
-      lng: currentAddress.location.lng,
-      lat: currentAddress.location.lat,
-      address: currentAddress.address,
-      title: currentAddress.title,
-    });
+    if (token == null) {
+      history.push("/");
+    } else {
+      setInformation({
+        ...information,
+        lng: currentAddress.location.lng,
+        lat: currentAddress.location.lat,
+        address: currentAddress.address,
+        title: currentAddress.title,
+      });
 
-    getTimeSlots(currentAddress.location.lng, currentAddress.location.lat);
+      getTimeSlots(currentAddress.location.lng, currentAddress.location.lat);
+    }
   }, []);
 
   const CartChange = (token) => dispatch(authAction.onCartChange(token));
@@ -113,20 +123,47 @@ const CheckOut = (props) => {
   const onAfterOrder = () => {
     setSmShow(false);
     history.push("/");
-    afterOrderAction()
+    afterOrderAction();
   };
+
+  const onlinePayment=(amount,order)=>{
+    axios
+    .post(
+      "billing/ssl/payment/order/create/",
+      {
+        amount: amount,
+        order: order,
+      },
+      {
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res);
+      window.location.replace(res.data.GatewayPageURL);
+      
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   const onPlaceOrder = (event) => {
     event.preventDefault();
     const orderSend = {
       owner: userInfo.id,
       cart: activeCart,
+      promo:information.promoId,
       ts_delivery: information.deliveryTime,
       time_slot: information.slot,
       recipient_phone: userInfo.phone,
       recipient_address: information.address,
       recipient_point: `{"lat":${information.lat},"lng":${information.lng}}`,
     };
+    setSmShow(true);
+    setloading(true)
     axios
       .post("order/order/customer/", orderSend, {
         headers: {
@@ -136,34 +173,21 @@ const CheckOut = (props) => {
       .then((response) => {
         console.log(response);
         CartChange(token);
+        setloading(false)
+        setIsError("")
         if (information.paymentMethod == 2) {
-          axios
-            .post(
-              "billing/ssl/payment/order/create/",
-              {
-                amount: response.data.final_bill,
-                order: response.data.id,
-              },
-              {
-                headers: {
-                  Authorization: `JWT ${token}`,
-                },
-              }
-            )
-            .then((res) => {
-              console.log(res);
-              window.location.replace(res.data.GatewayPageURL);
-              setSmShow(true);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          afterOrderAction();
+          onlinePayment(response.data.final_bill,response.data.id)
         } else {
-          setSmShow(true);
+          
         }
       })
       .catch((error) => {
+        setloading(false)
         console.log(error);
+        CartChange(token);
+        setIsError(error.message)
+        console.log(orderSend)
       });
   };
   const adressChange = (address) => {
@@ -183,7 +207,27 @@ const CheckOut = (props) => {
       slot: i + 1,
     });
   };
+
+  const onPromoSubmit=()=>{
+    const code=promo;
+    axios.get(`catalogue/promo/?code=${code}&payment_way=1`,{
+      headers: {
+        Authorization: `JWT ${token}`,
+      }
+    })
+    .then(response=>{
+      setDiscount(response.data.amount)
+      setInformation({
+        ...information,
+        promoId:response.data.id
+      })
+      console.log(response.data)
+    }).catch(error=>{
+      console.log(error)
+    })
+  }
   console.log("information", information);
+  console.log("error", isError);
   return (
     <section className="custom_page">
       <div className="container">
@@ -310,7 +354,8 @@ const CheckOut = (props) => {
                       href="#/action-1"
                     >
                       <a>
-                        <p className="m-0 p-0">{address.title}</p>
+                        <h6 className="my-0 mx-2 p-0">{address.title}<br/></h6>
+                        
                         <small>{address.address}</small>
                       </a>
                     </Dropdown.Item>
@@ -381,16 +426,23 @@ const CheckOut = (props) => {
           <div className="col-md-6 col-sm-6 col-12 order-box ml-2">
             <div className="order-price-container">
               <p>
-                Subtotal <span className="float-right">{totalPrice && totalPrice}</span>
+                Subtotal{" "}
+                <span className="float-right">{totalPrice && totalPrice}</span>
               </p>
               <p>
                 Delivery Charge <span className="float-right">BDT 49</span>
               </p>
+              {discount? <p>
+                Discount <span className="float-right">{discount}</span>
+              </p>:''}
               <h6>
-                Total <span className="float-right">{totalPrice +49}</span>
+                Total <span className="float-right">{totalPrice + 49}</span>
               </h6>
+              {discount? <h6>
+                After Discount <span className="float-right">{totalPrice + 49 -discount}</span>
+              </h6>:""}
             </div>
-           
+
             <Dropdown className="promo-code-container mt-3">
               <Dropdown.Toggle
                 as="a"
@@ -408,8 +460,8 @@ const CheckOut = (props) => {
 
               <Dropdown.Menu className="p-3">
                 <h6 className="text-center"> Add Promo Code</h6>
-                <input className="mx-auto w-100 " type="text" />
-                <button className="btn w-100 mt-2 mx-auto btn-primary">
+                <input className="mx-auto w-100 " value={promo} onChange={(e)=>setPromo(e.target.value)} type="text" />
+                <button onClick={onPromoSubmit} className="btn w-100 mt-2 mx-auto btn-primary">
                   Add Promo Code
                 </button>
               </Dropdown.Menu>
@@ -428,7 +480,7 @@ const CheckOut = (props) => {
                   />
                 </div>
                 <button className="btn btn-primary" onClick={onPlaceOrder}>
-                  Place Order ({totalPrice+49})
+                  Place Order ({discount? totalPrice + 49 -discount:totalPrice + 49})
                 </button>
               </form>
             </div>
@@ -436,9 +488,11 @@ const CheckOut = (props) => {
         </div>
       </div>
       <SuccessModal show={smShow} hide={onAfterOrder}>
-        <h4 className="bg-light p-2">
-          Thenks For Your Order We will contact verysoon
-        </h4>
+      <p className="bg-light p-2">
+        {loading && !isError ? <Spinner />: !loading && isError  ?  
+          isError  : 'Your Order has been successfully placed .We will update you shortly'
+        }
+        </p> 
       </SuccessModal>
     </section>
   );

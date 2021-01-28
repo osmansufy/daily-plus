@@ -16,6 +16,7 @@ console.log(props)
   const dispatch=useDispatch()
   const history=useHistory()
   const [smShow, setSmShow] = useState(false);
+  const [isError,setIsError]=useState('')
   const onAfterOrderProduct=()=>dispatch(actionsProducts.afterOrderProduct())
   const isSignUp=useSelector(state=>state.auth.accessToken)
   const totalPrice = useSelector((state) => state.carts.totalPrice);
@@ -58,10 +59,12 @@ carts.push({
    console.log(carts)
    
  
-   if (isSignUp) {
+   if (isSignUp && props.bagLists.length>0) {
+    
    if (userAddress.length==0) {
      console.log(userAddress)
      setSmShow(true)
+     setIsError('')
    }else{
     axios.post("/order/active_cart/",carts,{
       headers: {
@@ -71,17 +74,23 @@ carts.push({
     .then(response=>{
       console.log(response)
       onAfterOrderProduct()
+      props.closed()
+      setIsError('')
     })
     .catch(error=>{
       console.log(error)
+      setIsError('')
     })
     props.history.push('/checkout')
    }
   
+   }else if(isSignUp && props.bagLists.length==0){
+    setIsError("Please Add Product in Your Bag")
    }else{
+    setIsError("Please SignUp before Order")
      props.history.push('/signup')
    }
-   props.closed()
+   
  }
 
   console.log(props.bagLists)
@@ -112,10 +121,14 @@ if(item.count===1){
     console.log(item.id)
     props.onDeleteCartProduct({id:item.id,count:0})
   }
+  const onClose=()=>{
+    props.closed()
+    setIsError('')
+  }
     return (<><div id="cart-holder" className="cart-holder"  className={attachClasses.join(' ')}>
         <div  className="cart-header">
           <h6>{props.bagLists.length} Items</h6>
-          <button  className="btn btn-secondary" onClick={props.closed} id="cartCloseBtn">x Close</button>
+          <button  className="btn btn-secondary" onClick={onClose} id="cartCloseBtn">x Close</button>
         </div>
       {props.bagLists.map((item, index)=>(<div  className="cart-product">
           <div  className="cart-img">
@@ -123,7 +136,7 @@ if(item.count===1){
           </div>
           <div  className="quantity">
             <p  className="cart-product-title">{item.description}</p>
-            <p  className="sell-price">{item.inventory_list[0].unit_price}</p>
+            <p  className="sell-price"><small>ট </small> {item.inventory_list[0].unit_price_final}</p>
 
           
             <div  className="quantity-group">
@@ -135,10 +148,7 @@ if(item.count===1){
             </div>
           </div>
           <div  className="cart-price">
-            <div  className="total-price">
-              <p>{item.inventory_list[0].unit_price_final*item.unit_quantity}</p>
-              <p  className="regular-price">{item.inventory_list[0].unit_price*item.unit_quantity}</p>
-            </div>
+            
             <div  className="delete-cart">
               <a  onClick={()=>onDeleteHandler(item)}><i  className="fa fa-trash-o" /></a>
             </div>
@@ -174,12 +184,13 @@ if(item.count===1){
                BDT {totalPrice+49}
                </span>
                </div>
-               <CommonBtn clicked={orderCheckoutHandler} >Proceed (BDT-{totalPrice+49})</CommonBtn>
+               <p className="text-danger">{isError? isError:""}</p>
+               <CommonBtn clicked={orderCheckoutHandler} >Proceed  ( <small>ট </small>{totalPrice && totalPrice+49})</CommonBtn>
              </div>
              
         </div>
        
-      <div className={overlayClasses.join(' ')} onClick={props.closed} >
+      <div className={overlayClasses.join(' ')} onClick={onClose} >
         </div>
         <SuccessModal show={smShow} hide={() => setSmShow(false)} >You hove to set a Address to  procees Order
       <Button onClick={onAddress}  className="w-100 mt-3 d-flex align-items-center" variant="primary"><i class="fas fa-arrow-left"></i><span className="flex-grow-1"> Add Address </span></Button>

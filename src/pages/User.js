@@ -1,17 +1,17 @@
-import { Modal,Button } from "react-bootstrap";
+import { Modal,Button,Container } from "react-bootstrap";
 import profilePic from '../assets/img/profile.png'
 import account_icon from '../assets/img/account_circle_24px.svg'
 import lockicon from '../assets/img/lock_white.svg'
 import mailIcon from '../assets/img/mail_24px.svg'
 import callIcon from '../assets/img/call_24px.svg'
 import saveIcon from '../assets/img/save_24px.svg'
-import {Image,Container} from  'react-bootstrap'
 import InputField from "../component/FormField/InputField";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import cammera from '../assets/img/cammera.png'
 import axios from '../axios'
 import * as actionAuth from '../store/actions/actionAuth'
+import { Link } from "react-router-dom";
 const User = () => {
 
     const usersInformation=useSelector(state=>state.auth.userdetails)
@@ -24,10 +24,20 @@ const User = () => {
     
     const [userDetails,setUserDetails]=useState({
         
+        email:'',
+        phone:'',
+        name:'',
+        image:profilePic
+    })
+    useEffect(()=>{
+      setUserDetails({
         email:usersInformation.email,
         phone:usersInformation.phone,
-        name:usersInformation.name
-    })
+        name:usersInformation.name,
+        image:usersInformation.image
+      })
+      
+    },[usersInformation])
     useEffect(() => {
       if (!selectedImg) {
           setPreview(undefined)
@@ -86,9 +96,11 @@ console.log(userImg)
                 Authorization: `JWT ${usersToken}`,
                 'Content-Type': 'multipart/form-data'
               },
+              onUploadProgress: progressEvent =>{ 
+                console.log("progress"+Math.round(progressEvent.loaded/progressEvent.total*100+"%") )}
          })
          .then(response=>{
-          // onUserChange(usersToken,usersInformation.id)
+          onUserChange(usersToken,usersInformation.id)
              console.log(response)
              console.log(formdata)
          })
@@ -98,13 +110,13 @@ console.log(userImg)
          })
      } 
      
-     let imgUp= <div className="userProfilePic" onClick={()=>inputRef.current.click()} ><img src={profilePic}  />
+     let imgUp= <div className="userProfilePic" onClick={()=>inputRef.current.click()} ><img src={userDetails.image}  />
      </div>
      
      if(preview){
-         imgUp=<div className="userProfilePic"><img  src={preview} /></div>
+         imgUp=<div className="userProfilePic" onClick={()=>inputRef.current.click()}><img  src={preview} /></div>
      }
-    return ( <div className="custom_page user">
+    return ( <section className="custom_page user">
       <Container> 
     <Modal.Dialog className="mx-auto my-4 " contentClassName="pt-5">
 
@@ -139,10 +151,12 @@ console.log(userImg)
   </Modal.Body>
 
   <Modal.Footer className="flex-column">
-    <Button variant="secondary" className="btn btn-secondary px-4 py-2 m-0 w-100 d-flex align-items-center  btn-custom btn-lg btn-block"> 
+  
+    <Link to="/user/changepassword" variant="secondary" className="btn btn-secondary px-4 py-2 m-0 w-100 d-flex align-items-center  btn-custom btn-lg btn-block">
     <img src={lockicon} />
     <span className="flex-grow-1">Change Password </span>
-     </Button>
+    </Link>
+     
     <Button variant="primary" className="btn pl-4 mt-3 w-100 d-flex align-items-center  btn-custom btn-lg btn-block" onClick={profileUpdate}>
       <img src={saveIcon} />
       <span className="flex-grow-1">Save changes</span>
@@ -150,7 +164,7 @@ console.log(userImg)
   </Modal.Footer>
 </Modal.Dialog>
 </Container>
-    </div> );
+    </section> );
 }
  
 export default User;

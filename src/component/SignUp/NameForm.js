@@ -33,7 +33,7 @@ const NameForm = (props) => {
       </div>
 
 
-  <Button type="submit"  className="w-100 mt-3 d-flex align-items-center" variant="primary"><span className="flex-grow-1"> Next </span><img src={next} /></Button>
+  <Button type="submit" onClick={props.clicked} className="w-100 mt-3 d-flex align-items-center" variant="primary"><span className="flex-grow-1"> Next </span><img src={next} /></Button>
   </>
      );
 }

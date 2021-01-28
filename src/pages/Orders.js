@@ -50,7 +50,7 @@ if (loading) {
               <h5>{moment(order.ts_delivery).utc().format('MMM DD.YYYY')}</h5>
           </div>
           </div>  
-          <span>ট{order.total_bill} </span></div> 
+          <span>ট{order.final_bill} </span></div> 
           </a>
   })
   
@@ -65,7 +65,7 @@ let containerCencel=""
 if (loading) {
   containerCencel=<Spinner />
 }else if(!loading){
-containerCencel= allOrder.length >0 ? allOrder.filter(order=>order.status==6).map(order=>{
+containerCencel= allOrder.length >0 ? allOrder.filter(order=>order.status!=1).map(order=>{
   return     <a onClick={()=>onOrdeInfo(order.id)}>  
                <div className="row order-info">
            
@@ -80,7 +80,7 @@ containerCencel= allOrder.length >0 ? allOrder.filter(order=>order.status==6).ma
                     <h5 className="text-muted">{moment(order.ts_delivery).utc().format('MMM DD.YYYY')}</h5>
                     </div>
                 </div>  
-              <span>ট{order.total_bill} </span>
+              <span>ট{order.final_bill} </span>
             
             </div>
           </a>
@@ -97,7 +97,7 @@ containerCencel= allOrder.length >0 ? allOrder.filter(order=>order.status==6).ma
            state: { id: id}
        });
     };
-    return (<div className="custom_page order">
+    return (<section className="custom_page order">
          <Container> 
     <Modal.Dialog className="mx-auto my-0 " contentClassName="pt-5">
     
@@ -132,7 +132,7 @@ containerCencel= allOrder.length >0 ? allOrder.filter(order=>order.status==6).ma
 </Modal.Body>
 </Modal.Dialog>
 </Container>
-    </div> );
+    </section> );
 }
  
 export default Orders;

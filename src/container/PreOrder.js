@@ -18,7 +18,7 @@ getPreOrders()
             <div className="container">
               <div className="row">
                 <div className="col-md-12 col-sm-12 col-12">
-                  <h2>Pre-Order Products</h2>
+                  <h2 className="section-title">Pre-Order Products</h2>
                 </div>
               </div>
               <div className="row">

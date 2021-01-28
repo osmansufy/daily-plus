@@ -23,11 +23,11 @@ const PopulerProducts=props =>{
     infinite: true,
     className: "center",
     centerMode: true,
-    speed: 500,
+    speed: 700,
     slidesToShow: 6,
     slidesToScroll: 1,
     swipeToSlide: true,
-    autoplay:true,
+    autoplay:false,
     responsive: [
       {
         breakpoint: 1024,
@@ -61,7 +61,7 @@ const PopulerProducts=props =>{
           infinite: true,
           swipeToSlide: true,
           centerMode: false,
-          
+          arrows: false,
         }
       }
     ]
@@ -72,10 +72,11 @@ return ( <>
             <div className="container">
               <div className="row">
                 <div className="col-md-6 col-sm-6 col-6">
-                  <h3>Popular Items</h3>
+                  <h3 className="section-title">Popular Items</h3>
                 </div>
                 <div className="col-md-6 col-sm-6 col-6">
-                  <button className="btn btn-padding btn-primary float-right">View All Products</button>
+                  <button className="btn btn-padding btn-primary section-button float-right">View All Products</button>
+                  <a className="mobile-link">See All</a>
                 </div>
               </div>
               <Slider {...settings}>

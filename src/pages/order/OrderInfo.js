@@ -74,17 +74,7 @@ const OrderInfo = (props) => {
         Authorization: `JWT ${token}`,
       },
     }).then(response=>{
-      console.log(response.data)
-      container=
-      <Container> 
-  <Modal.Dialog className="mx-auto my-0 " contentClassName="pt-5"> 
-  
-  <img src={successImg} />
-  
-  <p className="text-center"> Payment successfully Cencel</p>
-  
-  </Modal.Dialog>
-  </Container>
+      history.push('/')
 
     })
     .catch(error=>{
@@ -168,7 +158,7 @@ const OrderInfo = (props) => {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
+         
         </Modal.Header>
         <Modal.Body>
          Are You sure you want to cancel the order?

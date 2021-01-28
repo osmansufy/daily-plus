@@ -8,20 +8,30 @@ import axios from '../../axios'
 import './GenieList.css'
 import { Button } from 'react-bootstrap'
 import GenieModal from './GenieModal'
+import SuccessModal from '../../UI/Modal/SuccessModal'
 const GenieList = () => {
 
     const history =useHistory()
-   const onGenieForm=()=>{
-   history.push('/genie/form')
-  //  history.push('/')
-  
-    }
+    const [modalShow,setModalShow]=useState(false)
     const [loading,setLoading]=useState(false)
    const [genieItems,setGenieItems]=useState([])
    const usersToken=useSelector(state=>state.auth.accessToken)
    const userInfo=useSelector(state=>state.auth.userdetails)
    const userAddress=useSelector(state=>state.address.userAddress)
-   const [modalShow, setModalShow] = useState(false);
+   const [show, setShow] = useState(false);
+   const onHide=()=>{
+    history.push('/signup')
+}
+   const onGenieForm=()=>{
+     if (usersToken) {
+      history.push('/genie/form')
+     }else{
+      setShow(true)
+     }
+    
+   //  history.push('/')
+  
+     }
    useEffect(()=>{
          
          setLoading(true)
@@ -123,6 +133,10 @@ const GenieList = () => {
         show={modalShow}
         onHide={onAfterOrder}
       />
+
+<SuccessModal show={show} hide={onHide} >
+    <p className="text-warning">Please SignUp before Order</p>
+</SuccessModal>
         </>
      );
 }

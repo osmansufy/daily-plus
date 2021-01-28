@@ -11,7 +11,7 @@ import GenieHistory from '../../component/Genie/GenieHistory';
 const Genie = () => {
 
     return (
-<div className="custom_page preorder mb-5">
+<section className="custom_page preorder mb-5">
          <Container> 
 
        
@@ -52,7 +52,7 @@ const Genie = () => {
 </Modal.Body>
 </Modal.Dialog>
 </Container>
-    </div> 
+    </section> 
 
       );
 }
