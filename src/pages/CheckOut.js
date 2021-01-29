@@ -28,7 +28,7 @@ const CheckOut = (props) => {
   const onSelectedAddress = (address) =>
     dispatch(addressAction.onAddressSelected(address));
   const [smShow, setSmShow] = useState(false);
-  const onAddressCheckout = () => dispatch(addressAction.onAddressCheckout());
+  const onAddressCheckout = (path) => dispatch(addressAction.onAddressCheckout(path));
   const onCurrentAddressAction = (latitude, longitude, token) =>
     dispatch(addressAction.getReverseGeoCode(latitude, longitude, token));
   const [information, setInformation] = useState({
@@ -46,7 +46,7 @@ const CheckOut = (props) => {
   const [promo,setPromo]=useState('')
   const [discount,setDiscount]=useState(0)
   const onNewLocation = () => {
-    onAddressCheckout();
+    onAddressCheckout("/checkout");
     props.history.push("/location");
   };
   const currentPosition = () => {

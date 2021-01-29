@@ -1,4 +1,4 @@
-import React,{useCallback, useEffect, useState} from 'react';
+import React,{lazy, useCallback, useEffect, useState} from 'react';
 
 import { connect, useDispatch } from 'react-redux';
 import * as cartActions from '../store/actions/actionCart'
@@ -78,7 +78,7 @@ props.onUpdateCartUnits({id:item.id, count:bagItem.count+1})
         <div className="product-card">
           <div className="custom-card">
           <a  onClick={()=>productHandler(props.data)}>
-          <img src={props.data.image_list[0].thumbnail_image_url ? props.data.image_list[0].thumbnail_image_url : emptyImg} alt="" />
+          <img width="151" height="151"  loading={lazy} src={props.data.image_list[0].thumbnail_image_url ? props.data.image_list[0].thumbnail_image_url : ""} alt="" />
       </a>
       
       

@@ -111,7 +111,7 @@ const AddressReducer = (state=initialState,action) => {
            
         return {
             ...state,
-            redirectPath:"/checkout",
+            redirectPath:action.path,
             isEdit:false
         }
        case actionsTypes.ADDRESS_ADD:

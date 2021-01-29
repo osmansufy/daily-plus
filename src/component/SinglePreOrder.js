@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { lazy, useState } from 'react';
 import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux';
 import * as cartActions from '../store/actions/actionCart'
@@ -59,7 +59,7 @@ console.log(props);
         <div className="col-lg-2 col-sm-3 col-6 mt-4">
                   <div className="product-card">
                     
-                     <img className="product-img" src={props.data.image_list[0].image_url} alt="" />
+                     <img className="product-img" loading={lazy} width="150" height="150" src={props.data.image_list[0].image_url} alt="" />
                    
     <h6 className= "pro-title mt-2">{props.data.name}</h6>
                     <div className="delivery-price">

@@ -288,13 +288,10 @@ header .logo-holder .logo{
 
 .available p{
     
-font-family: Poppins;
 font-size: 12px;
-font-style: normal;
+
 font-weight: 400;
-line-height: 18px;
-letter-spacing: 0em;
-text-align: left;
+
 color: #5EC401;
 
 }

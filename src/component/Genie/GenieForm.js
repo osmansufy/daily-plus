@@ -57,7 +57,7 @@ const GenieForm = () => {
     }
     )
     const [formIsvalid, setFormisValid] =useState(false)
-    const [selectedImg,setSelectedImg]  =useState()
+    const [selectedImg,setSelectedImg]  =useState('')
     const inputRef=useRef()
     const [preview, setPreview] = useState()
 
@@ -77,7 +77,7 @@ const GenieForm = () => {
 
    const fileChangedHandler = e => {
     if (!e.target.files || e.target.files.length === 0) {
-        setSelectedImg(undefined)
+        setSelectedImg('')
         return
     }
 

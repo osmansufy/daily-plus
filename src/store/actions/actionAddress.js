@@ -90,9 +90,10 @@ export const onAddAddress=(address)=>{
     }
 }
 
-export const onAddressCheckout=()=>{
+export const onAddressCheckout=(path)=>{
     return{
         type:actionsTypes.ADDRESS_ADD_FROM_CHECKOUT,
+        path:path
         
     }
 }

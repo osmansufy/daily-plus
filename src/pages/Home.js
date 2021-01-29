@@ -1,26 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState ,Suspense} from 'react'
 
 
-import Category from '../container/Category'
+
+
 import Banner from '../container/Banner';
-import PopulerProducts from '../container/PopulerProducts';
-import PreOrders from '../container/PreOrder'
-import MyBag from '../UI/MyBag'
+// import PopulerProducts from '../container/PopulerProducts';
+// import PreOrders from '../container/PreOrder'
+import Spinner from '../container/Spinner/Spinner'
 
 
+const Category = React.lazy(() => import('../container/Category'));
+const PopulerProducts = React.lazy(() => import('../container/PopulerProducts'));
+const PreOrders = React.lazy(() => import('../container/PreOrder'));
 function Home(props){
 console.log(props)
     return(<>
 
-          
+
           {<Banner />}
           {/* Cart View */}
         {/* {<MyBag />} */}
           {/* Shop by category section */}
-         {<Category/>}
+         {<Suspense fallback={<Spinner />}><Category/></Suspense>}
          
-         {<PopulerProducts />}
-         {<PreOrders />}
+         {<Suspense fallback={<Spinner />}><PopulerProducts /></Suspense>}
+         {<Suspense fallback={<Spinner />}><PreOrders /></Suspense>}
          
          
       </>

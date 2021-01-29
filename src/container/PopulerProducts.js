@@ -27,7 +27,7 @@ const PopulerProducts=props =>{
     slidesToShow: 6,
     slidesToScroll: 1,
     swipeToSlide: true,
-    autoplay:false,
+    autoplay:true,
     responsive: [
       {
         breakpoint: 1024,

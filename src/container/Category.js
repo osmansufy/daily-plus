@@ -26,7 +26,7 @@ class Category extends Component {
         centerMode: true,
         centerPadding: "20px",
         centerMargin: "20px",
-        speed: 500,
+        speed: 700,
         slidesToShow: 8,
         slidesToScroll: 1,
         swipeToSlide: true,
