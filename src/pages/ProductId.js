@@ -102,14 +102,14 @@ console.log(error)
     }else if(!loading && error==null && productInformation){
         content=<> <div className="col-md-6 col-sm-6 col-12">
         <div className="single-product-img">
-          {<img className="img-fluid" src={productInformation.image_list &&productInformation.image_list[0].image_url} alt="" />}
+          {<img className="img-fluid" src={productInformation.image_list &&productInformation.image_list[0].image_url} alt="true" />}
         </div>
         <div className="gallery-img mt-4">
           <div className="gallery-img-container">
-            <img className="img-fluid" src="dist/img/Rectangle2.svg" alt="" />
+            <img className="img-fluid" src="dist/img/Rectangle2.svg" alt="true" />
           </div>
           <div className="gallery-img-container">
-            <img src="dist/img/image 3.jpg" alt="" />
+            <img src="dist/img/image 3.jpg" alt="true" />
           </div>
         </div>
       </div>

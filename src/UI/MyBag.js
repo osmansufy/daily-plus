@@ -132,7 +132,7 @@ if(item.count===1){
         </div>
       {props.bagLists.map((item, index)=>(<div  className="cart-product">
           <div  className="cart-img">
-            <img  className="img-fluid" src={item.image_list[0].thumbnail_image_url} alt="" />
+            <img  className="img-fluid" src={item.image_list[0].thumbnail_image_url} alt="true" />
           </div>
           <div  className="quantity">
             <p  className="cart-product-title">{item.description}</p>
@@ -193,7 +193,7 @@ if(item.count===1){
       <div className={overlayClasses.join(' ')} onClick={onClose} >
         </div>
         <SuccessModal show={smShow} hide={() => setSmShow(false)} >You hove to set a Address to  procees Order
-      <Button onClick={onAddress}  className="w-100 mt-3 d-flex align-items-center" variant="primary"><i class="fas fa-arrow-left"></i><span className="flex-grow-1"> Add Address </span></Button>
+      <Button onClick={onAddress}  className="w-100 mt-3 d-flex align-items-center" variant="primary"><i className="fas fa-arrow-left"></i><span className="flex-grow-1"> Add Address </span></Button>
       
       </SuccessModal>
         </>

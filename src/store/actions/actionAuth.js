@@ -2,14 +2,14 @@ import axios from '../../axios'
 
 import * as actionsTypes from './actionsTypes'
 
-export const loginUserStart=()=>{
+const apiFetchStart=()=>{
     return{
-        type:actionsTypes.USER_LOGIN_START
+        type:actionsTypes.API_FETCH_START
     }
 }
-export const loginUserFail=(error)=>{
+const apiFechFail=(error)=>{
     return{
-        type:actionsTypes.USER_LOGIN_FAIL,
+        type:actionsTypes.API_FETCH_FAIL,
         error:error
     }
 }
@@ -36,27 +36,27 @@ export const cartChange=(cart)=>{
 }
 export const userLoginAction=(userdetails)=>{
     return dispatch=>{
-        dispatch(loginUserStart())
+        dispatch(apiFetchStart())
     axios.post('user/login/password/',userdetails)
     .then(response=>{
       dispatch (loginUserInit(response.data))
       console.log(response.data)
     }).catch(error=>{
         console.log(error)
-        dispatch(loginUserFail(error.message))
+        dispatch(apiFechFail(error.message))
     })
 }
 }
 export const userSignInAction=(userdetails)=>{
     return dispatch=>{
-        dispatch(loginUserStart())
+        dispatch(apiFetchStart())
     axios.post('user/signup/',userdetails)
     .then(response=>{
       dispatch (loginUserInit(response.data))
       console.log(response.data)
     }).catch(error=>{
         console.log(error)
-        dispatch(loginUserFail(error.message))
+        dispatch(apiFechFail(error.message))
     })
 }
 }
@@ -97,5 +97,55 @@ export const onUserUpdate=(isAuth,id)=>{
         .catch(error=>{
             console.log(error)
         })
+    }
+}
+
+const setNotificationCount=(data)=>{
+    return{
+        type:actionsTypes.USER_NOTIFICATION_COUNT,
+        count:data
+    }
+}
+export const onNotificationsCount=(isSignUp)=>{
+    return dispatch=>{   axios
+    .get("notification/count/", {
+      headers: {
+        Authorization: `JWT ${isSignUp}`,
+      },
+    })
+    .then((response) => {
+        dispatch (setNotificationCount(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+}
+const setNotifications=(notifications)=>{
+   return {
+    type:actionsTypes.USER_NOTIFICATIONS,
+    notifications:notifications
+   }
+}
+
+export const onGetNotifications=(isSignUp)=>{
+    
+        
+
+    return dispatch=>{  
+        dispatch(apiFetchStart())
+        axios
+        .get("notification/notification/", {
+          headers: {
+            Authorization: `JWT ${isSignUp}`,
+          },
+        })
+        .then((response) => {
+            dispatch (setNotifications(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+          dispatch(apiFechFail(error.message))
+        });
     }
 }

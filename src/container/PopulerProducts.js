@@ -28,6 +28,7 @@ const PopulerProducts=props =>{
     slidesToScroll: 1,
     swipeToSlide: true,
     autoplay:true,
+    lazyLoad: true,
     responsive: [
       {
         breakpoint: 1024,
@@ -61,6 +62,7 @@ const PopulerProducts=props =>{
           infinite: true,
           swipeToSlide: true,
           centerMode: false,
+          lazyLoad: true,
           arrows: false,
         }
       }
@@ -82,12 +84,16 @@ return ( <>
               <Slider {...settings}>
 
                 
-              {props.productLists && props.productLists.map((item, index) => {
-               return <SinglePopuler
+              {props.productLists && props.productLists.map((item) => (
+       
+
+              
+            <SinglePopuler
+            containerClass="mx-1 mt-4"
               //  clicked={()=>productHandler(item)}
-               data={item} key={index}/>
-              }
-                
+               data={item} key={item.id}/>
+      
+              )
               )}
                   
                </Slider>

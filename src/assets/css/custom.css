@@ -33,6 +33,13 @@ a{
 img{
   object-fit: contain;
   object-position: center;
+  max-width: 100%;
+}
+a.times.mr-3.nav-link.disabled,a.times.mr-3.active.disabled {
+  background-color: #ccc;
+}
+.close-text{
+  text-decoration: line-through;
 }
 .dropdown-item{
   white-space: inherit;
@@ -248,6 +255,7 @@ hr{
   display: flex;
   justify-content: space-between;
   height: 30px;
+  align-items: center;
 }
 .sell-icon svg {
   margin: 0 5px;
@@ -1027,4 +1035,8 @@ p.prePoduct-unit {
 p.sell-price {
   color: #FE903F;
   font-weight: 600;
+}
+
+.checkoutAddress{
+  width: 350px;
 }

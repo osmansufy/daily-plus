@@ -6,11 +6,14 @@ import ButtonQuantity from "../../UI/Button/ButtonQtn";
 import * as cartActions from "../../store/actions/actionCart";
 import { Nav, Dropdown, Tab, Row, Col } from "react-bootstrap";
 import * as addressAction from "../../store/actions/actionAddress";
+import * as authAction from "../../store/actions/actionAuth";
 import { useHistory } from "react-router";
+import ErrorToast from '../../UI/Toasts/Toast'
+import UserAddress from "../OrderCheckout/UserAddress";
 
 const PreOrderCheckout = () => {
   const [activePreProducts, setActivePreProducts] = useState([]);
-  const currentAddress = useSelector((state) => state.address.addreessCurrent);
+  const currentAddress = useSelector((state) => state.address.addressCurrent);
   const dispatch = useDispatch();
   const history = useHistory();
   const onUpdatePre = (id, qtn, token) =>
@@ -29,6 +32,9 @@ const PreOrderCheckout = () => {
   const onAddressCheckout = (path) => dispatch(addressAction.onAddressCheckout(path));
   const onCurrentAddressAction = (latitude, longitude, token) =>
     dispatch(addressAction.getReverseGeoCode(latitude, longitude, token));
+    const onNotificationsAction = (token) =>
+    dispatch(authAction.onGetNotifications(token));
+    const notificationsCount = (token) => dispatch(authAction.onNotificationsCount(token));
   const onPreDeleteHandler = (item) => {
     const id = item.id;
     onDeletePre(id, token);
@@ -40,7 +46,10 @@ const PreOrderCheckout = () => {
     const id = item.id;
     onUpdatePre(id, upQtn, token);
   };
-
+  const [showA, setShowA] = useState(false);
+  
+  
+  
   const subPreHandler = (item) => {
     console.log(item);
     const upQtn = parseInt(item.item_count - 1);
@@ -84,7 +93,15 @@ const PreOrderCheckout = () => {
   useEffect(() => {
     allPreProducts(token);
   }, []);
-  console.log(preProducts);
+ const showError=()=>{
+  setShowA(true)
+  setTimeout(()=>{
+    setShowA(false)
+    setIsError('')
+  }
+ 
+  ,4000)
+ }
   const placePreOrder = (event) => {
     event.preventDefault();
 
@@ -107,6 +124,8 @@ const PreOrderCheckout = () => {
         })
         .then((response) => {
           setIsError("");
+          onNotificationsAction(token)
+          notificationsCount(token)
           axios
             .post(
               "billing/ssl/payment/order/create/",
@@ -129,10 +148,12 @@ const PreOrderCheckout = () => {
         });
     } else if (preProducts.length == 0) {
       setIsError("Add item to order");
+      showError()
     }
   };
 
   return (
+    <>
     <div className="row">
       <div className="col-md-10 col-sm-10 col-12  my-4 mx-auto">
         <h5 className="text-danger">{isError ? isError : ""}</h5>
@@ -143,7 +164,7 @@ const PreOrderCheckout = () => {
                 <img
                   className="img-fluid"
                   src={item.prod_image_list[0].thumbnail_image_url}
-                  alt=""
+                  alt="product-img"
                 />
               </div>
               <div className="quantity">
@@ -186,72 +207,19 @@ const PreOrderCheckout = () => {
             </div>
           ))}
 
-        <div className="delivery-address m-4">
-          <div className=" mt-3">
-            <h6>Delivery Address </h6>
-            <div className="d-flex">
+        <div className="delivery-address justify-content-around w-100 d-flex mt-4">
+        <h6>Delivery Address </h6>
+              <UserAddress  />
+        </div>
+        <div className="address mt-3">
               <div className="address-icon mr-3">
                 <i className="fa fa-map-marker" aria-hidden="true" />
               </div>
-              <div className="address-right">
+              <div className="address-right mb-4">
                 <h6>{currentAddress && currentAddress.title}</h6>
                 <p>{currentAddress && currentAddress.address}</p>
               </div>
             </div>
-          </div>
-          <Dropdown className="addresschange-link ">
-            <Dropdown.Toggle as="a" variant="success" id="dropdown-basic">
-              Change Address
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu as="ul" className="preChangeAddress">
-              <Dropdown.Item>
-                <div
-                  onClick={currentPosition}
-                  className="d-flex align-items-center "
-                >
-                  <input
-                    type="radio"
-                    id="current"
-                    name="drone"
-                    checked
-                    value="current"
-                  />
-                  <label for="current" className="my-0 mx-3">
-                    Current Location
-                  </label>
-                </div>
-              </Dropdown.Item>
-              {userAddress.map((address, index) => (
-                <Dropdown.Item
-                  key={index}
-                  onClick={() => adressChange(address)}
-                  as="li"
-                  href="#/action-1"
-                >
-                  <a>
-                    <h6 className="my-0 mx-2 p-0">
-                      {address.title}
-                      <br />
-                    </h6>
-
-                    <small>{address.address}</small>
-                  </a>
-                </Dropdown.Item>
-              ))}
-              <Dropdown.Item as="li">
-                <a
-                  onClick={onNewLocation}
-                  type="button"
-                  className="btn btn-primary btn-custom btn-lg btn-block"
-                >
-                  {/* <img src={plusIcon} /> */}
-                  <span>Add New Address </span>
-                </a>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
         <div className="order-price-container">
           <p>
             Subtotal{" "}
@@ -321,6 +289,9 @@ const PreOrderCheckout = () => {
         </div>
       </div>
     </div>
+    <ErrorToast showA={showA} >
+      <h5 className="text-danger">{isError ? isError : ""}</h5></ErrorToast>
+    </>
   );
 };
 

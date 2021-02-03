@@ -4,7 +4,7 @@ import ButtonLink from "../UI/Button/ButtonLink";
 import MyBag from "../UI/MyBag";
 import CartBtn from "../UI/Button/CartBtn";
 import { Link } from "react-router-dom";
-import Notification from "../UI/Notification";
+// import Notification from "../UI/Notification";
 import CartBag from "../UI/CartBag";
 import logo from "../assets/img/logo.png";
 import pro from "../assets/img/pro.png";
@@ -19,6 +19,7 @@ import Address from "../UI/Address/Address";
 import deliveryIcon from "../assets/img/delivery-icon.png";
 import lampIcon from "../assets/img/lamp-icon.svg";
 import * as actionAddress from "../store/actions/actionAddress";
+import * as actionAuths from "../store/actions/actionAuth";
 import {
   Button,
   Navbar,
@@ -29,13 +30,18 @@ import {
   Badge,
 } from "react-bootstrap";
 import axios from "../axios";
-import Sidebar from "./Sidebar";
+// import Sidebar from "./Sidebar";
+import { Suspense } from "react";
+
+const Sidebar =React.lazy(()=>import ('./Sidebar'))
+const Notification =React.lazy(()=>import ('../UI/Notification'))
 const Header = (props) => {
+  const [categories,setCategories]=useState([])
   const [smShow, setSmShow] = useState(false);
+  const [loading,setLoading]=useState(false)
   const isSignUp = useSelector((state) => state.auth.accessToken);
   const [cartShow, setCartShow] = useState(false);
   const [notishow, setNotiShow] = useState(false);
-  const [notiCount, setNotiCount] = useState("");
   const [searchShow, setSearchShow] = useState(false);
   const [appHide, setAppHide] = useState(false);
 
@@ -43,14 +49,38 @@ const Header = (props) => {
   const dispatch = useDispatch();
   const onAddress = (isSignUp) =>
     dispatch(actionAddress.onUserAddress(isSignUp));
+  const onNotifications = (isSignUp) =>
+    dispatch(actionAuths.onNotificationsCount(isSignUp));
   const onCurrentAddressAction = (latitude, longitude, isSignUp) =>
     dispatch(actionAddress.getReverseGeoCode(latitude, longitude, isSignUp));
-  const deleverYaddress = useSelector((state) => state.address.addreessCurrent);
+  const deleverYaddress = useSelector((state) => state.address.addressCurrent);
+  const notificationCount = useSelector((state) => state.auth.notifiacationCount);
+
+
+ 
+  const getCategories=()=>{
+    if (categories.length==0) {
+      setLoading(true)
+      axios.get('catalogue/category/')
+      .then(response=>{
+             
+        setCategories(response.data)
+        setLoading(false)
+        
+    }).
+    catch(error=>{
+      console.log(error)
+      setLoading(false)
+    })
+    }
+   
+  }
   const shideberClosed = () => {
     setShowSidebar(false);
   };
   const btnClickHandler = () => {
     setShowSidebar(true);
+    getCategories()
   };
 
   const currentPosition = () => {
@@ -74,25 +104,14 @@ const Header = (props) => {
     } else {
     }
   };
+
+
   useEffect(() => {
     if (isSignUp) {
       currentPosition();
       onAddress(isSignUp);
-      axios
-        .get("notification/count/", {
-          headers: {
-            Authorization: `JWT ${isSignUp}`,
-          },
-        })
-        .then((response) => {
-          setNotiCount(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      setNotiCount("");
-    }
+      onNotifications(isSignUp)
+    } 
   }, [isSignUp]);
   const cartClickHandler = () => {
     setCartShow(true);
@@ -104,6 +123,7 @@ const Header = (props) => {
     setCartShow(false);
   };
   const notificationHandler = () => {
+   
     setNotiShow(true);
   };
   const searchClose = () => {
@@ -141,9 +161,7 @@ const Header = (props) => {
       );
     },
   };
-  const onCheck = (notification) => {
-    setNotiCount(notification);
-  };
+
   let appClasses = ["appShow"];
   if (appHide) {
     appClasses = ["appShow", "close"];
@@ -188,13 +206,13 @@ const Header = (props) => {
                   closed={searchClose}
                 />
                 <div className="notification-btn">
-                  <Dropdown as={ButtonGroup} title="Dropdown ">
+                  <Dropdown onClick={notificationHandler}  as={ButtonGroup} title="Dropdown ">
                     <Dropdown.Toggle
                       id="dropdown-custom-1"
                       className="custom-dropdown"
                     >
-                      <span class="badge badge-light">
-                        {notiCount.unchecked}
+                      <span className="badge badge-light">
+                        {notificationCount?.unchecked}
                       </span>
                       <span className="sr-only">unread messages</span>
 
@@ -213,11 +231,17 @@ const Header = (props) => {
                         />
                       </svg>
                     </Dropdown.Toggle>
+                    <Suspense fallback={<h4>Loading...</h4>}>
+
+                    
                     <Notification
-                      checked={onCheck}
+                    
                       show={notishow}
                       closed={notClosed}
+                      isLoading={loading}
+                
                     />
+                    </Suspense>
                   </Dropdown>
                   {/* <Notification show={notishow} closed={notClosed} /> */}
                 </div>
@@ -375,10 +399,10 @@ const Header = (props) => {
                 </div>
 
                 <div className="mobile-icon">
-                  <Dropdown as={ButtonGroup} title="Dropdown ">
+                  <Dropdown onClick={notificationHandler} as={ButtonGroup} title="Dropdown ">
                     <Dropdown.Toggle id="dropdown-custom-1">
-                      <span class="badge badge-light">
-                        {notiCount?.unchecked}
+                      <span className="badge badge-light">
+                        {notificationCount?.unchecked}
                       </span>
                       <span className="sr-only">unread messages</span>
 
@@ -397,7 +421,15 @@ const Header = (props) => {
                         />
                       </svg>
                     </Dropdown.Toggle>
-                    <Notification show={notishow} closed={notClosed} />
+                  
+                    <Suspense fallback={<h4>Loading...</h4>}>
+                      <Notification
+                     
+                      show={notishow}
+                      closed={notClosed}
+                      isLoading={loading}
+                    />
+                    </Suspense>
                     {isSignUp != null && (
                       <Dropdown as={ButtonGroup} title="Dropdown ">
                         <Dropdown.Toggle id="dropdown-custom-1">
@@ -469,7 +501,7 @@ const Header = (props) => {
                         <div className="d-flex align-items-center phoneAdelevery">
                           {" "}
                           <h6 className="mr-2">Delivery to</h6>
-                          <i class="fas fa-arrow-right"></i>
+                          <i className="fas fa-arrow-right"></i>
                           <p>{deleverYaddress?.address?.substring(0, 20)}...</p>
                         </div>
                       </>
@@ -492,7 +524,6 @@ const Header = (props) => {
                   className="fas fa-bars"
                   style={{ padding: "5px", color: "#5EC401" }}
                 />
-                <span className="ctb">Category</span>
               </ButtonLink>
               <Search
                 show={searchShow}
@@ -524,7 +555,10 @@ const Header = (props) => {
 
       <CartBag clicked={cartClickHandler} />
       <MyBag cartShow={cartShow} closed={cartClosed} />
-      <Sidebar show={showSidebar} closed={shideberClosed} />
+      <Suspense fallback={<h3>Loading...</h3>}>
+      <Sidebar isLoading={loading} categories={categories} show={showSidebar} closed={shideberClosed} />
+      </Suspense>
+     
     </>
   );
 };

@@ -45,10 +45,10 @@ const GenieOrderDetails = props => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true)
   const history= useHistory()
-  const preOrderId=history.location.state.id
+  const genieOrderId=history.location.state.id
    useEffect(()=>{
     setLoading(true)
-    axios.get(`order/genielist/order/${preOrderId}/`,{
+    axios.get(`order/genielist/order/${genieOrderId}/`,{
       headers:{
         Authorization: `JWT ${token}`,
       }
@@ -59,25 +59,7 @@ const GenieOrderDetails = props => {
      setLoading(false)
 
      statDispatch({type:response.data.status})
-    //  if (response.data.status==6) {
-    //   setPreOrderStatus("cancelled")
-  
-    // }
-    // else if(response.data.status==5){
-    //   setPreOrderStatus("complete")
-    // }
-    // else if(response.data.status==4){
-    //   setPreOrderStatus("on-the-way")
-    // }
-    // else if(response.data.status==3){
-    //   setPreOrderStatus("processing")
-    // }
-    // else if(response.data.status==2){
-    //   setPreOrderStatus("confirmed")
-    // }
-    // else if(response.data.status==1){
-    //   setPreOrderStatus("pending")
-    // }
+ 
     })
     .catch(error=>{
       console.log(error)
@@ -85,7 +67,7 @@ const GenieOrderDetails = props => {
       setError(error.message)
     })
 
-  },[])
+  },[genieOrderId])
 
 
 console.log(orderDetails)

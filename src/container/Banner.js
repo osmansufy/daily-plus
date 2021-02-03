@@ -14,7 +14,7 @@ function Banner(props) {
 <Container>
   <Carousel activeIndex={index}  onSelect={handleSelect} nextIcon="" prevIcon="">
     <Carousel.Item>
-      <img src={bannerImg} className="d-block w-100" alt="..." />
+      <img src={bannerImg} className="d-block w-100" alt="banner-img" />
       <Carousel.Caption>
         {/* <h3>First slide label</h3>
         <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p> */}
@@ -26,7 +26,7 @@ function Banner(props) {
         src="holder.js/800x400?text=Second slide&bg=282c34"
         alt="Second slide"
       /> */}
-<img src={bannerImg} className="d-block w-100" alt="..." />
+<img src={bannerImg} className="d-block w-100" alt="banner-img" />
       <Carousel.Caption>
         {/* <h3>Second slide label</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> */}
@@ -38,7 +38,7 @@ function Banner(props) {
         src="holder.js/800x400?text=Third slide&bg=20232a"
         alt="Third slide"
       /> */}
-<img src={bannerImg} className="d-block w-100" alt="..." />
+<img src={bannerImg} className="d-block w-100" alt="banner-img" />
       <Carousel.Caption>
         {/* <h3>Third slide label</h3>
         <p>

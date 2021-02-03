@@ -6,17 +6,15 @@ import { Link,withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
 function SingleCategory(props) {
 
-//  const onCategoryHandler=(id)=>{
-// // props.onCatProduct(name)
-// this.props.history.push('/category'+id)
-// }
+
+console.log(props)
     return (
         
              <div className="mt-2 ">
                <Link to={"/category/"+props.data.id+"/"+props.data.name} >
                <div className="card border-0 category-card">
                  <div className="category_img">
-                 <img loading={lazy} width="97" height="103" data-srcset={emptyImg} data-src={emptyImg} src={props.data.image} alt="" />
+                 <img loading="lazy" width="97" height="103" data-srcset={emptyImg} data-src={emptyImg} src={props.data.thumbnail_image_url} alt="category-img" />
                  </div>
                       
                       <h6>{props.data.name}</h6>

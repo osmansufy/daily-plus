@@ -124,7 +124,7 @@ const GenieList = () => {
         {genieItems.length>0 && genieItems.map((item, index)=>(
         <div key={index} className="d-flex geineItems mx-auto col-md-12">
             <div  className="gOimage">
-            <img  className="w-100 h-100" src={item.image} alt="" />
+            <img  className="w-100 h-100" src={item.image} alt="genie-img" />
             </div>
             <div  className="quantity ml-3">
               <p  className="m-0">{item.name}</p>

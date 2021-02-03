@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { useHistory } from "react-router";
 const CategoryPage = (props) => {
-    console.log(props.match.params.id)
+   
 
 
      const [onCatProducts,setOnCatProducts]=useState([])
@@ -26,6 +26,7 @@ const CategoryPage = (props) => {
     slidesToScroll: 1,
     swipeToSlide: true,
     autoplay:true,
+    lazyLoad: true,
     responsive: [
       {
         breakpoint: 1024,
@@ -57,8 +58,9 @@ const CategoryPage = (props) => {
           slidesToShow: 2,
           slidesToScroll: 1,
           infinite: true,
-          swipeToSlide: true,
-          
+         
+          centerMode: false,
+          autoplay:true,
         }
       }
     ]
@@ -73,28 +75,29 @@ const CategoryPage = (props) => {
         setLoading(false)
        })
       }
-      ,[])
+      ,[productId])
 
 
-
+console.log('onCatProducts',onCatProducts)
     return (
   <div className="custom_page">
     <section>
         <div className="container">
           <div className="row">
             <div className="col-md-6 col-sm-6 col-12">
-              <h2>{props.match.params.name}</h2>
+              <h2 className="section-title">{props.match.params.name}</h2>
             </div>
           </div>
-          <Slider {...settings}>
+          <div className="row">
             {loading ? <Spinner /> : onCatProducts.length>0 &&  onCatProducts.map((item,index) =>(
     <SinglePopuler
   //  clicked={()=>productHandler(item)}
+  containerClass="mt-4 col-md-2 col-sm-3 col-12"
     data={item} key={index}/>
  ))}
            
          
-         </Slider>
+           </div>
         
         </div>
       </section>

@@ -70,8 +70,8 @@ export const onAddressSelected=(address)=>{
 export const onAddressEdit=(location,address)=>{
     return {
         type:actionsTypes.ADDRESS_EDIT,
-        address:address,
-        location:location
+        address,
+        location
     }
 
 }
@@ -123,7 +123,6 @@ export const onNewAddressSubmit=(addressDteails,token)=>{
         .then(response=>{
             console.log(response)
             dispatch(onUserAddress(token))
-            dispatch(onAddSubmit())
         })
         .catch(error=>{
             console.log(error.message)

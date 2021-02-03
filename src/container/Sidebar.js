@@ -3,21 +3,10 @@ import axios from 'axios'
 import classes from './Sidebar.Module.css'
 import logo from '../assets/img/logo.png'
 import { Link,withRouter} from 'react-router-dom';
+import Spinner from '../container/Spinner/Spinner'
 const Sidebar=props=>{
- const [categories,setCategories]=useState([])
- console.log(categories)
-  useEffect(()=>{
-
-    axios.get('https://api.dailyplus.store/v0/catalogue/category/').then(response=>{
-           
-      setCategories(response.data)
-      
-      
-  }).
-  catch(error=>{
-    console.log(error)
-  })
-  },[])
+ 
+ 
 
   let attachClasses=[classes.mainsidebar,classes.close]
   if(props.show){
@@ -48,11 +37,11 @@ const Sidebar=props=>{
               <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 {/* Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library */}
-               {categories.map((cat,index)=>( <li key={index} className="nav-item has-treeview">
+               {props.isLoading ? <Spinner /> : props.categories && props.categories.map((cat,index)=>( <li key={index} className="nav-item has-treeview">
               
-                  <Link onClick={props.closed} to={"/category/"+cat.id+"/"+cat.name} className="nav-link align-items-center justify-content-between d-flex" >
+                  <Link onClick={props.closed} to={"/category/"+cat.id+"/"+cat.name} className="nav-link align-items-center p-0 justify-content-between d-flex" >
                    <div className="d-flex align-items-center">
-                   <img src={cat.image} alt="User Avatar" className="img-size-50 mr-3 rounded-circle" />
+                   <img src={cat.thumbnail_image_url} alt="User Avatar" className="img-size-50 mr-3 rounded-circle" />
                     <p className="m-0">
                       {cat.name}
                       

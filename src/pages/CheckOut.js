@@ -8,10 +8,13 @@ import { Redirect, useHistory, withRouter } from "react-router-dom";
 import * as authAction from "../store/actions/actionAuth";
 import * as addressAction from "../store/actions/actionAddress";
 import * as actionsCart from "../store/actions/actionCart";
-import plusIcon from "../assets/img/plus-icon.png";
 import offerIcon from "../assets/img/offer_24px.png";
 import SuccessModal from "../UI/Modal/SuccessModal";
 import Spinner from '../container/Spinner/Spinner'
+import ErrorToast from "../UI/Toasts/Toast";
+import TimeSlots from "../component/OrderCheckout/TimeSlots";
+import UserAddress from "../component/OrderCheckout/UserAddress";
+
 const CheckOut = (props) => {
   const token = useSelector((state) => state.auth.accessToken);
   const history = useHistory();
@@ -21,16 +24,17 @@ const CheckOut = (props) => {
   const activeCart = useSelector((state) => state.auth.activeCart);
   const [loading,setloading]=useState(false)
   const [isError,setIsError]=useState('')
-  const userAddress = useSelector((state) => state.address.userAddress);
-  const currentAddress = useSelector((state) => state.address.addreessCurrent);
+  const [showError, setShowError] = useState(false);
+  const currentAddress = useSelector((state) => state.address.addressCurrent);
   const totalPrice = useSelector((state) => state.carts.totalPrice);
   const afterOrderAction = () => dispatch(actionsCart.afterOrder());
-  const onSelectedAddress = (address) =>
-    dispatch(addressAction.onAddressSelected(address));
+
   const [smShow, setSmShow] = useState(false);
-  const onAddressCheckout = (path) => dispatch(addressAction.onAddressCheckout(path));
-  const onCurrentAddressAction = (latitude, longitude, token) =>
-    dispatch(addressAction.getReverseGeoCode(latitude, longitude, token));
+
+  const notificationsCount = (token) => dispatch(authAction.onNotificationsCount(token));
+
+    const onNotificationsAction = (token) =>
+  dispatch(authAction.onGetNotifications(token));
   const [information, setInformation] = useState({
     lng: "",
     lat: "",
@@ -45,35 +49,7 @@ const CheckOut = (props) => {
   const [dates, setDates] = useState([]);
   const [promo,setPromo]=useState('')
   const [discount,setDiscount]=useState(0)
-  const onNewLocation = () => {
-    onAddressCheckout("/checkout");
-    props.history.push("/location");
-  };
-  const currentPosition = () => {
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 50000,
-      maximumAge: 0,
-    };
-
-    const render = (pos) => {
-      const { latitude, longitude } = pos.coords;
-
-      onCurrentAddressAction(latitude, longitude, token);
-    };
-    const notFound = (err) => {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    };
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(render, notFound, options);
-    } else {
-      setInformation({
-        ...information,
-        address: "Your browser not support to get current location",
-      });
-    }
-  };
+ 
 
   const getTimeSlots = (lat, lng) => {
     const user = userInfo.id;
@@ -112,18 +88,23 @@ const CheckOut = (props) => {
   }, []);
 
   const CartChange = (token) => dispatch(authAction.onCartChange(token));
-
+const onDeletePromo=()=>{
+  setPromo('')
+  setDiscount(0)
+}
   const onMethod = (event) => {
     setInformation({
       ...information,
-      paymentMethod: event.target.value,
+      paymentMethod: parseInt(event.target.value) 
     });
+    console.log(event.target.value)
   };
 
   const onAfterOrder = () => {
     setSmShow(false);
     history.push("/");
     afterOrderAction();
+    onNotificationsAction(token)
   };
 
   const onlinePayment=(amount,order)=>{
@@ -143,10 +124,11 @@ const CheckOut = (props) => {
     .then((res) => {
       console.log(res);
       window.location.replace(res.data.GatewayPageURL);
-      
+      setloading(false)
     })
     .catch((err) => {
       console.log(err);
+      setloading(false)
     });
   }
 
@@ -173,13 +155,14 @@ const CheckOut = (props) => {
       .then((response) => {
         console.log(response);
         CartChange(token);
-        setloading(false)
+       
         setIsError("")
+        notificationsCount(token)
         if (information.paymentMethod == 2) {
           afterOrderAction();
           onlinePayment(response.data.final_bill,response.data.id)
         } else {
-          
+          setloading(false)
         }
       })
       .catch((error) => {
@@ -190,11 +173,7 @@ const CheckOut = (props) => {
         console.log(orderSend)
       });
   };
-  const adressChange = (address) => {
-    onSelectedAddress(address);
 
-    getTimeSlots(address.location.lat, address.location.lng);
-  };
   const dateSelected = (date) => {
     setInformation({
       ...information,
@@ -207,7 +186,14 @@ const CheckOut = (props) => {
       slot: i + 1,
     });
   };
-
+const sendError=()=>{
+  setShowError(true)
+  setTimeout(()=>{
+    setShowError(false)
+    setIsError('')
+  },4000)
+  setPromo('')
+}
   const onPromoSubmit=()=>{
     const code=promo;
     axios.get(`catalogue/promo/?code=${code}&payment_way=1`,{
@@ -221,14 +207,18 @@ const CheckOut = (props) => {
         ...information,
         promoId:response.data.id
       })
+      setIsError('')
       console.log(response.data)
     }).catch(error=>{
       console.log(error)
+      sendError()
+      setIsError('Promo code not found')
     })
   }
   console.log("information", information);
   console.log("error", isError);
   return (
+    <>
     <section className="custom_page">
       <div className="container">
         <div className="row">
@@ -240,137 +230,11 @@ const CheckOut = (props) => {
           <div className="col-md-6 col-sm-6 col-12 order-box mr-2">
             <h6 className="mb-3">Expected Date &amp; Time</h6>
 
-            <Tab.Container
-              id="left-tabs-example"
-              defaultActiveKey={`link-${moment().format("DD")}`}
-            >
-              <div className="date-container my-3">
-                <Nav variant="tabs">
-                  {dates &&
-                    dates.map((date, index) => (
-                      <Nav.Item className="mb-2" as="a">
-                        <Nav.Link
-                          onSelect={() => dateSelected(date.date)}
-                          eventKey={`link-${moment(date.date)
-                            .utc()
-                            .format("DD")}`}
-                        >
-                          <p>{moment(date.date).utc().format("ddd")}</p>
-
-                          <h4>{moment(date.date).utc().format("DD")}</h4>
-                          <p>{moment(date.date).utc().format("MMM")}</p>
-                        </Nav.Link>
-                      </Nav.Item>
-                    ))}
-                </Nav>
-              </div>
-              <Tab.Content>
-                {dates &&
-                  dates.map((date, index) => (
-                    <Tab.Pane
-                      className="w-100"
-                      id={moment(date.date).utc().format("DD")}
-                      eventKey={`link-${moment(date.date).utc().format("DD")}`}
-                    >
-                      <Nav
-                        variant="pills"
-                        className=""
-                        defaultActiveKey="date-0"
-                      >
-                        {slots &&
-                          slots.length > 0 &&
-                          slots
-                            .filter((slot) =>
-                              moment(slot.start).isSame(date.date, "day")
-                            )
-                            .map((slot, index) => (
-                              <>
-                                {slot.is_available ? (
-                                  <Nav.Item
-                                    disabled={!slot.is_available}
-                                    className="time-container mt-3"
-                                  >
-                                    <Nav.Link
-                                      onSelect={() => slotSelect(index)}
-                                      eventKey={`date-${index}`}
-                                      className="times  mr-3"
-                                    >
-                                      <p>
-                                        {moment(slot.start)
-                                          .utc()
-                                          .format("h:mm A")}
-                                        -
-                                        {moment(slot.end)
-                                          .utc()
-                                          .format("h:mm A")}
-                                      </p>
-                                    </Nav.Link>
-                                  </Nav.Item>
-                                ) : (
-                                  ""
-                                )}
-                              </>
-                            ))}
-                      </Nav>
-                    </Tab.Pane>
-                  ))}
-              </Tab.Content>
-            </Tab.Container>
+            <TimeSlots onDate={dates} onSlot={slots} selectedSlot={slotSelect} selectedDate={dateSelected} />
 
             <div className="delivery-address justify-content-around w-100 d-flex mt-4">
               <h6>Delivery Address </h6>
-              <Dropdown className="addresschange-link ">
-                <Dropdown.Toggle as="a" variant="success" id="dropdown-basic">
-                  Change Address
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu
-                  as="ul"
-                  className={classes.checkoutAddress}
-                  style={{ width: "100px" }}
-                >
-                  <Dropdown.Item>
-                    <div
-                      onClick={currentPosition}
-                      className="d-flex align-items-center "
-                    >
-                      <input
-                        type="radio"
-                        id="current"
-                        name="drone"
-                        checked
-                        value="current"
-                      />
-                      <label for="current" className="my-0 mx-3">
-                        Current Location
-                      </label>
-                    </div>
-                  </Dropdown.Item>
-                  {userAddress.map((address, index) => (
-                    <Dropdown.Item
-                      key={index}
-                      onClick={() => adressChange(address)}
-                      as="li"
-                      href="#/action-1"
-                    >
-                      <a>
-                        <h6 className="my-0 mx-2 p-0">{address.title}<br/></h6>
-                        
-                        <small>{address.address}</small>
-                      </a>
-                    </Dropdown.Item>
-                  ))}
-                  <Dropdown.Item as="li">
-                    <a
-                      onClick={onNewLocation}
-                      type="button"
-                      className="btn btn-primary btn-custom btn-lg btn-block"
-                    >
-                      <img src={plusIcon} /> <span>Add New Address </span>
-                    </a>
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <UserAddress onGetTimeSlots={getTimeSlots} />
             </div>
             <div className="address mt-3">
               <div className="address-icon mr-3">
@@ -393,6 +257,7 @@ const CheckOut = (props) => {
                       onChange={onMethod}
                       value="2"
                       name="payment"
+                      checked={information.paymentMethod === 2}
                     />
                   </div>
                   <div className="radio-btn-label">
@@ -414,6 +279,7 @@ const CheckOut = (props) => {
                       id="cashOnDelivery"
                       value="1"
                       name="payment"
+                      checked={information.paymentMethod === 1}
                     />
                   </div>
                   <div className="radio-btn-label">
@@ -427,23 +293,23 @@ const CheckOut = (props) => {
             <div className="order-price-container">
               <p>
                 Subtotal{" "}
-                <span className="float-right">{totalPrice && totalPrice}</span>
+                <span className="float-right">BDT {totalPrice && totalPrice}</span>
               </p>
               <p>
                 Delivery Charge <span className="float-right">BDT 49</span>
               </p>
-              {discount? <p>
-                Discount <span className="float-right">{discount}</span>
+              {discount? <p className="text-warning">
+                Discount <span className="float-right">-BDT {discount}</span>
               </p>:''}
-              <h6>
-                Total <span className="float-right">{totalPrice + 49}</span>
+              <h6 className={discount? "close-text":""}>
+                Total <span className={discount? "close-text float-right":"float-right"} >BDT {totalPrice + 49}</span>
               </h6>
               {discount? <h6>
-                After Discount <span className="float-right">{totalPrice + 49 -discount}</span>
+                Total <span className="float-right">BDT{totalPrice + 49 -discount}</span>
               </h6>:""}
             </div>
 
-            <Dropdown className="promo-code-container mt-3">
+           {!discount? <Dropdown className="promo-code-container mt-3">
               <Dropdown.Toggle
                 as="a"
                 className="dropdown-custom"
@@ -451,7 +317,7 @@ const CheckOut = (props) => {
                 id="dropdown-basic"
               >
                 <h6>
-                  <img src={offerIcon} className="mr-2" alt="" /> Add Promo Code{" "}
+                  <img src={offerIcon} className="mr-2" alt="true" /> Add Promo Code{" "}
                   <span className="float-right">
                     <i className="fa fa-angle-right" />
                   </span>
@@ -459,13 +325,24 @@ const CheckOut = (props) => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu className="p-3">
+
                 <h6 className="text-center"> Add Promo Code</h6>
                 <input className="mx-auto w-100 " value={promo} onChange={(e)=>setPromo(e.target.value)} type="text" />
-                <button onClick={onPromoSubmit} className="btn w-100 mt-2 mx-auto btn-primary">
+                <Dropdown.Item >
+               
+                <button disabled={!promo} onClick={onPromoSubmit} className="btn w-100 mt-2 mx-auto btn-primary">
                   Add Promo Code
                 </button>
+                </Dropdown.Item>
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown>:""}
+           {discount? <div className="d-flex justify-content-between align-items-center"> 
+            <img src={offerIcon} /> <span ><b className="text-success">{promo}</b> <b>Promo Added</b></span> 
+            <a onClick={onDeletePromo}>
+                    <i className="fa text-danger fa-trash-o" />
+                  </a>
+            </div>:""}
+
             <div className="order-note-container mt-3">
               <h6>Additional Note</h6>
               <form action className="mt-2">
@@ -480,7 +357,7 @@ const CheckOut = (props) => {
                   />
                 </div>
                 <button className="btn btn-primary" onClick={onPlaceOrder}>
-                  Place Order ({discount? totalPrice + 49 -discount:totalPrice + 49})
+                  Place Order BDT({discount? totalPrice + 49 -discount:totalPrice + 49})
                 </button>
               </form>
             </div>
@@ -495,6 +372,8 @@ const CheckOut = (props) => {
         </p> 
       </SuccessModal>
     </section>
+    <ErrorToast showA={showError}> <p>{isError}</p></ErrorToast>
+    </>
   );
 };
 

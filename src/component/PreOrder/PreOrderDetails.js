@@ -85,7 +85,7 @@ const PreOrderDetails = props => {
       setError(error.message)
     })
 
-  },[])
+  },[preOrderId])
 
   const onLinePayment=()=>{
     axios.post('billing/ssl/payment/order/create/',
@@ -150,7 +150,7 @@ const PreOrderDetails = props => {
         <div className="payment-method mt-4">
           <h6>Payment Method</h6>
           <div className="confirmed-payment mt-3">
-            <img src={payImg} alt="" className="mr-3" />
+            <img src={payImg} alt="product-img" className="mr-3" />
             <h6>{orderDetails.status==1? "Payment on Delevery" :"Online Payment" } </h6>
             <br />
 

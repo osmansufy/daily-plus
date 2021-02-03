@@ -31,6 +31,7 @@ class Category extends Component {
         slidesToScroll: 1,
         swipeToSlide: true,
         autoplay:true,
+        lazyLoad: true,
         responsive: [
           {
             breakpoint: 1024,

@@ -6,13 +6,7 @@ const initialState={
     userAddress:[],
     loading:false,
     error:null,
-    addreessCurrent:{
-        location:{
-            lat:23.78113301384171, 
-            lng:90.42303124459973
-        },
-        address:"Dingi Technologies Limited"
-    },
+    addressCurrent:[],
     isEdit:false,
     redirectPath:'/'
 }
@@ -23,9 +17,9 @@ const onUpdatedAddress=(state,action)=>{
         address:action.address
     }
 
-    const updatedAddress=updateObject(state.addreessCurrent,upadteArea)
+    const updatedAddress=updateObject(state.addressCurrent,upadteArea)
     const updatesState={
-        addreessCurrent:updatedAddress,
+        addressCurrent:updatedAddress,
         
     }
     return updateObject(state,updatesState)
@@ -38,9 +32,9 @@ const onAddUpdatedAddress=(state,action)=>{
                  title:""
     }
 
-    const updatedAddress=updateObject(state.addreessCurrent,upadteArea)
+    const updatedAddress=updateObject(state.addressCurrent,upadteArea)
     const updatesState={
-        addreessCurrent:updatedAddress,
+        addressCurrent:updatedAddress,
         isEdit:action.isEdit,
     }
     return updateObject(state,updatesState)
@@ -83,14 +77,15 @@ const AddressReducer = (state=initialState,action) => {
            
         return {
             ...state,
-            addreessCurrent:action.address,
+            addressCurrent:action.address,
             isEdit:true,
         };
         case actionsTypes.ADDRESS_EDIT_START:
            
             return {
                 ...state,
-                isEdit:action.isEdit
+                isEdit:action.isEdit,
+                redirectPath:'/'
             }
        case actionsTypes.ADDRESS_EDIT:
            
@@ -99,7 +94,7 @@ const AddressReducer = (state=initialState,action) => {
            
         return {
             ...state,
-            addreessCurrent:action.editAddress
+            addressCurrent:action.editAddress
         }
        case actionsTypes.ADDRESS_ADD_SUBMIT:
            
@@ -112,20 +107,25 @@ const AddressReducer = (state=initialState,action) => {
         return {
             ...state,
             redirectPath:action.path,
-            isEdit:false
+            isEdit:false,
+            addressCurrent:{
+                ...state.addressCurrent,
+                title:""
+            }
         }
        case actionsTypes.ADDRESS_ADD:
            
         return {
             ...state,
-            addreessCurrent:action.address,
+            addressCurrent:action.address,
             isEdit:false,
+            redirectPath:"/"
         }
        case actionsTypes.ADDRESS_CURRENT:
            
         return {
             ...state,
-            addreessCurrent:{
+            addressCurrent:{
                 location:{
                     lat:action.latitude ,
                     lng:action.longitude

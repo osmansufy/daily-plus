@@ -10,7 +10,7 @@ import SinglePopuler from "./SinglePopuler";
 import ButtonQuantity from "../UI/Button/ButtonQtn";
 import Spinner from "../container/Spinner/Spinner";
 import { Modal } from "react-bootstrap"
-
+import emptyImg from '../assets/img/emptyImg.png'
 const Product = (props) => {
   // const {details}=props
   const [itemCount, setItemCount] = useState(0);
@@ -79,12 +79,13 @@ const Product = (props) => {
   const settings = {
     dots: false,
     infinite: true,
-    centerMode: true,
+    centerMode: false,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
     swipeToSlide: true,
     autoplay: true,
+    lazyLoad: true,
     responsive: [
       {
         breakpoint: 1024,
@@ -110,14 +111,14 @@ const Product = (props) => {
           initialSlide: 2,
         },
       },
-      {
-        breakpoint: 480,
+    {
+        breakpoint: 400,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
           infinite: true,
           swipeToSlide: true,
-          centerMode: false,
+          // centerMode: true,
         },
       },
     ],
@@ -152,30 +153,30 @@ let discount=details && details.inventory_list && details.inventory_list[0] && d
                 {
                   <img
                     className="img-fluid"
-                    src={details.image_list && details.image_list[0].image_url}
-                    alt=""
+                    src={details.image_list && details.image_list[0]?.image_url}
+                    alt='true'
                   />
                 }
               </div>
-              <div className="gallery-img mt-4">
+              {/* <div className="gallery-img mt-4">
                 <div className="gallery-img-container">
                   <img
-                    className="img-fluid"
+                   
                     src="dist/img/Rectangle2.svg"
-                    alt=""
+                    alt="product-img"
                   />
                 </div>
                 <div className="gallery-img-container">
-                  <img src="dist/img/image 3.jpg" alt="" />
+                  <img src="dist/img/image 3.jpg" alt="product-img" />
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="col-md-6 col-sm-6 col-12">
               <div className="single-product-details">
                 <h6 className="mt-2 mb-2">{details.description}</h6>
                 <div className="price">
                   <h6 className="sell-price">
-                    {price}
+                    {price} <small>ট</small> 
                     <span className="regular-price">
                       {discount ? price+discount :""  }
                     </span>
@@ -239,7 +240,9 @@ let discount=details && details.inventory_list && details.inventory_list[0] && d
               catProductLists
                 .filter((el) => el.id != details.id)
                 .map((product, index) => (
-                  <SinglePopuler data={product} key={index} />
+                  <SinglePopuler 
+                  containerClass="mx-1 mt-4"
+                  data={product} key={product.id} />
                 ))
             ) : catLoading && error == null ? (
               <Spinner />

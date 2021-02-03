@@ -75,7 +75,7 @@ const Search = (props) => {
                               product.image_list[0] &&
                               product.image_list[0].thumbnail_image_url
                             }
-                            alt=""
+                            alt="true"
                           />
                         </div>
                         <div className="search-result-list-detail my-md-3">

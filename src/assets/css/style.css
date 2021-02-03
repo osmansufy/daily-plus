@@ -36,8 +36,8 @@ ul li{
     padding-bottom: 10px;
 }
 ul li a {
-    color: rgba(55, 71, 79, 0.72);
-    font-size: 0.9em;
+    color: rgba(55, 71, 79, 0.72) !important;
+    font-size: 0.9em !important;
     display: flex;
     align-items: center;
     font-family: Poppins;
@@ -332,11 +332,11 @@ footer{
 }
 
 
-.single-product-img img{
+/* .single-product-img img{
     display: block;
     margin: 0 auto;
     width: 90%;
-}
+} */
 .gallery-img{
     display: flex;
     justify-content: center;

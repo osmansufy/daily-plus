@@ -57,7 +57,7 @@ const OrderInfo = (props) => {
       setError(error.response)
     })
 
-  },[])
+  },[orderId])
 
   let container=""; 
   const onCancelOrder=(id)=>{
@@ -126,7 +126,7 @@ const OrderInfo = (props) => {
         <div className="payment-method mt-4">
           <h6>Payment Method</h6>
           <div className="confirmed-payment mt-3">
-            <img src="dist/img/icons.png" alt="" className="mr-3" />
+            <img src="dist/img/icons.png" alt="true" className="mr-3" />
             <h6>{orderDetails.status==1? "Payment on Delevery" :"Online Payment" } </h6>
           </div>
         </div>

@@ -19,7 +19,7 @@
   }
   
   .marker {
-    background-image: url("../map_pinned.png");
+    background-image: url("../img/map_pinned.png");
     background-repeat: no-repeat;
     background-size: 23px;
     width: 50px;

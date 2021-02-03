@@ -183,6 +183,7 @@ const GenieForm = () => {
              ref={inputRef}
              onChange={fileChangedHandler}
              style={{display:'none'}}
+             accept="image/*"
              />
             {imgUp}
             

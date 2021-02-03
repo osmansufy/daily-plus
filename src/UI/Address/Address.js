@@ -24,10 +24,9 @@ const Address = (props) => {
     dispatch(actionAddress.onAddressDelete(token, id));
   const onSelectedAddress = (address) =>
     dispatch(actionAddress.onAddressSelected(address));
-  const [isOffice, setIsoffice] = useState(false);
+
   const [smShow, setSmShow] = useState(false);
-  const [adShow, setAdSmShow] = useState(false);
-  const target = useRef(null);
+
   const editAddress = (add) => {
     onAddress(add);
 
@@ -122,7 +121,7 @@ const Address = (props) => {
                 <img src={changeIcon} />
               </a>
               <a className="mr-2" onClick={() => setSmShow(true)}>
-                <i class="fa fa-trash-o"></i>
+                <i className="fa fa-trash-o"></i>
               </a>
 
               <RemoveModal
@@ -172,7 +171,7 @@ const Address = (props) => {
                 <img src={changeIcon} />
               </a>
               <a className="mr-2" onClick={() => setSmShow(true)}>
-                <i class="fa fa-trash-o"></i>
+                <i className="fa fa-trash-o"></i>
               </a>
     
               <RemoveModal
@@ -209,9 +208,10 @@ const Address = (props) => {
                 <Dropdown.Item
                   className="d-flex address "
                   onClick={() => onSelectedAddress(add)}
+                  key={add.id}
                   as="div"
                 >
-                  <i class="fa fa-map-marker" aria-hidden="true"></i>
+                  <i className="fa fa-map-marker" aria-hidden="true"></i>
 
                   <div className="address-info">
                     <h4 className="name">{add.title}</h4>
@@ -224,7 +224,7 @@ const Address = (props) => {
                     <img src={changeIcon} />
                   </a>
                   <a className="mr-2" onClick={() => setSmShow(true)}>
-                    <i class="fa fa-trash-o"></i>
+                    <i className="fa fa-trash-o"></i>
                   </a>
 
                   <RemoveModal

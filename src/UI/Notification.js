@@ -1,38 +1,29 @@
 import { useEffect, useState } from 'react';
 import {DropdownButton,ButtonGroup,Dropdown} from 'react-bootstrap'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from '../axios'
 import moment from 'moment'
 import { useHistory } from 'react-router';
+import Spinner from '../container/Spinner/Spinner'
+import * as actionAuths from "../store/actions/actionAuth";
 const Notification = (props) => {
   
   const history=useHistory()
-  const [notifiacationItems,setNotificationItems]=useState([])
+  const dispatch=useDispatch()
   const isSignUp=useSelector(state=>state.auth.accessToken)
-  const getNotification=()=>{
-    axios.get('notification/notification/',{
-      headers:{
-        Authorization: `JWT ${isSignUp}`,
-    }
-    })
-    .then(response=>{
-      setNotificationItems(response.data)
-      console.log("Allnotifiacation",response)
-      
-    })
-    .catch(error=>{
-      console.log(error)
-    })
-  }
+  const allNotifications=useSelector(state=>state.auth.notifications)
+  const isLoading=useSelector(state=>state.auth.loading)
+  const onNotificationsAction = (isSignUp) =>
+  dispatch(actionAuths.onGetNotifications(isSignUp));
+  const onNotifications = (isSignUp) =>
+    dispatch(actionAuths.onNotificationsCount(isSignUp));
   useEffect(()=>{
-    if (isSignUp) {
-      getNotification()
-    }else{
-      setNotificationItems([])
+    if (isSignUp ) {
+      onNotificationsAction(isSignUp)
     }
     
   },[isSignUp])
-  console.log(notifiacationItems)
+
   const notificationRead=(id)=>{
     axios.post(`notification/mark_read/${id}/`,'',{
       headers:{
@@ -40,15 +31,15 @@ const Notification = (props) => {
     }
     })
     .then(response=>{
-      getNotification()
+      // getNotification()
       console.log(response)
-      props.checked(response.data)
+      onNotifications(isSignUp)
     })
     .catch(error=>{
       console.log(error)
     })
   }
-
+console.log(props)
   const onShowNotification=(notification)=>{
     let id=""
     if(notification.genie_list_order && !notification.order && !notification.pre_order ){
@@ -90,7 +81,7 @@ const Notification = (props) => {
   <button className="btn" onClick={props.closed}>X</button> */}
 </div>
 
-{notifiacationItems.map((noti,index)=>(
+{isLoading ? <Spinner /> : allNotifications && allNotifications.map((noti,index)=>(
   <Dropdown.Item eventKey={index} onClick={()=>onShowNotification(noti)} className={`notification-list pt-2 ${!noti?.checked && "notification-checked"}`}>
     
     <h6>{noti.title}<span className="float-right">{moment(noti.ts_created).utc().format('MMM DD.YYYY')}</span></h6>

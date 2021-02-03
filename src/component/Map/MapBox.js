@@ -8,6 +8,8 @@ import AddAddress from './AddAddress';
 import * as actionAddress from '../../store/actions/actionAddress'
 import { Redirect, useHistory } from 'react-router';
 
+// import 'mapbox-gl/dist/mapbox-gl.css'
+// import './Map.css'
 
 const config = require('../../config.json')
 
@@ -26,7 +28,7 @@ const Map = props => {
 const history=useHistory()
   const dispatch=useDispatch()
 
-  const onEddressInit=(address,location)=>dispatch(actionAddress.onAddressEdit(address,location))
+  const onEddressInit=(location,address)=>dispatch(actionAddress.onAddressEdit(location,address))
   const inputRef=useRef()
   const [mapinfo,setMapinfo]=useState({
     id: null,
@@ -254,18 +256,17 @@ marker.on('dragend', ()=>onDragEnd(marker));
     //     loader: false })
   }
  
-  const searchHandle =()=>{
-   
-  }
+
   const onEditEddress=()=>{
    const location={
      lat:lat,
      lng:lng
    }
-   const address=searchEnter
 
-    onEddressInit(location,address)
+
+    onEddressInit(location,searchEnter)
     history.push('/location/save')
+    console.log('searchEnter',searchEnter)
      }
   let MapContainer=(<div className="mapModal">
     <form
