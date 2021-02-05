@@ -4,6 +4,7 @@ import classes from './Sidebar.Module.css'
 import logo from '../assets/img/logo.png'
 import { Link,withRouter} from 'react-router-dom';
 import Spinner from '../container/Spinner/Spinner'
+import emptyImg from "../assets/img/emptyImg.png";
 const Sidebar=props=>{
  
  
@@ -41,7 +42,7 @@ const Sidebar=props=>{
               
                   <Link onClick={props.closed} to={"/category/"+cat.id+"/"+cat.name} className="nav-link align-items-center p-0 justify-content-between d-flex" >
                    <div className="d-flex align-items-center">
-                   <img src={cat.thumbnail_image_url} alt="User Avatar" className="img-size-50 mr-3 rounded-circle" />
+                   <img src={cat.thumbnail_image_url ?cat.thumbnail_image_url:emptyImg } alt="category-image" className="img-size-50 mr-3 rounded-circle" loading="lazy" />
                     <p className="m-0">
                       {cat.name}
                       

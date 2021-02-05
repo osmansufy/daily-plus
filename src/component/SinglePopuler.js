@@ -6,6 +6,7 @@ import * as productActions from "../store/actions/actionProducts";
 import ButtonQuantity from "../UI/Button/ButtonQtn";
 import ProductModal from "../component/ProductModal";
 import emptyImg from "../assets/img/emptyImg.png";
+import LoadingImage from "../UI/LoadingImage";
 const SinglePopuler = (props) => {
   const dispatch = useDispatch();
   const onCatProduct = (id) =>
@@ -26,9 +27,7 @@ const SinglePopuler = (props) => {
 
     onCatProduct(item.category);
   };
-  const modalClosedHandler = () => {
-    setModalShow(false);
-  };
+
   const isCart = (product) => {
     return product.id === props.data.id;
   };
@@ -94,7 +93,7 @@ const SinglePopuler = (props) => {
         <div className="product-card">
           <div className="custom-card">
             <a onClick={() => productHandler(props.data)}>
-              <img
+              {/* <img
                 width="151"
                 height="151"
                 src={
@@ -106,13 +105,23 @@ const SinglePopuler = (props) => {
                 }
                 alt="product-img"
                 loading="lazy"
-              />
+              /> */}
+                 <LoadingImage 
+           emptyImg={emptyImg}
+           imageClass="" 
+           width="151"
+           height="151"
+            realImage={props.data?.image_list[0]?.thumbnail_image_url
+            ? props.data?.image_list[0]?.thumbnail_image_url
+            : props.data?.image_list[0]?.image_url
+            ? props.data?.image_list[0]?.image_url
+            : emptyImg}/>
             </a>
           </div>
-          <h6 className=" pro-title">{props.data.name}</h6>
+          <h6 className="pt-2 pro-title">{props.data.name}</h6>
           <div className="price">
             <h6 className="sell-price">
-              {props.data.inventory_list[0].unit_price_final}{" "}
+            ৳{props.data.inventory_list[0].unit_price_final}{" "}
               <span className="regular-price">
                 {props.data?.inventory_list[0]?.discount
                   ? props.data?.inventory_list[0]?.unit_price_final +
@@ -173,7 +182,7 @@ const SinglePopuler = (props) => {
         </div>
       </div>
       <ProductModal
-        modalClosed={modalClosedHandler}
+       
         show={modalShow}
         onHide={() => setModalShow(false)}
       />

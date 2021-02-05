@@ -92,7 +92,7 @@ console.log('onCatProducts',onCatProducts)
             {loading ? <Spinner /> : onCatProducts.length>0 &&  onCatProducts.map((item,index) =>(
     <SinglePopuler
   //  clicked={()=>productHandler(item)}
-  containerClass="mt-4 col-md-2 col-sm-3 col-12"
+  containerClass="mt-4 col-md-3 col-lg-2 col-sm-4 col-12"
     data={item} key={index}/>
  ))}
            

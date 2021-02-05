@@ -153,10 +153,10 @@ const Signup = () => {
         console.log(error);
         
         setupRecaptcha();
-        var phoneNumber = "+" + formState.userInfo.phone;
+        let phoneNumber = "+" + formState.userInfo.phone;
         console.log(phoneNumber);
         setloading(false)
-        var appVerifier = window.recaptchaVerifier;
+        let appVerifier = window.recaptchaVerifier;
         firebase
           .auth()
           .signInWithPhoneNumber(phoneNumber, appVerifier)

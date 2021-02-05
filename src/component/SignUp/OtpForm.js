@@ -22,8 +22,9 @@ const OtpForm = (props) => {
   onChange={props.change}
   numInputs={6}
   inputStyle="otpClass"
-  containerStyle="justify-content-center signupInput otpField otpContainer "
+  // containerStyle="justify-content-center signupInput otpField otpContainer "
   // separator={<span>-</span>}
+  inputStyle="w-100 mx-1"
 
 />
     

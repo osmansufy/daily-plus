@@ -10,6 +10,7 @@ import logo from "../assets/img/logo.png";
 import pro from "../assets/img/pro.png";
 import callIcon from "../assets/img/call.png";
 import offerIcon from "../assets/img/offer_24px.png";
+import offerBlack from "../assets/img/offer_black.png";
 import phoneApp from "../assets/img/banner-phone.png";
 import accountPic from "../assets/img/account.png";
 import Search from "../UI/Search";
@@ -381,16 +382,18 @@ const Header = (props) => {
         <div className="mobile-show">
           {isSignUp == null && (
             <div className="d-flex  bg-custom-warning py-1 pl-2 pr-3 align-items-center justify-content-between">
-              <span>You are not logged in</span>{" "}
+              <span className="text-white" >You are not logged in</span>{" "}
               <Link to="/signup">
-                <b className="text-dark">Login</b>
+                <b className="text-white">Login</b>
               </Link>
             </div>
           )}
+             <div className="container"> 
+                  </div>
         </div>
         <div className="container">
-          <div className="mobile-show">
-            <Navbar collapseOnSelect expand="lg"  variant="light">
+          <div className="mobile-show ">
+            <Navbar collapseOnSelect expand="lg" className="px-0"  variant="light">
               <Navbar.Brand className="flex-grow-1 d-flex justify-content-between m-0">
                 <div className="mobile-logo">
                   <Link to="/">
@@ -401,10 +404,10 @@ const Header = (props) => {
                 <div className="mobile-icon">
                   <Dropdown onClick={notificationHandler} as={ButtonGroup} title="Dropdown ">
                     <Dropdown.Toggle id="dropdown-custom-1">
-                      <span className="badge badge-light">
+                      {/* <span className="badge badge-light">
                         {notificationCount?.unchecked}
                       </span>
-                      <span className="sr-only">unread messages</span>
+                      <span className="sr-only">unread messages</span> */}
 
                       <svg
                         width={22}
@@ -459,7 +462,7 @@ const Header = (props) => {
                       <img
                         className="mr-4"
                         style={{ width: "30px" }}
-                        src={offerIcon}
+                        src={offerBlack}
                       />
                       {/* <i className="fa fa-percent"></i> */}
                       <span className="text-success">Offers</span>{" "}
@@ -494,37 +497,24 @@ const Header = (props) => {
                     <span className="text-success">+8809638111444</span>
                   </Nav.Link>
 
-                  <NavDropdown
-                    className="text-dark nav-address"
-                    title={
-                      <>
-                        <div className="d-flex align-items-center phoneAdelevery">
-                          {" "}
-                          <h6 className="mr-2">Delivery to</h6>
-                          <i className="fas fa-arrow-right"></i>
-                          <p>{deleverYaddress?.address?.substring(0, 20)}...</p>
-                        </div>
-                      </>
-                    }
-                    id="collasible-nav-dropdown"
-                  >
-                    <Address />
-                  </NavDropdown>
+              
                 </Nav>
               </Navbar.Collapse>
             </Navbar>
+           
           </div>
         </div>
        
-        <div className="container">
-          <div className="mobile-show">
+        
+        <div className="container pb-2">
+          <div className="mobile-show ">
             <div className="d-flex  mt-2 pr-2 justify-content-space-between">
-              <ButtonLink clicked={btnClickHandler}>
-                <i
+            <a onClick={btnClickHandler}  id="nav-link " className="nav-link sidebar-toggle pl-0"  role="button"> 
+             <i
                   className="fas fa-bars"
-                  style={{ padding: "5px", color: "#5EC401" }}
-                />
-              </ButtonLink>
+                  style={{ paddingRight: "5px", color: "#5EC401" }}
+                /></a>
+            
               <Search
                 show={searchShow}
                 className="flex-grow-1 mr-3 search-mobile search"
@@ -549,6 +539,20 @@ const Header = (props) => {
               </CartBtn>
             </div>
           </div>
+          <Dropdown title="Dropdown ">
+                    <Dropdown.Toggle
+                    id="dropdown-custom-1"
+                    className="address-button custom-dropdown mt-2"
+                  >
+                    <div className="d-flex align-items-center phoneAdelevery">
+                          {" "}
+                          <h6 className="mr-2">Delivery to</h6>
+                          <i className="fas fa-arrow-right"></i>
+                          <p>{deleverYaddress?.address?.substring(0, 35)}...</p>
+                        </div>
+                  </Dropdown.Toggle>
+                    <Address  onCurrent={currentPosition} />
+                  </Dropdown>
         </div>
         </div>
       </header>

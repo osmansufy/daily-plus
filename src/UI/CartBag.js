@@ -18,7 +18,7 @@ const CartBag = (props) => {
     
     return ( <div onClick={props.clicked} className="floting-cart">
     <div  className="floting-cart-top">
-   <div><small className="mt-1">ট</small> {price} </div>
+   <div>{price}৳</div>
     <a className="bg-none border-0">
 <img src={bagWhite} /><Badge className="rounded-circle" variant="light">{carts.length}</Badge>
   <span className="sr-only">product cart</span>

@@ -29,7 +29,7 @@ function Footer(props) {
                 </div>
               </div>
             </div>
-            <div className="col-md-3 mt-4 col-sm-6 ">
+            <div className="col-md-3 mt-4 col-6 ">
               <div className="footer-about">
               <h3>About Daily Plus</h3>
               <ul className="mt-3 p-0">
@@ -40,7 +40,7 @@ function Footer(props) {
               </ul>
             </div>
             </div>
-            <div className="col-md-3 mt-4 col-sm-6 ">
+            <div className="col-md-3 mt-4 col-6 ">
               <div className="footer-contact">
 
              
@@ -55,32 +55,33 @@ function Footer(props) {
               </ul>
             </div>
             </div>
-            <div className="col-md-3 mt-4 col-sm-6 ">
+            <div className="col-md-3 mt-sm-4 col-6 ">
               <div className="footer-app ">
 
               
               <h3>App Download</h3>
               <ul className="mt-3  p-0">
-                <li className="mx-1"><a href="https://play.google.com/store/apps/details?id=com.dingi.dailyplus" target="_blank" ><img className="img-fluid" src={play } alt="app-img" /></a></li>
+                <li className="mx-sm-1"><a href="https://play.google.com/store/apps/details?id=com.dingi.dailyplus" target="_blank" ><img className="img-fluid" src={play } alt="app-img" /></a></li>
                 <li><a href="https://apps.apple.com/us/app/id1520548400" target="_blank" ><img className="img-fluid" src={app} alt="true" /></a></li>
               </ul>
             </div>
             </div>
-          </div>
-          <div className="row">
-           
-            <div className=" col-12">
+            <div className=" col-6 col-sm-12">
               <div className="payment-info">
               <h5 className="m-1">Payment Methods</h5>
                 <ul>
               
-                  <li className="m-1"><a><img src={cashOn} alt="true" /></a></li>
-                  <li className="m-1"><a><img src={bkash} alt="true" /></a></li>
-                  <li className="m-1"><a><img src={visa} alt="true" /></a></li>
-                  <li className="m-1"><a><img src={matercard}alt="true" /></a></li>    
+                  <li className="mr-1"><a><img src={cashOn} alt="true" /></a></li>
+                  <li className="mr-1"><a><img src={bkash} alt="true" /></a></li>
+                  <li className="mr-1"><a><img src={visa} alt="true" /></a></li>
+                  <li className="mr-1"><a><img src={matercard}alt="true" /></a></li>    
                 </ul>
               </div>
             </div>
+          </div>
+          <div className="row">
+           
+            
             <div className=" col-12">
               <p className="text-center">Copyright 2020 © Daily Plus</p>
             </div>
