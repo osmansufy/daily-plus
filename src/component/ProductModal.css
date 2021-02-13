@@ -72,7 +72,7 @@
       .product-tags {
         display: flex;
         align-items: center;
-        margin: 20px 0;
+        /* margin: 20px 0; */
     }
       .custom-card {
         background: #F9FAFA;
@@ -83,15 +83,6 @@
         /* height: 255px; */
     }
 
-    .single-product-details .add-to-bag-btn {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #5EC401;
-      width: 220px;
-      color: #fff !important;
-      margin: 40px 0;
-  }
   
   .single-product-details .add-to-bag-btn img {
       margin-right: 10px;
@@ -114,9 +105,6 @@ a.btn.tag-btn {
   color: #37474F;
 }
 
-.tag-icon {
-  margin-right: 10px;
-}
 .product-modal .product-card .pro-title {
   color: #37474F;
   min-height: 60px;

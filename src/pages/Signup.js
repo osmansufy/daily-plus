@@ -123,17 +123,16 @@ const Signup = () => {
 
   const [formState, formDispatch] = useReducer(formReducer, initialState);
   const setupRecaptcha = () => {
-    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-      "recaptcha_container",
-      {
-        size: "invisible",
-        callback: function (response) {
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
-          onSignInSubmit();
-          console.log(response);
-        },
+
+
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha_container', {
+      'size': 'invisible',
+      'callback': (response) => {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+        onSignInSubmit();
       }
-    );
+    });
+
   };
 
   const onSignInSubmit = () => {
@@ -153,10 +152,10 @@ const Signup = () => {
         console.log(error);
         
         setupRecaptcha();
-        let phoneNumber = "+" + formState.userInfo.phone;
+        var phoneNumber = "+" + formState.userInfo.phone;
         console.log(phoneNumber);
         setloading(false)
-        let appVerifier = window.recaptchaVerifier;
+        var appVerifier = window.recaptchaVerifier;
         firebase
           .auth()
           .signInWithPhoneNumber(phoneNumber, appVerifier)
@@ -376,7 +375,7 @@ const Signup = () => {
       break;
     case formType.PASSWORD:
       if (loading || isloading) {
-        formContent= <><div id="recaptcha_container"></div><Spinner /></>
+        formContent= <Spinner />
       }else{
       formContent = (
         <PasswordForm
@@ -447,6 +446,7 @@ const Signup = () => {
   }
   return (
     <section className="custom_page signup">
+      <div id="recaptcha_container"></div>
 {authRedirect}
       <div className="modal-dialog">
         <div className="modal-content">

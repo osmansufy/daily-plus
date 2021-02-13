@@ -5,6 +5,8 @@ import * as cartActions from '../store/actions/actionCart'
 import { useHistory } from 'react-router';
 import axios from '../axios'
 import SuccessModal from '../UI/Modal/SuccessModal';
+import LoadingImage from '../UI/LoadingImage';
+import emptyImg from "../assets/img/emptyImg.png";
 function SinglePreOrder(props) {
    const [modalShow,setModalShow]=useState(false)
   const dispatch=useDispatch()
@@ -15,13 +17,13 @@ console.log(props);
   // const onPreOrder=(item,token)=>dispatch(cartActions.cartPreAction(item,token))
     let freeDel= null 
     let discount=props.data.inventory_list[0].discount
-    if (props.data.pre_order_details.is_free_delivery) {
+    if (props?.data?.pre_order_details?.is_free_delivery) {
         freeDel=(<h6 className="sell-price">Free Delivery</h6>)
     }
     // if (props.data.inventory_list[0].unit_price_final==props.data.inventory_list[0].unit_price) {
     //     discount=null
     // }
-    const date=props.data.pre_order_details.delivery_date
+    const date=props?.data?.pre_order_details?.delivery_date
     const onSignin =()=>{
       setModalShow(false)
       history.push('/signup')
@@ -59,7 +61,21 @@ console.log(props);
         <div className="col-lg-2 col-sm-3 col-6 mt-4">
                   <div className="product-card">
                     
-                     <img className="product-img" loading="lazy" width="150" height="150" src={props.data.image_list[0].thumbnail_image_url} alt="product-img" />
+                     {/* <img className="product-img" loading="lazy" 
+                     width="150" height="150" 
+                     src={props.data.image_list[0].thumbnail_image_url} alt="product-img" /> */}
+                       <LoadingImage 
+           emptyImg={emptyImg}
+           className="product-img"
+           width="150" height="150" 
+            realImage={
+              props.data?.image_list[0]?.thumbnail_image_url ?
+              props.data.image_list[0].thumbnail_image_url :
+              props.data.image_list[0].image?
+              props.data.image_list[0].image:
+              emptyImg
+            
+            }/>
                    
     <h6 className= "pro-title mt-2">{props.data.name}</h6>
                     <div className="delivery-price">

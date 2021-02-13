@@ -19,7 +19,7 @@ const User = () => {
     const dispatch=useDispatch()
     const inputRef=useRef()
     const [preview, setPreview] = useState()
-    const [selectedImg,setSelectedImg]  =useState()
+    const [selectedImg,setSelectedImg]  =useState('')
     const onUserChange=()=>dispatch(actionAuth.onUserUpdate(usersToken,usersInformation.id))
     
     const [userDetails,setUserDetails]=useState({
@@ -90,7 +90,10 @@ console.log(userImg)
          formdata.append("email", userDetails.email);
          formdata.append("phone", userDetails.phone);
          formdata.append("name", userDetails.name);
-         formdata.append("image", selectedImg);
+         if (selectedImg) {
+          formdata.append("image", selectedImg);
+         }
+        
          axios.patch(`user/profile/${id}/`,formdata,{
             headers: {
                 Authorization: `JWT ${usersToken}`,

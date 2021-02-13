@@ -14,10 +14,10 @@ function Footer(props) {
         <div className="container">
           <div className="row">
             <div className="col-md-3 mt-4 col-sm-6 ">
-              <div className="logo">
+              <div className="logo justify-content-sm-start justify-content-center">
                 <img src={logo} alt="logo" className="img-fluid" />
               </div>
-              <div className="social mt-4">
+              <div className="social justify-content-sm-start justify-content-center mt-4">
                 <div className="box">
                   <i className="fa fa-facebook" />
                 </div>
@@ -80,8 +80,6 @@ function Footer(props) {
             </div>
           </div>
           <div className="row">
-           
-            
             <div className=" col-12">
               <p className="text-center">Copyright 2020 © Daily Plus</p>
             </div>

@@ -4,6 +4,7 @@ import CategoryPage from "../pages/Category";
 import * as productActions from "../store/actions/actionProducts";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import LoadingImage from "../UI/LoadingImage";
 function SingleCategory(props) {
   console.log(props);
   return (
@@ -11,7 +12,7 @@ function SingleCategory(props) {
       <Link to={"/category/" + props.data.id + "/" + props.data.name}>
         <div className="card border-0 category-card">
           <div className="category_img">
-            <img
+            {/* <img
               loading="lazy"
               width="97"
               height="103"
@@ -23,7 +24,19 @@ function SingleCategory(props) {
                   : emptyImg
               }
               alt="category-img"
-            />
+            /> */}
+                <LoadingImage 
+           emptyImg={emptyImg}
+           imageClass="" 
+           width="97"
+           height="103"
+            realImage={
+              props.data?.thumbnail_image_url
+                ? props.data.thumbnail_image_url
+                : props.data.image
+                ? props.data.image
+                : emptyImg
+            }/>
           </div>
 
           <h6>{props.data.name}</h6>

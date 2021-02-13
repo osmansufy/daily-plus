@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UserModal from "../UI/Account/UserModal";
 import Address from "../UI/Address/Address";
 import deliveryIcon from "../assets/img/delivery-icon.png";
+import whiteDown from "../assets/img/white-down.png";
 import lampIcon from "../assets/img/lamp-icon.svg";
 import * as actionAddress from "../store/actions/actionAddress";
 import * as actionAuths from "../store/actions/actionAuth";
@@ -376,9 +377,6 @@ const Header = (props) => {
         </div>
         </div>
         <div className="mobile-nav ">
-
-       
-       
         <div className="mobile-show">
           {isSignUp == null && (
             <div className="d-flex  bg-custom-warning py-1 pl-2 pr-3 align-items-center justify-content-between">
@@ -506,7 +504,7 @@ const Header = (props) => {
         </div>
        
         
-        <div className="container pb-2">
+        <div className="container shadow  pb-2">
           <div className="mobile-show ">
             <div className="d-flex  mt-2 pr-2 justify-content-space-between">
             <a onClick={btnClickHandler}  id="nav-link " className="nav-link sidebar-toggle pl-0"  role="button"> 
@@ -539,20 +537,22 @@ const Header = (props) => {
               </CartBtn>
             </div>
           </div>
-          <Dropdown title="Dropdown ">
+         {isSignUp? <Dropdown className="mobile-show " title="Dropdown ">
                     <Dropdown.Toggle
                     id="dropdown-custom-1"
-                    className="address-button custom-dropdown mt-2"
+                    className="address-button custom-dropdown w-100 pl-1 mt-2"
                   >
-                    <div className="d-flex align-items-center phoneAdelevery">
+                    <div className="d-flex py-2 px-2 w-100  justify-content-between align-items-center phoneAdelevery">
                           {" "}
-                          <h6 className="mr-2">Delivery to</h6>
-                          <i className="fas fa-arrow-right"></i>
-                          <p>{deleverYaddress?.address?.substring(0, 35)}...</p>
+                          <h6 className="ml-2 text-white">Delivery to</h6>
+                          <p className="text-white">
+                            {deleverYaddress?.address?.substring(0, 40)}...
+                            </p>
+                          <img className="" src={whiteDown} />
                         </div>
                   </Dropdown.Toggle>
                     <Address  onCurrent={currentPosition} />
-                  </Dropdown>
+                  </Dropdown>:""}
         </div>
         </div>
       </header>

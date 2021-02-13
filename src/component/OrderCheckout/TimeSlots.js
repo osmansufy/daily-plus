@@ -43,7 +43,7 @@ const TimeSlots = (props) => {
                           props.onSlot.length > 0 &&
                           props.onSlot
                             .filter((slot) =>
-                              moment(slot.start).isSame(date.date, "day")
+                              moment(slot.start).isSame(date.date, "day") && slot.is_available
                             )
                             .map((slot, index) => (
                             
@@ -58,12 +58,9 @@ const TimeSlots = (props) => {
                                        disabled={!slot.is_available}
                                     >
                                       <p>
-                                        {moment(slot.start)
-                                          .utc()
-                                          .format("h:mm A")}
+                                        {moment(slot.start).utc(true).format("h:mm A")}
                                         -
-                                        {moment(slot.end)
-                                          .utc()
+                                        {moment(slot.end).utc(true)
                                           .format("h:mm A")}
                                       </p>
                                     </Nav.Link>

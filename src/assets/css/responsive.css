@@ -44,7 +44,12 @@
 }
 
 @media (max-width: 640px) {
-  
+  .single-product-details .add-to-bag-btn {
+    font-size: 10px;
+    width: 110px;
+    padding: 2px;
+
+}
   .user .modal-content {
     padding: 0;
   }
@@ -91,8 +96,8 @@
     fill: white;
     transition: all ease 0.3s;
   }
-  h6,p,span{
-    font-size: 12px;
+  h6,p{
+    font-size: 10px;
   }
   .product-info p{
     font-size: 10px;
@@ -101,6 +106,9 @@
   }
   a.btn.tag-btn{
     font-size: 12px;
+  }
+  .user-panel img{
+    width: 100px;
   }
 }
 
@@ -129,6 +137,9 @@ p.prePoduct-unit {
 }
 ul li a {
 
+  font-size: 12px;
+}
+h4, h5{
   font-size: 12px;
 }
   footer {
@@ -229,6 +240,10 @@ ul li a {
   left: inherit;
   min-width: 320px;
   right: -110%;
+}
+.phoneAdelevery{
+  background-color: var(--secondary-color);
+  color: #fff;
 }
 }
 

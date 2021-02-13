@@ -19,7 +19,7 @@ console.log(props)
 
           {<Banner />}
      
-         {<Suspense fallback={<Spinner />}><Category/></Suspense>}
+         {<Suspense fallback={<h5>Loading...</h5>}><Category/></Suspense>}
          
          {<Suspense fallback={<h5>Loading...</h5>}><PopulerProducts /></Suspense>}
          {/* {<Suspense fallback={<Spinner />}> */}

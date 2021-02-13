@@ -259,7 +259,7 @@ const Address = (props) => {
             type="button"
             className="btn btn-primary btn-custom btn-lg btn-block"
           >
-            <img src={plusIcon} /> <span>Please SignUp First</span>
+            <img src={plusIcon} /> <h6 className="text-white text-center flex-grow-1">Please SignUp First</h6>
           </a>
         </Dropdown.Item>
       )}

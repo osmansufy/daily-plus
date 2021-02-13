@@ -63,10 +63,10 @@ const UserAddress = (props) => {
                  className="checkoutAddress"
              
                 >
-                  <Dropdown.Item>
-                    <div
+                  <Dropdown.Item  as="li">
+                    <a
                       onClick={currentPosition}
-                      className="d-flex align-items-center "
+                      className="d-flex ml-2 align-items-center "
                     >
                       <input
                         type="radio"
@@ -78,14 +78,13 @@ const UserAddress = (props) => {
                       <label for="current" className="my-0 mx-3">
                         Current Location
                       </label>
-                    </div>
+                    </a>
                   </Dropdown.Item>
                   {userAddress.map((address, index) => (
                     <Dropdown.Item
                       key={index}
                       onClick={() => adressChange(address)}
                       as="li"
-                      href="#/action-1"
                     >
                       <a>
                         <h6 className="my-0 mx-2 p-0">{address.title}<br/></h6>

@@ -60,10 +60,7 @@ const App = (props) => {
       <Switch>
         <Route path="/" exact component={Home} />
 
-        <Route path="/category/:id/:name"
-        
-        exact
-    component={CategoryPage}
+        <Route path="/category/:id/:name"exact component={CategoryPage}
         />
         <Route path="/product/:id" exact 
         

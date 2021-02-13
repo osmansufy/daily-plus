@@ -62,7 +62,7 @@ const CheckOut = (props) => {
         },
       })
       .then((response) => {
-        console.log(response);
+        console.log("slots",response);
         setSlots(response.data.slots);
         setDates(response.data.dates);
       })

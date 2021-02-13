@@ -8,7 +8,7 @@ const PhoneForm = (props) => {
         <>
 
 <div className="row justify-content-center">
-<div id="recaptcha_container"></div>
+
 
 
 <Image src={imgPhone}   />
