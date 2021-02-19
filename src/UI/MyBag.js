@@ -135,7 +135,7 @@ if(item.count===1){
             <img  className="img-fluid" src={item.image_list[0].thumbnail_image_url} alt="true" />
           </div>
           <div  className="quantity">
-            <p  className="cart-product-title">{item.description}</p>
+            <p  className="cart-product-title">{item.name}</p>
             <p  className="sell-price"><small>ট </small> {item.inventory_list[0].unit_price_final}</p>
 
           

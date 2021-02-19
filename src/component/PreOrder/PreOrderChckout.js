@@ -48,7 +48,13 @@ const PreOrderCheckout = () => {
   };
   const [showA, setShowA] = useState(false);
   
-  
+  const onGetDeleveryLocation=()=>{
+    if (currentAddress?.address) {
+      return currentAddress
+    }else{
+     return userAddress[0]
+    }
+  }
   
   const subPreHandler = (item) => {
     console.log(item);
@@ -159,15 +165,16 @@ const PreOrderCheckout = () => {
         <h5 className="text-danger">{isError ? isError : ""}</h5>
         {preProducts.length > 0 &&
           preProducts.map((item, index) => (
-            <div className="cart-product mx-auto col-md-10">
-              <div className="gOimage">
+            <div className=" mb-3 col-md-12">
+              <div className="d-flex">
+              <div className="gOimage mr-2">
                 <img
                   className="img-fluid"
                   src={item.prod_image_list[0].thumbnail_image_url}
                   alt="product-img"
                 />
               </div>
-              <div className="quantity">
+              <div className="quantity mr-2">
                 <h5 className="preOrderDate my-2">
                   Pre-order (
                   {moment(item?.pre_order_details?.delivery_date)
@@ -205,6 +212,7 @@ const PreOrderCheckout = () => {
               </div>
               <div></div>
             </div>
+            </div>
           ))}
 
         <div className="delivery-address justify-content-around w-100 d-flex mt-4">
@@ -216,8 +224,8 @@ const PreOrderCheckout = () => {
                 <i className="fa fa-map-marker" aria-hidden="true" />
               </div>
               <div className="address-right mb-4">
-                <h6>{currentAddress && currentAddress.title}</h6>
-                <p>{currentAddress && currentAddress.address}</p>
+                <h6>{onGetDeleveryLocation()?.title}</h6>
+                <p>{onGetDeleveryLocation()?.address}</p>
               </div>
             </div>
         <div className="order-price-container">

@@ -83,8 +83,8 @@ if (loading) {
               <h4>
 {order.order_identifier}
               </h4>
-              <h5>{statusOrder(order.status)}</h5>
-              <h5>{moment(order.ts_created).utc().format('MMM DD.YYYY')}</h5>
+              <h5 className={order.status==6? "text-danger":""}>{statusOrder(order.status)}</h5>
+              <h5>{moment(order.ts_created).utc(true).format('MMM DD.YYYY')}</h5>
           </div>
           </div>  
           <span>ট{order.total_bill} </span></div> 

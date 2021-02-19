@@ -6,7 +6,7 @@ const initialState={
     userAddress:[],
     loading:false,
     error:null,
-    addressCurrent:[],
+    addressCurrent:{},
     isEdit:false,
     redirectPath:'/'
 }

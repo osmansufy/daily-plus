@@ -418,6 +418,7 @@ const Signup = () => {
           change={(value) =>
             formDispatch({ type: formType.CHANGE_OTP, otp: value })
           }
+          phone={formState.userInfo.phone}
         />
       );
       break;

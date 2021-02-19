@@ -201,8 +201,9 @@ const CategoryPage = (props) => {
     <div className="custom_page">
       <section>
         <div className="container">
-          
-        <h2 className="section-title text-center">{props.match.params.name}</h2>
+          <div className="offset-sm-3">
+            <h2 className="section-title ">{props.match.params.name}</h2></div>
+        
        <div className="d-block d-sm-none my-2 phone-category"> 
        <Nav variant="pills" defaultActiveKey="all" className="flex-nowrap">
 
@@ -302,7 +303,7 @@ const CategoryPage = (props) => {
               </div>
             </div>
             <div className="col-md-9 col-12">
-              
+            
               <div className="row">
                 {loading ? (
                   <Spinner />

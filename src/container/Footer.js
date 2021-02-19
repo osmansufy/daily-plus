@@ -61,7 +61,7 @@ function Footer(props) {
               
               <h3>App Download</h3>
               <ul className="mt-3  p-0">
-                <li className="mx-sm-1"><a href="https://play.google.com/store/apps/details?id=com.dingi.dailyplus" target="_blank" ><img className="img-fluid" src={play } alt="app-img" /></a></li>
+                <li className=""><a href="https://play.google.com/store/apps/details?id=com.dingi.dailyplus" target="_blank" ><img className="img-fluid" src={play } alt="app-img" /></a></li>
                 <li><a href="https://apps.apple.com/us/app/id1520548400" target="_blank" ><img className="img-fluid" src={app} alt="true" /></a></li>
               </ul>
             </div>
@@ -71,10 +71,10 @@ function Footer(props) {
               <h5 className="m-1">Payment Methods</h5>
                 <ul>
               
-                  <li className="mr-1"><a><img src={cashOn} alt="true" /></a></li>
-                  <li className="mr-1"><a><img src={bkash} alt="true" /></a></li>
-                  <li className="mr-1"><a><img src={visa} alt="true" /></a></li>
-                  <li className="mr-1"><a><img src={matercard}alt="true" /></a></li>    
+                  <li className="mr-1 my-1"><a><img src={cashOn} alt="true" /></a></li>
+                  <li className="mr-1 my-1"><a><img src={bkash} alt="true" /></a></li>
+                  <li className="mr-1 my-1"><a><img src={visa} alt="true" /></a></li>
+                  <li className="mr-1 my-1"><a><img src={matercard}alt="true" /></a></li>    
                 </ul>
               </div>
             </div>

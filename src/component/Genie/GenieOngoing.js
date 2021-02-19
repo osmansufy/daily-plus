@@ -67,11 +67,13 @@ const GenieOngoing = () => {
     }
   }, []);
   let contentGenieHistory = "";
+  const onGoingOrder=genieAllOrder
+  .filter((order) => order.status == 1)
+  console.log('onGoingOrder',onGoingOrder);
   if (loading) {
     contentGenieHistory = <Spinner />;
-  } else if (!loading && genieAllOrder.length > 0) {
+  } else if (!loading && onGoingOrder.length > 0) {
     contentGenieHistory = genieAllOrder
-      .filter((order) => order.status == 1)
       .map((order) => {
         // statDispatch({type:order.status})
         return (
@@ -84,7 +86,7 @@ const GenieOngoing = () => {
                   <h4>{order.order_identifier}</h4>
                   <h5>{statusOrder(order.status)}</h5>
                   <h5>
-                    {moment(order.ts_created).utc().format("MMM DD.YYYY")}
+                    {moment(order.ts_created).utc(true).format("MMM DD.YYYY")}
                   </h5>
                 </div>
               </div>

@@ -84,7 +84,7 @@ console.log(props)
 {isLoading ? <Spinner /> : allNotifications && allNotifications.map((noti,index)=>(
   <Dropdown.Item eventKey={index} onClick={()=>onShowNotification(noti)} className={`notification-list pt-2 ${!noti?.checked && "notification-checked"}`}>
     
-    <h6>{noti.title}<span className="float-right">{moment(noti.ts_created).utc().format('MMM DD.YYYY')}</span></h6>
+    <h6>{noti.title}<span className="float-right">{moment(noti.ts_created).utc(true).format('MMM DD.YYYY')}</span></h6>
      <div className="noti-message">
        <p>{noti.text}</p>
       <div className="noti-message-icon">

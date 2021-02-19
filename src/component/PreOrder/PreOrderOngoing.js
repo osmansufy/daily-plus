@@ -53,7 +53,7 @@ if (loading) {
 {order.order_identifier}
               </h4>
               <h5>Pending</h5>
-              <h5>{moment(order.ts_delivery).utc().format('MMM DD.YYYY')}</h5>
+              <h5>{moment(order.ts_delivery).utc(true).format('MMM DD.YYYY')}</h5>
           </div>
           </div>  
           <span>ট{order.total_bill} </span></div> 

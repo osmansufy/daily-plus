@@ -48,9 +48,12 @@ const Header = (props) => {
   const [appHide, setAppHide] = useState(false);
 
   const [showSidebar, setShowSidebar] = useState(false);
+  const address = useSelector((state) => state.address.userAddress);
   const dispatch = useDispatch();
   const onAddress = (isSignUp) =>
     dispatch(actionAddress.onUserAddress(isSignUp));
+  const notGetingCuurentLocation = (address) =>
+    dispatch(actionAddress.onAddressSelected(address));
   const onNotifications = (isSignUp) =>
     dispatch(actionAuths.onNotificationsCount(isSignUp));
   const onCurrentAddressAction = (latitude, longitude, isSignUp) =>
@@ -99,11 +102,13 @@ const Header = (props) => {
     };
     const notFound = (err) => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
+      
     };
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(render, notFound, options);
     } else {
+      console.log("notLocation");
     }
   };
 
@@ -164,6 +169,13 @@ const Header = (props) => {
     },
   };
 
+  const onDeleveryAddress=()=>{
+    if (deleverYaddress?.address) {
+      return deleverYaddress
+    }else{
+     return address[0]
+    }
+  }
   let appClasses = ["appShow"];
   if (appHide) {
     appClasses = ["appShow", "close"];
@@ -364,7 +376,7 @@ const Header = (props) => {
                         id="contentcshow"
                         style={{ cursor: "pointer", margin: 0 }}
                       >
-                        {deleverYaddress?.address?.substring(0, 20)}...
+                        {onDeleveryAddress()?.address?.substring(0, 20)}...
                       </p>
                     </div>
                     <img className="mt-md-4 ml-2" src={deliveryIcon} />
@@ -546,7 +558,7 @@ const Header = (props) => {
                           {" "}
                           <h6 className="ml-2 text-white">Delivery to</h6>
                           <p className="text-white">
-                            {deleverYaddress?.address?.substring(0, 40)}...
+                            {onDeleveryAddress()?.address?.substring(0, 40)}...
                             </p>
                           <img className="" src={whiteDown} />
                         </div>

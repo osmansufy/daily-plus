@@ -5,7 +5,7 @@ import axios from "../../axios";
 import Spinner from "../../container/Spinner/Spinner";
 import {Modal,Button,Container} from 'react-bootstrap'
 import successImg from '../../assets/img/success.png'
-
+import payImg from '../../assets/img/payment.png'
 import moment from 'moment'
 const OrderInfo = (props) => {
   const token=useSelector(state=>state.auth.accessToken)
@@ -99,7 +99,7 @@ const OrderInfo = (props) => {
       <div className="col-md-6 col-sm-6 col-12 order-box m-2">
         <h6 className="mb-3">Scheduled</h6>
         <div className="selected-date-container">
-          <h6><i className="fa fa-calendar-check-o mr-3" /> { orderDetails.ts_delivery && moment(orderDetails.ts_delivery).utc().format('MMMM DD . YYYY ')} <span style={{marginLeft: '10px', color: '#F37A20'}}> {orderDetails.ts_delivery && moment(orderDetails.ts_delivery).utc().format('hh A')}- {moment(orderDetails.ts_delivery).add(3,'h').utc().format('hh A')}</span></h6>
+          <h6><i className="fa fa-calendar-check-o mr-3" /> { orderDetails.ts_delivery && moment(orderDetails.ts_delivery).utc(true).format('MMMM DD . YYYY ')} <span style={{marginLeft: '10px', color: '#F37A20'}}> {orderDetails.ts_delivery && moment(orderDetails.ts_delivery).utc(true).format('hh A')}- {moment(orderDetails.ts_delivery).add(3,'h').utc(true).format('hh A')}</span></h6>
           <div className="boxed-border-container mt-3">
             <div className="boxed-border1" />
             <div className="boxed-border2" />
@@ -126,7 +126,7 @@ const OrderInfo = (props) => {
         <div className="payment-method mt-4">
           <h6>Payment Method</h6>
           <div className="confirmed-payment mt-3">
-            <img src="dist/img/icons.png" alt="true" className="mr-3" />
+            <img src={payImg} alt="true" className="mr-3" />
             <h6>{orderDetails.status==1? "Payment on Delevery" :"Online Payment" } </h6>
           </div>
         </div>
@@ -142,7 +142,7 @@ const OrderInfo = (props) => {
         </div>
         <div className="order-note-container mt-3">
           <h6 className="mb-3">Additional Note</h6>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, consectetur!</p>
+          <p>{orderDetails?.note ? orderDetails?.note:""}</p>
           <button className="btn btn-secondary contact-support mt-4"><i className="fa fa-envelope support-btn-icon" />Contact with Support</button>
 
           

@@ -4,18 +4,16 @@ const TimeSlots = (props) => {
     return ( 
 <Tab.Container
               id="left-tabs-example"
-              defaultActiveKey={`link-${moment().format("DD")}`}
+              defaultActiveKey="link-0"
             >
               <div className="date-container my-3">
                 <Nav variant="tabs">
                   {props.onDate &&
-                    props.onDate.map((date, index) => (
+                    props.onDate.filter(date=>date.is_available).map((date, index) => (
                       <Nav.Item className="mb-2" as="a">
                         <Nav.Link
                           onSelect={() => props.selectedDate(date.date)}
-                          eventKey={`link-${moment(date.date)
-                            .utc()
-                            .format("DD")}`}
+                          eventKey={`link-${index}`}
                         >
                           <p>{moment(date.date).utc().format("ddd")}</p>
 
@@ -28,11 +26,11 @@ const TimeSlots = (props) => {
               </div>
               <Tab.Content>
                 {props.onDate  &&
-                  props.onDate .map((date, index) => (
+                  props.onDate.filter(date=>date.is_available).map((date, index) => (
                     <Tab.Pane
                       className="w-100"
                       id={moment(date.date).utc().format("DD")}
-                      eventKey={`link-${moment(date.date).utc().format("DD")}`}
+                      eventKey={`link-${index}`}
                     >
                       <Nav
                         variant="pills"

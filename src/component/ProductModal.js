@@ -169,7 +169,7 @@ let discount=details && details.inventory_list && details.inventory_list[0] && d
             </div>
             <div className="col-md-6 col-sm-6 col-12">
               <div className="single-product-details">
-                <h6 className="mt-2 mb-2">{details.description}</h6>
+                <h6 className="mt-2 mb-2">{details.name}</h6>
                 <div className="price my-2">
                   <h6 className="">
                   ৳{price} 

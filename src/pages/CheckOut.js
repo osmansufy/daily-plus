@@ -19,7 +19,6 @@ const CheckOut = (props) => {
   const token = useSelector((state) => state.auth.accessToken);
   const history = useHistory();
   const dispatch = useDispatch();
-  // const userAddressAction=(token)=>dispatch(addressAction.onUserAddress(token))
   const userInfo = useSelector((state) => state.auth.userdetails);
   const activeCart = useSelector((state) => state.auth.activeCart);
   const [loading,setloading]=useState(false)
@@ -28,7 +27,7 @@ const CheckOut = (props) => {
   const currentAddress = useSelector((state) => state.address.addressCurrent);
   const totalPrice = useSelector((state) => state.carts.totalPrice);
   const afterOrderAction = () => dispatch(actionsCart.afterOrder());
-
+  const userAddress = useSelector((state) => state.address.userAddress);
   const [smShow, setSmShow] = useState(false);
 
   const notificationsCount = (token) => dispatch(authAction.onNotificationsCount(token));
@@ -70,20 +69,26 @@ const CheckOut = (props) => {
         console.log(error);
       });
   };
-
+const onGetDeleveryLocation=()=>{
+  if (currentAddress?.address) {
+    return currentAddress
+  }
+   return userAddress[0]
+  
+}
   useEffect(() => {
     if (token == null) {
       history.push("/");
     } else {
       setInformation({
         ...information,
-        lng: currentAddress.location.lng,
-        lat: currentAddress.location.lat,
-        address: currentAddress.address,
-        title: currentAddress.title,
+        lng: onGetDeleveryLocation()?.location?.lng,
+        lat: onGetDeleveryLocation()?.location?.lat,
+        address: onGetDeleveryLocation()?.address,
+        title: onGetDeleveryLocation()?.title,
       });
 
-      getTimeSlots(currentAddress.location.lng, currentAddress.location.lat);
+      getTimeSlots(onGetDeleveryLocation()?.location?.lng, onGetDeleveryLocation()?.location?.lat);
     }
   }, []);
 
@@ -91,6 +96,10 @@ const CheckOut = (props) => {
 const onDeletePromo=()=>{
   setPromo('')
   setDiscount(0)
+  setInformation({
+    ...information,
+    promoId:""
+  })
 }
   const onMethod = (event) => {
     setInformation({
@@ -154,6 +163,7 @@ const onDeletePromo=()=>{
       })
       .then((response) => {
         console.log(response);
+        console.log('orderSend',orderSend);
         CartChange(token);
        
         setIsError("")
@@ -241,8 +251,8 @@ const sendError=()=>{
                 <i className="fa fa-map-marker" aria-hidden="true" />
               </div>
               <div className="address-right">
-                <h6>{currentAddress && currentAddress.title}</h6>
-                <p>{currentAddress && currentAddress.address}</p>
+                <h6>{ onGetDeleveryLocation()?.title}</h6>
+                <p>{onGetDeleveryLocation()?.address}</p>
               </div>
             </div>
 
@@ -305,7 +315,7 @@ const sendError=()=>{
                 Total <span className={discount? "close-text float-right":"float-right"} >BDT {totalPrice + 49}</span>
               </h6>
               {discount? <h6>
-                Total <span className="float-right">BDT{totalPrice + 49 -discount}</span>
+                Total <span className="float-right">BDT{(totalPrice + 49 -discount).toFixed(2)}</span>
               </h6>:""}
             </div>
 
@@ -357,7 +367,7 @@ const sendError=()=>{
                   />
                 </div>
                 <button className="btn btn-primary" onClick={onPlaceOrder}>
-                  Place Order BDT({discount? totalPrice + 49 -discount:totalPrice + 49})
+                  Place Order BDT({discount? (totalPrice + 49 -discount).toFixed(2):(totalPrice + 49).toFixed(2)})
                 </button>
               </form>
             </div>

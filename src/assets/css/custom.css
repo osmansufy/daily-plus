@@ -122,12 +122,7 @@ span {
 .img-size-25 {
   width: 25px;
 }
-h1,
-h2,
-h3,
-h6 {
-  /* font-weight: bold; */
-}
+
 .dropdown-item:active {
   background-color: #5ec401;
   color: #e1e1e1;
@@ -1101,4 +1096,8 @@ h5.subName {
 .brandFilterWrapper {
   max-height: 200px;
   overflow-y: auto;
+}
+section.banner_sec .carousel-item img {
+  object-fit: fill;
+  border-radius: 12px;
 }

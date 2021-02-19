@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as productActions from '../store/actions/actionProducts'
+import * as cartActions from "../store/actions/actionCart";
 import Spinner from '../container/Spinner/Spinner'
 import axios from '../axios'
 import SinglePopuler from "../component/SinglePopuler";
+import bagIcon from "../assets/img/bag_white.png";
+import tagIcon from "../assets/img/tag.png";
 import Slider from "react-slick";
+import ButtonQuantity from "../UI/Button/ButtonQtn";
 const ProductId = (props) => {
 
   
@@ -20,7 +24,12 @@ const ProductId = (props) => {
     const error=useSelector(state=>state.products.error)
     const productId = props.match.params.id;
     const [categoriProducts,setCategoriProducts]=useState([])
-
+    const bagLists = useSelector((state) => state.carts.cartProducts);
+    const onCartAdd = (item) => dispatch(cartActions.cartAction(item));
+  const onCartUpdate = (id, units) =>
+    dispatch(cartActions.updateCartUnits(id, units));
+  const onCartDel = (id, unit_quantity) =>
+    dispatch(cartActions.deleteCartProduct(id, unit_quantity));
     const getCatProducts=(id)=>{
       setCatloading(true)
       axios.get('catalogue/product/public/?category='+id)
@@ -47,117 +56,114 @@ console.log(error)
       })
 
     },[productId])
-  
-    const settings = {
-      dots: false,
-      infinite: true,
-      className: "center",
-      centerMode: true,
-      speed: 500,
-      slidesToShow: 5,
-      slidesToScroll: 1,
-      swipeToSlide: true,
-      autoplay:true,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 5,
-            slidesToScroll: 1,
-            infinite: true,
-          }
-        },
-        {
-          breakpoint: 769,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 1,
-            infinite: true,
-          }
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-            initialSlide: 2
-          }
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 1,
-            infinite: true,
-            swipeToSlide: true,
-            
-          }
-        }
-      ]
+    const isCart = (product) => {
+      return product.id === productInformation.id;
     };
- 
+    const bagItem = bagLists.find(isCart);
+    console.log(productInformation);
+    const onCartHandler = (productInformation) => {
+      onCartAdd(productInformation);
+    };
+    const onAddCartHandler = (item) => {
+      console.log(item);
+  
+      onCartUpdate({ id: item.id, count: bagItem.count + 1 });
+    };
+    const OnSubHandler = (item) => {
+      console.log(item);
+      if (bagItem.count === 1) {
+        onCartDel({ id: item.id, count: 0 });
+      } else {
+        onCartUpdate({ id: item.id, count: bagItem.count - 1 });
+      }
+    };
+    let cartButton = (
+      <a
+        id="bag"
+        onClick={() => onCartHandler(productInformation)}
+        className="btn mb-2 w-50 mx-auto add-to-bag-btn"
+      >
+        <img src={bagIcon} />
+        Add to Bag
+      </a>
+    );
+  
+    if (bagItem && bagItem.count >= 1) {
+      cartButton = (
+        <ButtonQuantity
+          id="cart"
+          subClicked={() => OnSubHandler(productInformation)}
+          addClicked={() => onAddCartHandler(productInformation)}
+        >
+          <div className="show-quantity">
+            <h6 className="m-0">{bagItem && bagItem.count}</h6>
+          </div>
+        </ButtonQuantity>
+      );
+    }
+    let price=productInformation && productInformation.inventory_list && productInformation.inventory_list[0] && productInformation.inventory_list[0]?.unit_price_final;
+    let discount=productInformation && productInformation.inventory_list && productInformation.inventory_list[0] && productInformation?.inventory_list[0]?.discount
     let content=""
     if (loading) {
         content=<Spinner />
     }else if(!loading && error==null && productInformation){
         content=<> <div className="col-md-6 col-sm-6 col-12">
         <div className="single-product-img">
-          {<img className="img-fluid" src={productInformation.image_list &&productInformation.image_list[0].image_url} alt="true" />}
+          {<img  src={productInformation.image_list &&productInformation.image_list[0].image_url} alt="true" />}
         </div>
-        <div className="gallery-img mt-4">
+        {/* <div className="gallery-img mt-4">
           <div className="gallery-img-container">
             <img className="img-fluid" src="dist/img/Rectangle2.svg" alt="true" />
           </div>
           <div className="gallery-img-container">
             <img src="dist/img/image 3.jpg" alt="true" />
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="col-md-6 col-sm-6 col-12">
         <div className="single-product-product">
-          <h3 className="mt-2 mb-2">{productInformation.description}</h3>
+          <h3 className="mt-2 mb-2 section-title">{productInformation.name}</h3>
           <div className="price">
-            <h6 className="sell-price">{productInformation.inventory_list&& productInformation.inventory_list[0].unit_price_final} <span className="regular-price">{productInformation.inventory_list && productInformation.inventory_list[0].unit_price}</span></h6>
+          <h6 className="">
+                  ৳{price} 
+                    <span className="mx-md-3 regular-price">
+                       {discount ?`৳${price+discount }`:""  }
+                    </span>
+                  </h6>
           </div>
-         {/* {
-         cartButton} */}
+         {
+         cartButton}
           <hr />
-          <div className="product-tags">
-            <div className="tag-icon">
-              {/* <img src={tagIcon} /> */}
-            </div>
-            <div className="tags">
-              <a className="btn tag-btn" >Daily Products</a>
-<a className="btn tag-btn">{productInformation.brand}</a>
-            </div>
-          </div>
-          <div className="product-info">
-           <div className="product-dt">
-
-           
-            <h5 className="mt-2">Details</h5>
-            <p>{productInformation.inventory_list && productInformation.inventory_list[0].unit_price}
-            Et quidem faciunt, ut summum bonum sit extremum et rationibus conquisitis de voluptate. Sed ut summum bonum sit id,
-            </p>
-            </div>
-           <div className="product-dt">
-
-           
-            <h5 className="mt-2 ">Ingredients</h5>
-            <p>
-            Et quidem faciunt, ut summum bonum sit extremum et rationibus conquisitis de voluptate. Sed ut summum bonum sit id,
-            </p>
-            </div>
-           <div className="product-dt">
-
-           
-            <h5 className="mt-2">More Information</h5>
-            <p>
-            Et quidem faciunt, ut summum bonum sit extremum et rationibus conquisitis de voluptate. Sed ut summum bonum sit id,
-            </p>
-            </div>
-
-          </div>
+          
+          <div className="product-tags my-2">
+                  <div className="tag-icon">
+                    <img src={tagIcon} />
+                  </div>
+                  <div className="tags">
+                    
+                    <a className="btn tag-btn">{productInformation.brand}</a>
+                   
+                  </div>
+                  
+                </div>
+        
+                <div className="product-info">
+                  <div className="product-dt">
+                    <h5 className="mt-2">Product Details</h5>
+                    <p>
+                     {productInformation?.description}
+                    </p>
+                  </div>
+                  <div className="product-dt">
+                    <h5 className="mt-2 ">Brand</h5>
+                    <p>
+                     {productInformation?.brand}
+                    </p>
+                  </div>
+                  <div className="product-dt">
+                  
+                  </div>
+                </div>
         </div>
       </div>
 </>
@@ -166,17 +172,26 @@ console.log(error)
     }
     return (  <section className="custom_page">
   <div className="container">
+    
           <div className="row">
        {content}
           </div>
-          <Slider {...settings}> 
+          <div className="row">
+            <div className="col-md-12 col-sm-12 col-12">
+              <h4 className="modal-title">Related Items</h4>
+            </div>
+          </div>
+          <div className="row">
           { catLoading ? <Spinner /> : !catLoading && categoriProducts &&  categoriProducts.filter(el=>el.id!=productInformation.id).map((product,index)=>(
-            <SinglePopuler
-            
-             data={product} key={index}/>
+             <SinglePopuler
+           
+             containerClass="mt-4 col-md-3 col-6"
+             data={product}
+             key={product.id}
+           />
        
           )) }  
-          </Slider>
+         </div>
         </div>
     </section>);
 }

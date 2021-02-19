@@ -7,14 +7,16 @@ import OtpInput from 'react-otp-input';
 const OtpForm = (props) => {
     return ( 
         <>
-        <div className="text-danger">{props.error ? "Password Is inValid" :''}</div>
+       
     
         <div className="row justify-content-center">
     
     <Image src={imgPass}   />
     
     </div>
-            <p>We need to verify you. We will send you a one time verification code. </p>
+            <p>We have sent SMS to:
+              <br/>
++{props.phone}</p>
               {/* <div className="text-danger">{props.formError ? formError : ''}</div> */}
               
 <OtpInput

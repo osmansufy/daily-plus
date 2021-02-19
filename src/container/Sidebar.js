@@ -24,7 +24,7 @@ const Sidebar=props=>{
           {/* Sidebar */}
           <div className="sidebar">
             {/* Sidebar user panel (optional) */}
-            <div className="user-panel mt-3 pb-3 mb-3 justify-content-between d-flex">
+            <div className="user-panel     align-items-center mt-3 pb-3 mb-3 justify-content-between d-flex">
               <div className="image">
                 <Link onClick={props.closed} to="/"> <img src={logo}alt="logo" /></Link>
               </div>

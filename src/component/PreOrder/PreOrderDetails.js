@@ -123,7 +123,7 @@ const PreOrderDetails = props => {
       <div className="col-md-6 col-sm-6 col-12 order-box m-2">
         <h6 className="mb-3">Scheduled</h6>
         <div className="selected-date-container">
-          <h6><i className="fa fa-calendar-check-o mr-3" /> { orderDetails.ts_delivery && moment(orderDetails.ts_delivery).utc().format('MMMM DD . YYYY ')} <span style={{marginLeft: '10px', color: '#F37A20'}}> {orderDetails.ts_delivery && moment(orderDetails.ts_delivery).utc().local().format('hh:mm A')}- {moment(orderDetails.ts_delivery).add(3,'h').utc().local().format('hh:mm A')}</span></h6>
+          <h6><i className="fa fa-calendar-check-o mr-3" /> { orderDetails.ts_delivery && moment(orderDetails.ts_delivery).utc(true).format('MMMM DD . YYYY ')} <span style={{marginLeft: '10px', color: '#F37A20'}}> {orderDetails.ts_delivery && moment(orderDetails.ts_delivery).utc().local().format('hh:mm A')}- {moment(orderDetails.ts_delivery).add(3,'h').utc().local().format('hh:mm A')}</span></h6>
           <div className="boxed-border-container mt-3">
             <div className="boxed-border1" />
             <div className="boxed-border2" />
@@ -170,7 +170,7 @@ const PreOrderDetails = props => {
         </div>
         <div className="order-note-container mt-3">
           <h6 className="mb-3">Additional Note</h6>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias, consectetur!</p>
+          <p>{orderDetails?.note ? orderDetails?.note:""}</p>
           <button className="btn btn-secondary contact-support mt-4"><i className="fa fa-envelope support-btn-icon" />Contact with Support</button>
 
           
