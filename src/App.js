@@ -17,7 +17,7 @@ import { createBrowserHistory } from "history";
 
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import CategoryPage from './pages/Category';
-
+import FourOhFour from './pages/FourOhFour'
 // import OffersPage from './pages/Offers';
 // import CheckOut from './pages/CheckOut';
 import Success from "./pages/CheckOutSuccess";
@@ -37,6 +37,11 @@ import GenieForm from "./component/Genie/GenieForm";
 // import AboutUs from './pages/About';
 import ChangePass from "./component/SignUp/ChangePass";
 import Spinner from "./container/Spinner/Spinner";
+// import Privacy from "./pages/Privacy";
+// import Tearms from "./pages/Tearms";
+
+const Tearms = React.lazy(() => import("./pages/Tearms"));
+const Privacy = React.lazy(() => import("./pages/Privacy"))
 const Home = React.lazy(() => import("./pages/Home"));
 // const CategoryPage = React.lazy(() => import("./pages/Category"));
 const SignUp = React.lazy(() => import("./pages/Signup"));
@@ -155,6 +160,8 @@ const App = (props) => {
           )}
         />
         <Route path="/location/save" exact component={AddAddress} />
+        <Route path="/privacy" exact component={Privacy} />
+        <Route path="/tearms" exact component={Tearms} />
         <Route
           path="/about"
           exact
@@ -164,6 +171,7 @@ const App = (props) => {
             </Suspense>
           )}
         />
+        <Route component={FourOhFour}/>
       </Switch>
     </Suspense>
   );

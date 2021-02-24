@@ -69,10 +69,10 @@ console.log(props);
            className="product-img"
            width="150" height="150" 
             realImage={
-              props.data?.image_list[0]?.thumbnail_image_url ?
-              props.data.image_list[0].thumbnail_image_url :
-              props.data.image_list[0].image?
-              props.data.image_list[0].image:
+              props?.data?.image_list[0]?.thumbnail_image_url ?
+              props?.data?.image_list[0]?.thumbnail_image_url :
+              props?.data?.image_list[0]?.image?
+              props?.data?.image_list[0]?.image:
               emptyImg
             
             }/>
@@ -86,7 +86,7 @@ console.log(props);
                       
                     </div>
                     <div className="available">
-                      <p>Available {moment(date).utc().format('MMM DDD.YYYY')}</p>
+                      <p>Available {moment(date).utc(true).format('MMM DD.YYYY')}</p>
                     </div>
                     <a onClick={()=>addPreOrder(props.data,token)} className="btn w-100 mt-sm-3 d-flex align-items-center add-to-bag-btn"><svg width={20} height={21} viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
    <rect width={20} height={20} transform="translate(0 0.25)" fill="none" />

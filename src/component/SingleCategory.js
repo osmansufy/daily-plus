@@ -31,15 +31,15 @@ function SingleCategory(props) {
            width="97"
            height="103"
             realImage={
-              props.data?.thumbnail_image_url
-                ? props.data.thumbnail_image_url
-                : props.data.image
-                ? props.data.image
+              props?.data?.thumbnail_image_url
+                ? props?.data?.thumbnail_image_url
+                : props?.data?.image
+                ? props?.data?.image
                 : emptyImg
             }/>
           </div>
 
-          <h6>{props.data.name}</h6>
+          <h6>{props?.data?.name}</h6>
         </div>
       </Link>
     </div>

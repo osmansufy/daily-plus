@@ -1,14 +1,18 @@
-import Axios from 'axios';
+import Axios from '../axios';
 import React, { useEffect, useState } from 'react';
 import SinglePreOrder from '../component/SinglePreOrder';
 
 function PreOrder(props) {
   const [preOrders,setPreOrders]=useState([])
 
-  const getPreOrders=async()=>{
-    Axios.get('https://api.dailyplus.store/v0/catalogue/product/public/?pre_order=1').then(response=>{
+  const getPreOrders=()=>{
+   Axios.get('catalogue/product/public/?pre_order=1')
+   .then(response=>{
       setPreOrders(response.data)
     })
+    .catch(error=>
+     { console.log("preerror",error)}
+      )
   }
   useEffect(()=>{
 getPreOrders()

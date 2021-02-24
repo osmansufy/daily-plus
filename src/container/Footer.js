@@ -35,8 +35,8 @@ function Footer(props) {
               <ul className="mt-3 p-0">
                 <li><Link to="/about"> About US</Link></li>
                 <li><a  >FAQ</a></li>
-                <li><a href="http://dailyplus.store/terms_of_service.html" target="_blank"  >Terms of Services</a></li>
-                <li><a href="http://dailyplus.store/privacy_policy.html" target="_blank"  >Privacy Policy</a></li>
+                <li><Link to="/tearms">Terms of Services</Link> </li>
+                <li><Link to="/privacy">Privacy Policy</Link></li>
               </ul>
             </div>
             </div>
