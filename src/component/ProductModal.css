@@ -74,14 +74,15 @@
         align-items: center;
         /* margin: 20px 0; */
     }
-      .custom-card {
+      
+    /* .custom-card {
         background: #F9FAFA;
         border-radius: 8px;
         display: flex;
         justify-content: center;
         padding: 0;
-        /* height: 255px; */
-    }
+
+    } */
 
   
   .single-product-details .add-to-bag-btn img {

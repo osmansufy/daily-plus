@@ -34,7 +34,7 @@ const Product = (props) => {
     return product.id === details.id;
   };
   const bagItem = bagLists.find(isCart);
-  console.log(details);
+  console.log("details",details);
   const onCartHandler = (item) => {
     onCartAdd(item);
   };
@@ -62,7 +62,7 @@ const Product = (props) => {
       Add to Bag
     </a>
   );
-
+console.log("single",props);
   if (bagItem && bagItem.count >= 1) {
     cartButton = (
       <ButtonQuantity

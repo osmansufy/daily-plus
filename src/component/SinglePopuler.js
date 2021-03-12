@@ -87,11 +87,18 @@ const SinglePopuler = (props) => {
       </ButtonQuantity>
     );
   }
+  const disCount=props.data?.inventory_list[0]?.discount
   return (
     <>
       <div className={props.containerClass}>
         <div className="product-card">
           <div className="custom-card">
+            {
+              
+              disCount ? <div className="offerDiscountTag">
+              <small className="text-white text-center">-{props.data?.inventory_list[0]?.discount}৳</small></div>:""
+            }
+            
             <a onClick={() => productHandler(props.data)}>
               {/* <img
                 width="151"

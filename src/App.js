@@ -37,6 +37,8 @@ import GenieForm from "./component/Genie/GenieForm";
 // import AboutUs from './pages/About';
 import ChangePass from "./component/SignUp/ChangePass";
 import Spinner from "./container/Spinner/Spinner";
+import AllProducts from "./pages/AllProducts";
+import AllCategories from "./pages/AllCategories";
 // import Privacy from "./pages/Privacy";
 // import Tearms from "./pages/Tearms";
 
@@ -64,9 +66,10 @@ const App = (props) => {
     <Suspense fallback={<Spinner />}>
       <Switch>
         <Route path="/" exact component={Home} />
-
+<Route path="/categories" exact component={AllCategories} />
         <Route path="/category/:id/:name"exact component={CategoryPage}
         />
+        <Route path="/products" exact component={AllProducts} />
         <Route path="/product/:id" exact 
         
         component={ProductId} />

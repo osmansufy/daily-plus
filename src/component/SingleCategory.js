@@ -8,7 +8,7 @@ import LoadingImage from "../UI/LoadingImage";
 function SingleCategory(props) {
   console.log(props);
   return (
-    <div className="mt-2 ">
+    <div className={props.containerClass}>
       <Link to={"/category/" + props.data.id + "/" + props.data.name}>
         <div className="card border-0 category-card">
           <div className="category_img">

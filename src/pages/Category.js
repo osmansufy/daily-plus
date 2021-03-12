@@ -314,7 +314,7 @@ const CategoryPage = (props) => {
                       //  clicked={()=>productHandler(item)}
                       containerClass="mt-4 col-md-3 col-6"
                       data={item}
-                      key={index}
+                      key={item.id}
                     />
                   ))
                 )}

@@ -210,8 +210,22 @@ hr {
   border-radius: 8px;
   display: flex;
   justify-content: center;
-  padding: 50px 0;
+position: relative;
   /* height: 255px; */
+}
+.offerDiscountTag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #F37A20;
+  /* width: 30px; */
+  /* height: 30px; */
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7px 5px;
 }
 .btn.add-to-bag-btn:hover svg path {
   fill: white;

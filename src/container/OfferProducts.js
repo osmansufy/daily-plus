@@ -1,24 +1,21 @@
-import React, { useEffect, useState} from 'react';
-
+import React, { useEffect, useState } from 'react';
+import axios from '../axios'
 import SinglePopuler from '../component/SinglePopuler';
-import Spinner from '../container/Spinner/Spinner'
-import * as productActions from '../store/actions/actionProducts'
-import {connect} from 'react-redux'
-
-import { Route, Router, useHistory } from 'react-router';
-import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { Link } from 'react-router-dom';
-const PopulerProducts=props =>{
-  // const [modalShow, setModalShow] = useState(false);
-  const history=useHistory()
- useEffect(() => {
-  props.onInItProducts()
-  
-    }, []);
-
-
-
+const OfferProducts = () => {
+    const [offersProducts,setOfferProducts]=useState([])
+    useEffect(()=>{
+       axios.get('catalogue/product/public/paginated/?is_offer=true')
+       .then(response=>{
+           console.log("offer",response?.data?.results);
+           setOfferProducts(response?.data?.results)
+       })
+       .catch(error=>
+        {
+            console.log(error);
+        })
+    },[])
+    
   const settings = {
     dots: false,
     infinite: true,
@@ -69,25 +66,23 @@ const PopulerProducts=props =>{
       }
     ]
   };
-return ( <>
-
+    return (
+      
 <section>
             <div className="container">
               <div className="row">
                 <div className="col-md-6 col-sm-6 col-6">
-                  <h3 className="section-title">Popular Items</h3>
+                  <h3 className="section-title">Daily Offers</h3>
                 </div>
-                <div className="col-md-6 col-sm-6 col-6">
-                  <Link to="/products">
+                {/* <div className="col-md-6 col-sm-6 col-6">
                   <button className="btn btn-padding btn-primary section-button float-right">View All Products</button>
-                  </Link>
-                  <Link  className="mobile-link" to="/products">See All</Link>
-                </div>
+                  <a className="mobile-link">See All</a>
+                </div> */}
               </div>
               <Slider {...settings}>
 
                 
-              {props.productLists && props.productLists.map((item) => (
+              {offersProducts && offersProducts.map((item) => (
        
 
               
@@ -103,28 +98,7 @@ return ( <>
             </div>
             
           </section>
-        
-    
-        
-         
+    );
+};
 
-          </>
-        
-)
-        
-}
-const mapStateToProps=state=>{
-  return {
-    productLists:state.products.products,
-    
-  }
-}
-
-const mapDispatchToProps=dispatch=>{
-  return{
-    onInItProducts:()=>dispatch(productActions.initFetchProducts()),
-    onProductDetails:(details)=>dispatch(productActions.productDetails(details))
-  }
-}
-
-export default connect(mapStateToProps,mapDispatchToProps)(PopulerProducts)
+export default OfferProducts;

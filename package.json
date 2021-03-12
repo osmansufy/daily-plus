@@ -29,7 +29,8 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "slick-carousel": "^1.8.1",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "worker-loader": "^3.0.8"
   },
   "scripts": {
     "start": "PORT=4326 react-scripts start",

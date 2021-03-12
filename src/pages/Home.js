@@ -4,6 +4,7 @@ import React, { useEffect, useState ,Suspense} from 'react'
 
 
 import Banner from '../container/Banner';
+import OfferProducts from '../container/OfferProducts';
 // import PopulerProducts from '../container/PopulerProducts';
 import PreOrders from '../container/PreOrder'
 import Spinner from '../container/Spinner/Spinner'
@@ -18,7 +19,7 @@ console.log(props)
 
 
           {<Banner />}
-     
+     <OfferProducts />
          {<Suspense fallback={<h5>Loading...</h5>}><Category/></Suspense>}
          
          {<Suspense fallback={<h5>Loading...</h5>}><PopulerProducts /></Suspense>}

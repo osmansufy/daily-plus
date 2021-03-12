@@ -5,6 +5,7 @@ import SingleCategory from '../component/SingleCategory';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import { Link } from 'react-router-dom';
 class Category extends Component {
     state={
         categories:[]
@@ -72,7 +73,7 @@ class Category extends Component {
       };
       
         const cats =this.state.categories.map((item,index)=>{
-return <SingleCategory data={item} key={index} />
+return <SingleCategory data={item} key={index} containerClass="mt-4"/>
 
 
         });
@@ -83,8 +84,11 @@ return <SingleCategory data={item} key={index} />
                   <h3 className="section-title">Shop by Categories</h3>
                 </div>
                 <div className="col-md-6 col-sm-6 col-6">
-                  <button className="btn btn-padding section-button btn-primary float-right">View All Category</button>
-                  <a className="mobile-link">See All</a>
+                  <Link to="/categories">
+                  <button  className="btn btn-padding section-button btn-primary float-right">View All Category</button>
+                  </Link>
+                  <Link to="/categories" className="mobile-link">See All</Link>
+               
                 </div>
               </div>
              

@@ -10,7 +10,8 @@ import { Redirect, useHistory } from 'react-router';
 
 // import 'mapbox-gl/dist/mapbox-gl.css'
 // import './Map.css'
-
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 const config = require('../../config.json')
 
 mapboxgl.accessToken =config.MAPBOX_ACCESS_TOKEN;
@@ -97,7 +98,7 @@ const history=useHistory()
    
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: "http://tilesv3.dingi.live/styles/Combined-Bangla/style.json",
+      style: config.DINGI_MAP_ENG,
       center: [lng, lat],
       zoom: zoom,
     });
