@@ -1,7 +1,8 @@
 // import './assets/css/adminlte.min.css'
 
 // import './assets/css/animate.css'
-
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./assets/css/style.css";
@@ -39,8 +40,8 @@ import ChangePass from "./component/SignUp/ChangePass";
 import Spinner from "./container/Spinner/Spinner";
 import AllProducts from "./pages/AllProducts";
 import AllCategories from "./pages/AllCategories";
-// import Privacy from "./pages/Privacy";
-// import Tearms from "./pages/Tearms";
+import Products from "./pages/Products";
+
 
 const Tearms = React.lazy(() => import("./pages/Tearms"));
 const Privacy = React.lazy(() => import("./pages/Privacy"))
@@ -69,7 +70,11 @@ const App = (props) => {
 <Route path="/categories" exact component={AllCategories} />
         <Route path="/category/:id/:name"exact component={CategoryPage}
         />
-        <Route path="/products" exact component={AllProducts} />
+        <Route path="/products" exact
+        //  component={AllProducts} 
+        component={Products}
+         
+         />
         <Route path="/product/:id" exact 
         
         component={ProductId} />

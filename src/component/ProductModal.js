@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import "./ProductModal.css";
 import bagIcon from "../assets/img/bag_white.png";
 import tagIcon from "../assets/img/tag.png";
-import * as productActions from "../store/actions/actionProducts";
+import "slick-carousel/slick/slick-theme.css";
 import * as cartActions from "../store/actions/actionCart";
 import SinglePopuler from "./SinglePopuler";
 import ButtonQuantity from "../UI/Button/ButtonQtn";
