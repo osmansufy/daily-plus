@@ -1,5 +1,5 @@
 import React, { lazy, useCallback, useEffect, useState } from "react";
-
+import "slick-carousel/slick/slick-theme.css";
 import { connect, useDispatch } from "react-redux";
 import * as cartActions from "../store/actions/actionCart";
 import * as productActions from "../store/actions/actionProducts";
@@ -87,7 +87,7 @@ const SinglePopuler = (props) => {
       </ButtonQuantity>
     );
   }
-  const disCount=props.data?.inventory_list[0]?.discount
+  const disCount=props.data?.inventory_list[0].discount
   return (
     <>
       <div className={props.containerClass}>

@@ -6,7 +6,6 @@ import * as productActions from '../store/actions/actionProducts'
 import {connect} from 'react-redux'
 
 import { Route, Router, useHistory } from 'react-router';
-import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { Link } from 'react-router-dom';
 const PopulerProducts=props =>{
