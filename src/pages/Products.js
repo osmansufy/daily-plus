@@ -3,8 +3,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react'
 import SinglePopuler from '../component/SinglePopuler'
 import { Spinner } from 'react-bootstrap';
 
-// import useProductsLoad from '../component/UseProductsLoad'
-const useProductsLoad = React.lazy(() => import('../component/UseProductsLoad'));
+
 export default function Products() {
 
   const [pageNumber, setPageNumber] = useState(0)
@@ -17,7 +16,7 @@ export default function Products() {
     setLoading(true)
     setError(false)
 
-    axios.get(`catalogue/product/public/paginated/?offset=${pageNumber}&limit=10`).then(response => {
+    axios.get(`catalogue/product/public/paginated/?offset=${pageNumber}&limit=12`).then(response => {
       setAllProducts([...allproducts,...response?.data?.results])
       setHasMore(response.data.next)
       setLoading(false)
@@ -37,7 +36,7 @@ export default function Products() {
     if (observer.current) observer.current.disconnect()
     observer.current = new IntersectionObserver(entries => {
       if (entries?.[0].isIntersecting) {
-        setPageNumber(pageNumber + 1)
+        setPageNumber(pageNumber + 12)
         console.log("pageNumber",node)
 
       }
@@ -50,7 +49,8 @@ export default function Products() {
 console.log('products',pageNumber)
 
   return (
-    <div className="container">
+    <div className="container mt-5">
+     <h3 className="section-title">All Products</h3>
 <div className="row">
       { allproducts && allproducts.map((product, index) => {
         if (allproducts.length === index + 1) {
@@ -58,7 +58,7 @@ console.log('products',pageNumber)
             return   <div 
             className="col-md-3 col-6"  
              ref={lastProductElementRef}
-            key={index}
+            key={product.id}
             >
 
               <SinglePopuler
@@ -70,7 +70,7 @@ console.log('products',pageNumber)
         } else {
             // return <div  key={product.id}>{product.name}</div>
             return <div    
-            key={index}
+            key={product.id}
             className="col-md-3 col-6" 
             >
 

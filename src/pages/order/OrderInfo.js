@@ -6,6 +6,7 @@ import Spinner from "../../container/Spinner/Spinner";
 import {Modal,Button,Container} from 'react-bootstrap'
 import successImg from '../../assets/img/success.png'
 import payImg from '../../assets/img/payment.png'
+import OnlinePayment from '../../component/CommonFunctions/OnlinePayment'
 import moment from 'moment'
 const OrderInfo = (props) => {
   const token=useSelector(state=>state.auth.accessToken)
@@ -54,7 +55,7 @@ const OrderInfo = (props) => {
     .catch(error=>{
       console.log(error)
       setLoading(false)
-      setError(error.response)
+      setError(error?.response)
     })
 
   },[orderId])
@@ -82,7 +83,25 @@ const OrderInfo = (props) => {
     })
     handleClose()
   }
- 
+  const onLinePayment=()=>{
+    OnlinePayment(token,orderDetails.final_bill,orderDetails.id)
+    // axios.post('billing/ssl/payment/order/create/',
+    //         {
+    //             amount: orderDetails.final_bill,
+    //             order: orderDetails.id,
+    //               }, {
+    //                 headers:{
+    //                   Authorization: `JWT ${token}`,
+    //                 }
+    //               }
+    //     )
+    //     .then(res=>{
+    //         window.location.replace(res.data.GatewayPageURL)
+    //     })
+    //     .catch(err=>{
+    //         console.log(err)
+    //     })
+  }
   if (loading ) {
     container=<Spinner /> 
   }else if( !loading && error) {
@@ -129,6 +148,11 @@ const OrderInfo = (props) => {
             <img src={payImg} alt="true" className="mr-3" />
             <h6>{orderDetails.status==1? "Payment on Delevery" :"Online Payment" } </h6>
           </div>
+          {orderDetails.status==1? 
+            <a onClick={onLinePayment} className="btn btn-primary w-100 mt-4 mx-auto">Pay Online</a>
+            :""
+          }
+            
         </div>
       </div>
       <div className="col-md-6 col-sm-6 col-12 order-box m-2">

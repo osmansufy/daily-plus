@@ -6,7 +6,7 @@ import Spinner from "../../container/Spinner/Spinner";
 import {Modal,Button,Container} from 'react-bootstrap'
 import payImg from '../../assets/img/payment.png'
 import moment from 'moment'
-
+import OnLinePaymnt from '../CommonFunctions/OnlinePayment'
 const PreOrderDetails = props => {
   
   const statusReducer=(currStatus,action)=>{
@@ -88,22 +88,23 @@ const PreOrderDetails = props => {
   },[preOrderId])
 
   const onLinePayment=()=>{
-    axios.post('billing/ssl/payment/order/create/',
-            {
-                amount: orderDetails.final_bill,
-                preorder: orderDetails.id,
-                  }, {
-                    headers:{
-                      Authorization: `JWT ${token}`,
-                    }
-                  }
-        )
-        .then(res=>{
-            window.location.replace(res.data.GatewayPageURL)
-        })
-        .catch(err=>{
-            console.log(err)
-        })
+    OnLinePaymnt(token,orderDetails.final_bill,"",orderDetails.id)
+    // axios.post('billing/ssl/payment/order/create/',
+    //         {
+    //             amount: orderDetails.final_bill,
+    //             preorder: orderDetails.id,
+    //               }, {
+    //                 headers:{
+    //                   Authorization: `JWT ${token}`,
+    //                 }
+    //               }
+    //     )
+    //     .then(res=>{
+    //         window.location.replace(res.data.GatewayPageURL)
+    //     })
+    //     .catch(err=>{
+    //         console.log(err)
+    //     })
   }
 
   let container=""; 

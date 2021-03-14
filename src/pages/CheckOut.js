@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import classes from "./CheckOut.Module.css";
 import { Redirect, useHistory, withRouter } from "react-router-dom";
 import * as authAction from "../store/actions/actionAuth";
-import * as addressAction from "../store/actions/actionAddress";
+import OnlinePayment from '../component/CommonFunctions/OnlinePayment'
 import * as actionsCart from "../store/actions/actionCart";
 import offerIcon from "../assets/img/offer_24px.png";
 import SuccessModal from "../UI/Modal/SuccessModal";
@@ -168,9 +168,11 @@ const onDeletePromo=()=>{
        
         setIsError("")
         notificationsCount(token)
+        onNotificationsAction(token)
         if (information.paymentMethod == 2) {
           afterOrderAction();
-          onlinePayment(response.data.final_bill,response.data.id)
+          OnlinePayment(token,response.data.final_bill,response.data.id)
+          // onlinePayment(response.data.final_bill,response.data.id)
         } else {
           setloading(false)
         }
