@@ -10,6 +10,7 @@ import SuccessModal from './Modal/SuccessModal';
 import {Button} from 'react-bootstrap'
 import * as actionsCart from "../store/actions/actionCart";
 import * as actionsProducts from "../store/actions/actionProducts";
+import ErrorToast from './Toasts/Toast';
 const MyBag=(props)=> {
 console.log(props)
 
@@ -17,6 +18,7 @@ console.log(props)
   const history=useHistory()
   const [smShow, setSmShow] = useState(false);
   const [isError,setIsError]=useState('')
+  const [showError, setShowError] = useState(false);
   const onAfterOrderProduct=()=>dispatch(actionsProducts.afterOrderProduct())
   const isSignUp=useSelector(state=>state.auth.accessToken)
   const totalPrice = useSelector((state) => state.carts.totalPrice);
@@ -57,7 +59,13 @@ carts.push({
 })
    })
    console.log(carts)
-   
+   const sendError=()=>{
+    setShowError(true)
+    setTimeout(()=>{
+      setShowError(false)
+      setIsError('')
+    },4000)
+  }
  
    if (isSignUp && props.bagLists.length>0) {
     
@@ -89,6 +97,8 @@ carts.push({
    }else{
     setIsError("Please SignUp before Order")
      props.history.push('/signup')
+     props.closed()
+     sendError()
    }
    
  }
@@ -196,6 +206,7 @@ if(item.count===1){
       <Button onClick={onAddress}  className="w-100 mt-3 d-flex align-items-center" variant="primary"><i className="fas fa-arrow-left"></i><span className="flex-grow-1"> Add Address </span></Button>
       
       </SuccessModal>
+      <ErrorToast showA={showError}><p>{isError}</p></ErrorToast>
         </>
     );
 }

@@ -7,6 +7,7 @@ import {Modal,Button,Container} from 'react-bootstrap'
 import payImg from '../../assets/img/payment.png'
 import moment from 'moment'
 import OnLinePaymnt from '../CommonFunctions/OnlinePayment'
+import { Link } from "react-router-dom";
 const PreOrderDetails = props => {
   
   const statusReducer=(currStatus,action)=>{
@@ -134,7 +135,7 @@ const PreOrderDetails = props => {
         </div>
         <p className="mt-3 mb-3">Your Order is {status}</p>
         <button className="btn track-order-btn"> Track Order</button>
-        <button className="btn view-all-product-btn">View All Products</button>
+        <Link to="/products" className="btn view-all-product-btn">View All Products</Link>
         {/* <button className="btn btn-primary add-more-btn">Add More Product</button> */}
         <div className="delivery-address mt-4">
           <h6>Delivery Address</h6>

@@ -18,9 +18,11 @@ function Footer(props) {
                 <img src={logo} alt="logo" className="img-fluid" />
               </div>
               <div className="social justify-content-sm-start justify-content-center mt-4">
-                <div className="box">
+               <Link to={{pathname:`https://www.facebook.com/dailyplus.store`}} target="_blank">
+               <div className="box">
                   <i className="fa fa-facebook" />
                 </div>
+               </Link> 
                 <div className="box">
                   <i className="fa fa-twitter" />
                 </div>
@@ -48,7 +50,7 @@ function Footer(props) {
               <ul className="mt-3 p-0">
                 <li><a  href="tel:+8809638111444" ><i className="fa fa-phone pr-3" />+8809638111444</a></li>
                 <li><a href="mailto:customers@dailyplus.store" ><i className="fa fa-envelope pr-2" />customers@dailyplus.store</a></li>
-                <li><a><i className="fab fa-facebook-messenger pr-2"></i>Messenger
+                <li><a href="https://www.facebook.com/messages/t/103441371445639" target="_blank"><i className="fab fa-facebook-messenger pr-2"></i>Messenger
                 </a>
                 </li>
                 <li><a><i className="fa fa-map-marker pr-3" />Floor 4, Wakil Tower</a></li>

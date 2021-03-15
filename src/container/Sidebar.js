@@ -49,9 +49,9 @@ const Sidebar=props=>{
                     </p>
                    </div>
                    
-                    <bold>
+                    <b>
                       <i className="fas fa-angle-right ms-auto p-2 w-100" />
-                      </bold>
+                      </b>
                   
                   </Link>
                  
