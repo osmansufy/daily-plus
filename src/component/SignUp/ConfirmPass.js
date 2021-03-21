@@ -11,7 +11,8 @@ import axios from 'axios'
 const ConfimPasswordForm = (props) => {
 
   const [formError,setFormError]=useState()
-  const [showPss,setshowPass]=useState(false)
+  const [showPass,setshowPass]=useState(false)
+  const [showConfirmPass,setShowConfirmPass]=useState(false)
   console.log(props)
   const checkValidity = () => {
   
@@ -49,8 +50,14 @@ const ConfimPasswordForm = (props) => {
  
 
 
-  const onTogglePass=()=>{
-setshowPass(!showPss)
+  const onTogglePass=(e)=>{
+    console.log(e.target) 
+    console.dir(e.target) 
+setshowPass(!showPass)
+  }
+  const onToggleConfirmPass=(e)=>{
+    
+    setShowConfirmPass(!showConfirmPass)
   }
   console.log(formError)
     return ( <>
@@ -74,7 +81,7 @@ setshowPass(!showPss)
               <input
                placeholder="password"
               
-               type="password"
+               type={showPass ? "text" :"password" }
                value={props.value1}
      
                onChange={props.change1}
@@ -82,23 +89,38 @@ setshowPass(!showPss)
                className="border-0 form-control"
                id="inputEmail" />
               <label for="inputEmail">Password</label>
-              <span className="input-group-text border-0 inBR"><img src={visibility} /></span>
+              <span className="input-group-text border-0 inBR" onClick={onTogglePass}>
+                {/* <img src={visibility} /> */}
+                {
+                  showPass?
+                  <i class="fas fa-eye"></i>
+                  : <i class="fas fa-eye-slash"></i>
+                }
+                </span>
             </div>
             
 
             <div className="form-label-group mb-3 input-group">
-                <span className="input-group-text border-0 input-start"  id="inputEmail"> <img src={locksvg} /></span>
+                <span className="input-group-text border-0 input-start"  id="inputEmail"> 
+                <img src={locksvg} />
+                </span>
               <input
-               
                placeholder="Confirm password"
-               type={showPss ? "text" :"password" }
+               type={showConfirmPass ? "text" :"password" }
               value={props.value2}
      
                onChange={props.change2}
                className="border-0 form-control"
                id="inputEmail" />
               <label for="inputEmail">Confirm Password</label>
-              <span className="input-group-text border-0 inBR " onClick={onTogglePass}><img src={visibility} /></span>
+              <span className="input-group-text border-0 inBR " id="confirmPassword" onClick={onToggleConfirmPass}>
+                {/* <img src={visibility} /> */}
+                {
+                  showConfirmPass?
+                  <i class="fas fa-eye"></i>
+                  : <i class="fas fa-eye-slash"></i>
+                }
+                </span>
             </div>
           {/* <div className="text-danger">{props.formError ? formError : ''}</div> */}
 

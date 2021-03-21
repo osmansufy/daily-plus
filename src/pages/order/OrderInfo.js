@@ -17,6 +17,8 @@ const OrderInfo = (props) => {
   const [orderStatus,setOrderStatus]=useState()
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true)
+  const [showdProducts,setShowdProducts]=useState(false)
+  const [showTracks,setShowTracks]=useState(false)
   const history= useHistory()
   const orderId=history.location.state.id
  console.log(history)
@@ -127,8 +129,19 @@ const OrderInfo = (props) => {
           </div>
         </div>
         <p className="mt-3 mb-3">Your Order is {orderStatus}</p>
-        <button className="btn track-order-btn"> Track Order</button>
-        <button className="btn view-all-product-btn">View All Products</button>
+        <button onClick={()=>setShowTracks(!showTracks)} className="btn track-order-btn"> Track Order</button>
+        <div className={showTracks? "d-block": "d-none"}>
+          {orderDetails?.events.map(event=>(
+            <div className="orderEvent">
+            
+              <h5>{event.title}</h5>
+              <small>{moment(event.ts_updated).utc(true).format('MMMM DD . YYYY h:mm A ')}</small>
+            </div>
+          ))
+
+          }
+        </div>
+        <button onClick={()=>setShowdProducts(true)} className="btn view-all-product-btn">View All Products</button>
         {/* <button className="btn btn-primary add-more-btn">Add More Product</button> */}
         <div className="delivery-address mt-4">
           <h6>Delivery Address</h6>
@@ -167,7 +180,7 @@ const OrderInfo = (props) => {
         <div className="order-note-container mt-3">
           <h6 className="mb-3">Additional Note</h6>
           <p>{orderDetails?.note ? orderDetails?.note:""}</p>
-          <button className="btn btn-secondary contact-support mt-4"><i className="fa fa-envelope support-btn-icon" />Contact with Support</button>
+          <a href="https://www.facebook.com/messages/t/103441371445639" target="_blank" className="btn btn-secondary contact-support mt-4"><i className="fa fa-envelope support-btn-icon" />Contact with Support</a>
 
           
         {orderDetails.status!=6?  <a onClick={handleShow} className="w-100 row justify-content-center mt-4 text-danger">Cancel Order</a> : ""} 
@@ -193,6 +206,36 @@ const OrderInfo = (props) => {
           </Button>
        <Button variant="secondary" onClick={()=>onCancelOrder(orderDetails.id)}>Yse</Button>
         </Modal.Footer>
+      </Modal>
+      <Modal show={showdProducts} onHide={()=>setShowdProducts(false)}>
+        <Modal.Header closeButton>
+
+        </Modal.Header>
+        <Modal.Body  >
+{
+  orderDetails?.cart_items?.map(item=>(
+    <div className="row ">
+      <div className="col-3">
+      <img src={item?.product_details?.image_url} height='50' alt=""/>
+      </div>
+     <div className="col-7">
+     <div className="d-flex flex-column">
+      <p>{item?.product_details?.name}</p>
+      <p className="my-3">{item?.total_price}</p>
+      </div>
+     </div>
+    <div className="col-2">
+    <div className="bg-light rounded">
+       <span className="p-3">
+         {item?.item_count}Pcs
+       </span>
+     </div>
+    </div>
+   
+    </div>
+  ))
+}
+        </Modal.Body>
       </Modal>
         </div>
       </div>

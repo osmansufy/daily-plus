@@ -1,390 +1,461 @@
-import { useEffect, useReducer, useRef, useState } from "react";
-import {Modal,Button,InputGroup,FormControl,Row,Container,Image,Col, Form} from 'react-bootstrap'
-import firebase from '../../src/firebaseConfig'
-import imgPhone from '../assets/img/mobile.png'
-import imgCammera from '../assets/img/cammera.png'
-import imgPass from '../assets/img/password.png'
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
-import OtpInput from 'react-otp-input';
-import account_icon from '../assets/img/account_circle_24px.png'
-import lockicon from '../assets/img/lock.png'
-import {Redirect} from 'react-router-dom'
-import {checkValidity} from '../utility/validity'
-import axios from "axios";
+import firebase from "../../src/firebaseConfig";
+import { useReducer, useState } from "react";
+import { Container, Modal } from "react-bootstrap";
+import ConfimPasswordForm from "../component/SignUp/ConfirmPass";
+import NameForm from "../component/SignUp/NameForm";
+import OtpForm from "../component/SignUp/OtpForm";
+import PasswordForm from "../component/SignUp/passwordForm";
+import PhoneForm from "../component/SignUp/PhoneForm";
 import { useDispatch, useSelector } from "react-redux";
-import * as authAction from '../store/actions/actionAuth'
-import InputField from "../component/FormField/InputField";
-import InputPhone from "../component/FormField/PhoneInput";
-const SignUp = () => {
- const [userInfo,setUserInfo]=useState({
-   
-     phone:'',
-     fullName:'',
-     email:'',
-     password:'',
-     confirmPassword:'',
-     accessToken:''
-   
- })
+import * as authAction from "../store/actions/actionAuth";
+import Spinner from '../container/Spinner/Spinner'
+import { Redirect } from "react-router-dom";
+import axios from "axios";
+import EmailForm from "../component/SignUp/EmailForm";
+const Signup = () => {
+  const dispatch = useDispatch();
+  const isAuth = useSelector((state) => state.auth.accessToken);
+  const isloading = useSelector((state) => state.auth.loading);
+  const isError = useSelector((state) => state.auth.error);
+  const [loading,setloading]=useState(false)
+  const loginAction = (userdetails) =>
+    dispatch(authAction.userLoginAction(userdetails));
+  const SignIninAction = (userdetails) =>
+    dispatch(authAction.userSignInAction(userdetails));
+  const [inputerror, setInputError] = useState("");
 
- console.log(userInfo)
- const dispatch=useDispatch()
-const isAuth=useSelector(state=>state.auth.accessToken)
-const isError=useSelector(state=>state.auth.error)
- const loginAction=(userdetails)=>dispatch(authAction.userLoginAction(userdetails))
- const [passShow,setPassShow]=useState(false)
- const [otp,setOtp]=useState(null)
- const [sendOtp,setSendOtp]=useState()
- const [formError,setFormError]=useState()
- const [formValid,setFormValid]=useState(true)
+  const formType = {
+    PHONE: "PHONE",
+    OTP: "OTP",
+    SEND_OTP: "SEND_OTP",
+    PASSWORD: "PASSWORD",
+    EMAIL: "EMAIL",
+    NAME: "NAME",
+    CONFIRM_PASSWORD: "CONFIRM_PASSWORD",
+    CHANGE_INPUT: "CHANGE_INPUT",
+    ACCESS_TOKEN: "ACCESS_TOKEN",
+    CHANGE_OTP: "CHANGE_OTP",
+    FORGET_PASS: "FORGET_PASS",
+  };
 
- const [form,setForm]=useState('')
-const setupRecaptcha=()=>{
-  window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha_container', {
-    'size': 'invisible',
-    'callback': function(response) {
-      // reCAPTCHA solved, allow signInWithPhoneNumber.
-      onSignInSubmit();
-      console.log(response)
+  const initialState = {
+    userInfo: {
+      phone: "",
+      fullName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      accessToken: "",
+    },
+    otp: "",
+    confirmOtp: "",
+    forgetPass: false,
+    form: formType.PHONE,
+  };
+
+  const formReducer = (cuurentState, action) => {
+    switch (action.type) {
+      case formType.PHONE:
+        return {
+          ...cuurentState,
+          form: action.form,
+        };
+      case formType.PASSWORD:
+        return {
+          ...cuurentState,
+          form: action.form,
+        };
+      case formType.CONFIRM_PASSWORD:
+        return {
+          ...cuurentState,
+          form: action.form,
+        };
+      case formType.NAME:
+        return {
+          ...cuurentState,
+
+          form: action.form,
+        };
+      case formType.EMAIL:
+        return {
+          ...cuurentState,
+
+          form: action.form,
+        };
+      case formType.SEND_OTP:
+        return {
+          ...cuurentState,
+          confirmOtp: action.confirmOtp,
+          form: action.form,
+        };
+      case formType.OTP:
+        return {
+          ...cuurentState,
+          form: action.form,
+        };
+      case formType.ACCESS_TOKEN:
+        return {
+          ...cuurentState,
+          userInfo: {
+            ...cuurentState.userInfo,
+            accessToken: action.accessToken,
+          },
+        };
+      case formType.FORGET_PASS:
+        return {
+          ...cuurentState,
+          forgetPass: true,
+        };
+      case formType.CHANGE_INPUT:
+        return {
+          ...cuurentState,
+          userInfo: {
+            ...cuurentState.userInfo,
+            [action.field]: action.value,
+          },
+        };
+      case formType.CHANGE_OTP:
+        return { ...cuurentState, otp: action.otp };
+      default:
+        throw new Error("Should not be reached!");
     }
-  });
-  
- }
- const validity=(value)=>{
-  if (value.match(/12345/)) {
-    return 'Invalid value: '+value,
-    setFormValid(false)
-  } 
-  else if (value.match(/1234/)) {
-    // return false;
-    setFormValid(false)
-  } 
-  else if (value=="") {
-    return false;
-    setFormValid(false)
-  } 
-  else {
-    return true;
-    setFormValid(true)
-  }
-}
-const validPass=()=>{
+  };
 
-  let isValid = true;
-  let errors=""
-  if (!userInfo.password) {
-
-    isValid = false;
-
-    errors= "Please enter your password.";
-
-  }
+  const [formState, formDispatch] = useReducer(formReducer, initialState);
+  const setupRecaptcha = () => {
 
 
-
-  if (!userInfo.confirmPassword) {
-
-    isValid = false;
-
-    errors = "Please enter your confirm password.";
-
-  }
-
-
-
-  if (typeof userInfo.password !== "undefined" && typeof userInfo.confirmPassword !== "undefined") {
-
-      
-
-    if (userInfo.password != userInfo.confirmPassword) {
-
-      isValid = false;
-
-      errors = "Passwords don't match.";
-
-    }
-
-  } 
-  setFormError(errors)
-  return isValid
-}
-
-    const passToggle=()=>{
-        setPassShow(!passShow)
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha_container', {
+      'size': 'invisible',
+      'callback': (response) => {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+        onSignInSubmit();
       }
+    });
 
-const newUserSubmit=()=>{
-  axios.post('https://api.dailyplus.store/v0/user/signup/',{
-    'access_token':userInfo.accessToken,
-    'display_name':userInfo.fullName,
-    'email':userInfo.email,
-    'password':userInfo.password
-  }).then(response=>{
-    console.log(response)
-  }).catch(error=>{
-    console.log(error)
-  })
-}
-const onPassSubmit=()=>{
-  
-if (validPass()) {
-  console.log(userInfo)
-  newUserSubmit()
-}
+  };
 
+  const onSignInSubmit = () => {
+    const formData = new FormData();
 
-}
+    formData.append("phone", `+${formState.userInfo.phone}`);
+    setloading(true)
+    axios.post("https://api.dailyplus.store/v0/user/check-number/", formData)
+      .then((response) => {
+        setloading(false)
+        if (response.status == 200) {
+          formDispatch({ type: formType.PHONE, form: formType.PASSWORD });
+          console.log(response);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        
+        setupRecaptcha();
+        var phoneNumber = "+" + formState.userInfo.phone;
+        console.log(phoneNumber);
+        setloading(false)
+        var appVerifier = window.recaptchaVerifier;
+        firebase
+          .auth()
+          .signInWithPhoneNumber(phoneNumber, appVerifier)
+          .then(function (confirmationResult) {
+            // SMS sent. Prompt user to type the code from the message, then sign the
+            // user in with confirmationResult.confirm(code).
+            window.confirmationResult = confirmationResult;
+            
+            formDispatch({
+              type: formType.SEND_OTP,
+              confirmOtp: confirmationResult,
+              form: formType.OTP,
+            });
+            console.log(confirmationResult);
+          })
+          .catch(function (error) {
+            // Error; SMS not sent
+            // ...
+            
+            console.log(error);
+          });
+      });
+  };
 
- const onSignInSubmit=()=>{
+  const onOtpInSubmit = () => {
+    var code = formState.otp;
 
-axios.post('https://api.dailyplus.store/v0/user/check-number/',{
-  "phone":"+"+userInfo.phone
-}).then(response=>{
+    // var credential = firebase.auth.PhoneAuthProvider.credential(otp.verificationId, code)
 
+    // console.log(credential)
 
-  if (response.status==200) {
-    document.querySelector('.logPassField').style.display='flex'
-    setForm('logPass')
-    console.log(response)
-  }else{
-setupRecaptcha()
-var phoneNumber = '+'+userInfo.phone;
-console.log(phoneNumber)
+    formState.confirmOtp
+      .confirm(code)
+      .then(function (result) {
+        // User signed in successfully.
+        var user = result.user;
+        console.log(user.idToken);
 
-var appVerifier = window.recaptchaVerifier;
-firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
-  .then(function (confirmationResult) {
-    // SMS sent. Prompt user to type the code from the message, then sign the
-    // user in with confirmationResult.confirm(code).
-    window.confirmationResult = confirmationResult;
-    setOtp(confirmationResult) 
-   
-    console.log(confirmationResult)
-    setForm('otp') 
-    document.querySelector('.otpField').style.display='flex'
-  }).catch(function (error) {
-    // Error; SMS not sent
-    // ...
+        const token = user
+          .getIdToken()
+          .then((response) => {
+            console.log(response);
+            formDispatch({
+              type: formType.ACCESS_TOKEN,
+              accessToken: response,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        console.log(token);
+        if (formState.forgetPass) {
+          formDispatch({ type: formType.OTP, form: formType.CONFIRM_PASSWORD });
+        } else {
+          formDispatch({ type: formType.OTP, form: formType.NAME });
+        }
 
-    setFormError(error.message)
-  });
-  }
-}).catch(error=>{
-  console.log(error)
- 
-})
+        // ...
+      })
+      .catch(function (error) {
+        // User couldn't sign in (bad verification code?)
+        // ...
+        formDispatch({ type: formType.OTP, form: formType.OTP });
+      });
+  };
+  const oldUserSubmit = () => {
+    const details = {
+      phone: "+" + formState.userInfo.phone,
+      password: formState.userInfo.password,
+    };
 
- 
-   
- }
-
- const onOtpInSubmit=()=>{
-  
-
-  var code = sendOtp;
-
-// var credential = firebase.auth.PhoneAuthProvider.credential(otp.verificationId, code)
-
-// console.log(credential)
-
-otp.confirm(code).then(function (result) {
-  // User signed in successfully.
-  var user = result.user;
-  console.log(user.idToken)
- 
- const token=user.getIdToken().then(response=>{
-   console.log(response)
-   setUserInfo({
-     ...userInfo,
-     accessToken:response
-   })
- }).catch(error=>{
-   console.log(error)
- })
- console.log(token)
- 
-  setForm('name') 
-  document.querySelector('.nameField').style.display='flex'
-
-  // ...
-}).catch(function (error) {
-  // User couldn't sign in (bad verification code?)
-  // ...
-  console.log(error.response)
-  document.querySelector('.otpField').style.display='flex'
-});
-
-}
-const handleChange=(event)=> {
-setUserInfo({
-  ...userInfo,
-    [event.target.name] :event.target.value
-
-
-  });
-
-}
-
-
-const otpHandleChange=(sendOtp)=>{
-  setSendOtp(sendOtp)
-}
- 
-
-
-
-const allhidden=()=>{
-const allInputs= document.querySelectorAll('.signupInput')
-allInputs.forEach(input=>{
-  input.style.display='none'
-})
-
-}
-
-const oldUserSubmit=()=>{
-  
-  const details={
-    'phone':"+"+userInfo.phone,
-    'password':userInfo.password
-  }
-  
-  loginAction(details)
-
-}
-let formImage=<Image src={form=='phone'? imgPhone 
-: form=='logPass' ? imgPass : imgCammera }   />
-
-useEffect(()=>{
- 
-    allhidden()
- setForm('phone')
-
-document.querySelector('.phoneField').style.display='flex'
-},[])
-
-
-const onNextSubmit=()=>{
-  allhidden()
-  
-if (form=='phone') {
-  console.log(form)
-  onSignInSubmit()
-}
-else if (form=='otp') {
-  console.log(form)
-  onOtpInSubmit()
-}
-else if (form=='name') {
-  console.log(form)
- 
-  setForm('email')
-     document.querySelector('.emailField').style.display="flex"
+    loginAction(details);
     
-}
-else if (form=='email') {
-  console.log(form)
- 
-  setForm('pass')
-     document.querySelector('.passField').style.display="flex"
-     document.querySelector('.confirmPassField').style.display="flex"
-}
-else if (form=='pass') {
-  onPassSubmit()
-}
-else if (form=='logPass') {
- 
-  oldUserSubmit()
- if (isError!="") {
-   setForm('logPass')
-   document.querySelector('.logPassField').style.display='flex'
- }
-   
-  console.log(isError)
-}else{
-  document.querySelector('.phoneField').style.display='flex' 
-}
+  };
 
-}
+  const newUserInfo = {
+    access_token: formState.userInfo.accessToken,
+    display_name: formState.userInfo.fullName,
+    email: formState.userInfo.email,
+    password: formState.userInfo.password,
+  };
 
-
-
-let authRedirect=""
-if (isAuth!=null) {
-  authRedirect=<Redirect to="/" />
-}
-
-    return ( <div className="custom_page">
-      {authRedirect}
-        <Container> 
-    <Modal.Dialog className="mx-auto my-0 " contentClassName="pt-5">
-       
-       <div className="row justify-content-center">
-
-    {formImage}
- 
-    </div>
+  const phoneValid = (value) => {
+    if (value.match(/12345/)) {
+      return "Invalid value: " + value;
+    } else if (value.match(/1234/)) {
+      return false;
+    } else if (value === "") {
+      return "Please Enter Phone Number";
+    } else if (value === 880) {
+      return "Please Enter Your Phone Number";
+    }
+    return true;
+  };
+  const onPhone = () => {
+    const valid = phoneValid(formState.userInfo.phone);
+    if (valid == true) {
+      onSignInSubmit();
+    } else {
+      console.log(phoneValid(formState.userInfo.phone));
+    }
+  };
+  const onName = () => {
+    if (formState.userInfo.fullName != "") {
       
-        <Modal.Body className="p-4 text-center">
-        
-        <Modal.Title>Enter your mobile number</Modal.Title>
-          <p>We need to verify you. We will send you a one time verification code. </p>
-          <div className="text-danger">{formError ? formError : ''}</div>
-          <InputPhone containerClass="phoneField signupInput" value={userInfo.phone} change={(phone)=>setUserInfo({phone:phone})} valid={() =>validity(userInfo.phone) } />
-         
-<div id="recaptcha_container"></div>
-<OtpInput
-  value={sendOtp}
-  onChange={otpHandleChange}
-  numInputs={6}
-  inputStyle="otpClass"
-  containerStyle="justify-content-center signupInput otpField otpContainer "
-  // separator={<span>-</span>}
+      formDispatch({ type: formType.NAME, form: formType.EMAIL });
+      setInputError("");
+    } else {
+      setInputError("Please Enter YourName");
+    }
+  };
+  const onEmail = () => {
+    const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+    if (formState.userInfo.email != "" && pattern.test(formState.userInfo.email)) {
+      setInputError("");
+      formDispatch({ type: formType.EMAIL, form: formType.CONFIRM_PASSWORD });
+    } else {
+      setInputError("Please Enter  A Valid Email Address");
+    }
+  };
+  const onLogPass = () => {
+    oldUserSubmit();
+  };
+  const onInputChange = (field) => (event) => {
+    formDispatch({
+      type: formType.CHANGE_INPUT,
+      field,
+      value: event.target.value,
+    });
+  };
 
-/>
-<InputField value={userInfo.email} name="fullName" placeholder="Email"
-       imgSrc={account_icon} 
-       type="text"
-       change={handleChange} appand={false} classInput="mb-3 signupInput emailField"/>
- <InputField value={userInfo.fullName} name="fullName" placeholder="Full Name"
-       imgSrc={account_icon} change={handleChange} appand={false} classInput="mb-3 signupInput nameField"/>
+  const onConfirmPass = () => {
+    if (formState.forgetPass) {
+      let formdata = new FormData();
+      formdata.append("access_token", formState.userInfo.accessToken);
+      formdata.append("new_password", formState.userInfo.password);
 
-  <div className="text-danger">{formError ? formError :''}</div>
-  <InputField value={userInfo.password} name="password" placeholder="Password"
-       imgSrc={lockicon}
-       type={passShow? "password":"text"}
-       change={handleChange}
-       pShow={passToggle}
-       appand={true} classInput="mb-3 signupInput passField"/>
- 
- 
-  <InputField value={userInfo.confirmPassword}
-  type={passShow? "password":"text"}
-  pShow={passToggle}
-  name="password" placeholder="Confirm Password"
-       imgSrc={lockicon} change={handleChange} appand={true} classInput="mb-3 signupInput confirmPassField"/>
- 
- <InputField value={userInfo.password} 
- error={isError}
-  type={passShow? "text":"password"}
-  pShow={passToggle}
- name="password" placeholder="Password"
-       imgSrc={lockicon} change={handleChange} appand={true} classInput="mb-3 signupInput logPassField"/>
+      axios
+        .post(
+          "https://api.dailyplus.store/v0/user/password/change/otp/",
+          formdata
+        )
+        .then((response) => {
+          console.log(response);
+          formDispatch({
+            type: formType.CONFIRM_PASSWORD,
+            form: formType.PASSWORD,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      const newUserInfo = {
+        access_token: formState.userInfo.accessToken,
+        display_name: formState.userInfo.fullName,
+        email: formState.userInfo.email,
+        password: formState.userInfo.password,
+      };
+      SignIninAction(newUserInfo);
+      
+    }
+  };
 
-  <Button type="submit" onClick={onNextSubmit} className="w-100 mt-3" variant="primary">Next</Button>
-         {/* {formField} */}
-        </Modal.Body>
-        
-        <Modal.Footer className="p-4">
-        <Row className="justify-content-md-center w-100">
-          
-          </Row>
-        </Modal.Footer>
-       
-      </Modal.Dialog>
+  const onForgetPass = () => {
+    window.appVerifier = new firebase.auth.RecaptchaVerifier(
+      "recaptcha_forget_container",
+      {
+        size: "invisible",
+      }
+    );
+    const appVerifier = window.appVerifier;
+    var phoneNumber = "+" + formState.userInfo.phone;
+    firebase
+      .auth()
+      .signInWithPhoneNumber(phoneNumber, appVerifier)
+      .then(function (confirmationResult) {
+        console.log("Success");
+        // SMS sent. Prompt user to type the code from the message, then sign the
+        // user in with confirmationResult.confirm(code).
+        window.confirmationResult = confirmationResult;
+
+        formDispatch({
+          type: formType.SEND_OTP,
+          confirmOtp: confirmationResult,
+          form: formType.OTP,
+        });
+        console.log(confirmationResult);
+      })
+      .catch(function (error) {
+        console.log("Error:" + error.code);
+      });
+    formDispatch({ type: formType.FORGET_PASS });
+  };
+
+  let formContent = "";
+ 
+  switch (formState.form) {
+    case formType.PHONE:
      
-      </Container>
-      </div> );
-}
- 
-export default SignUp;
+      formContent = (
+        <PhoneForm
+          containerClass="phoneField signupInput"
+          valid={(value, country) => phoneValid(value, country)}
+          value={formState.userInfo.phone}
+          change={(phone) =>
+            formDispatch({
+              type: formType.CHANGE_INPUT,
+              field: "phone",
+              value: phone,
+            })
+          }
+          clicked={onPhone}
+        />
+      );
+        
+      break;
+    case formType.PASSWORD:
+      if (loading || isloading) {
+        formContent= <Spinner />
+      }else{
+      formContent = (
+        <PasswordForm
+          value={formState.userInfo.password}
+          forGetClicked={onForgetPass}
+          clicked={onLogPass}
+          onError={isError}
+          change={onInputChange("password")}
+        />
+      );
+      }
+      break;
+    case formType.NAME:
+      formContent = (
+        <NameForm
+          value={formState.userInfo.fullName}
+          error={inputerror}
+          clicked={onName}
+          change={onInputChange("fullName")}
+        />
+      );
+      break;
+    case formType.EMAIL:
+      
+      formContent = (
+        <EmailForm
+          value={formState.userInfo.email}
+          error={inputerror}
+          clicked={onEmail}
+          change={onInputChange("email")}
+        />
+      );
+      
+      break;
+    case formType.OTP:
+      formContent = (
+        <OtpForm
+          value={formState.otp}
+          clicked={onOtpInSubmit}
+          change={(value) =>
+            formDispatch({ type: formType.CHANGE_OTP, otp: value })
+          }
+          phone={formState.userInfo.phone}
+        />
+      );
+      break;
+    case formType.CONFIRM_PASSWORD:
+      formContent = (
+        <ConfimPasswordForm
+          userInfo={newUserInfo}
+          isForget={formState.forgetPass}
+          value1={formState.userInfo.password}
+          change1={onInputChange("password")}
+          value2={formState.userInfo.confirmPassword}
+          clicked={onConfirmPass}
+          change2={onInputChange("confirmPassword")}
+        />
+      );
+      break;
+    default:
+      break;
+  }
+
+  console.log(formState);
+
+  let authRedirect = "";
+  if (isAuth != null) {
+    authRedirect = <Redirect to="/" />;
+  }
+  return (
+    <section className="custom_page signup">
+      <div id="recaptcha_container"></div>
+{authRedirect}
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-body">{formContent}</div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Signup;

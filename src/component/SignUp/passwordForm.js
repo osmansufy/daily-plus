@@ -37,7 +37,16 @@ const PasswordForm = (props) => {
                className="border-0 form-control"
                id="inputEmail" />
               <label for="inputEmail">Password</label>
-              <span className="input-group-text border-0 inBR" onClick={onTogglePass}><img src={visibility} /></span>
+              <span className="input-group-text border-0 inBR" onClick={onTogglePass}>
+                {/* <img src={visibility} /> */}
+                {
+                  showPss?
+                  <i class="fas fa-eye"></i>
+                  : <i class="fas fa-eye-slash"></i>
+                }
+               
+                
+                </span>
             </div>
             <small onClick={props.forGetClicked} style={{cursor:"pointer"}} className="text-danger">Forgot  Password?</small>
             <Button type="submit" onClick={props.clicked}  className="w-100 d-flex align-items-center mt-4" variant="primary"><span className="flex-grow-1"> Submit </span><img src={next} /></Button>

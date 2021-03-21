@@ -1,5 +1,5 @@
 import firebase from "../../src/firebaseConfig";
-import { useReducer, useState } from "react";
+import { useReducer, useRef, useState } from "react";
 import { Container, Modal } from "react-bootstrap";
 import ConfimPasswordForm from "../component/SignUp/ConfirmPass";
 import NameForm from "../component/SignUp/NameForm";
@@ -23,7 +23,7 @@ const Signup = () => {
   const SignIninAction = (userdetails) =>
     dispatch(authAction.userSignInAction(userdetails));
   const [inputerror, setInputError] = useState("");
-
+const recatchRef=useRef()
   const formType = {
     PHONE: "PHONE",
     OTP: "OTP",
@@ -36,6 +36,7 @@ const Signup = () => {
     ACCESS_TOKEN: "ACCESS_TOKEN",
     CHANGE_OTP: "CHANGE_OTP",
     FORGET_PASS: "FORGET_PASS",
+    Change_Phone: "Change_Phone",
   };
 
   const initialState = {
@@ -50,6 +51,7 @@ const Signup = () => {
     otp: "",
     confirmOtp: "",
     forgetPass: false,
+    loading:false,
     form: formType.PHONE,
   };
 
@@ -59,7 +61,7 @@ const Signup = () => {
         return {
           ...cuurentState,
           form: action.form,
-        };
+        }; 
       case formType.PASSWORD:
         return {
           ...cuurentState,
@@ -87,6 +89,15 @@ const Signup = () => {
           ...cuurentState,
           confirmOtp: action.confirmOtp,
           form: action.form,
+        };
+      case formType.Change_Phone:
+        return {
+          ...cuurentState,
+          form: action.form,
+          userInfo:{
+            ...cuurentState.userInfo,
+            phone:""
+          }
         };
       case formType.OTP:
         return {
@@ -123,17 +134,50 @@ const Signup = () => {
 
   const [formState, formDispatch] = useReducer(formReducer, initialState);
   const setupRecaptcha = () => {
-
+    console.log("cuurent",recatchRef.current.innerHTML );
+    if (window.recaptchaVerifier && recatchRef) {
+      window.recaptchaVerifier.clear()
+      recatchRef.current.innerHTML = `<div id="recaptcha_container"></div>`
+    }
 
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha_container', {
       'size': 'invisible',
       'callback': (response) => {
         // reCAPTCHA solved, allow signInWithPhoneNumber.
-        onSignInSubmit();
+        // onSignInSubmit();
       }
     });
-
+    handleSendOtp()
   };
+
+  const handleSendOtp=()=>{
+
+    var phoneNumber = "+" + formState.userInfo.phone;
+    console.log(phoneNumber);
+    setloading(false)
+    var appVerifier = window.recaptchaVerifier;
+    firebase
+      .auth()
+      .signInWithPhoneNumber(phoneNumber, appVerifier)
+      .then(function (confirmationResult) {
+        // SMS sent. Prompt user to type the code from the message, then sign the
+        // user in with confirmationResult.confirm(code).
+        window.confirmationResult = confirmationResult;
+        setloading(false)
+        formDispatch({
+          type: formType.SEND_OTP,
+          confirmOtp: confirmationResult,
+          form: formType.OTP,
+        });
+        console.log(confirmationResult);
+      })
+      .catch(function (error) {
+        // Error; SMS not sent
+        // ...
+        setloading(false)
+        console.log(error);
+      });
+  }
 
   const onSignInSubmit = () => {
     const formData = new FormData();
@@ -152,31 +196,7 @@ const Signup = () => {
         console.log(error);
         
         setupRecaptcha();
-        var phoneNumber = "+" + formState.userInfo.phone;
-        console.log(phoneNumber);
-        setloading(false)
-        var appVerifier = window.recaptchaVerifier;
-        firebase
-          .auth()
-          .signInWithPhoneNumber(phoneNumber, appVerifier)
-          .then(function (confirmationResult) {
-            // SMS sent. Prompt user to type the code from the message, then sign the
-            // user in with confirmationResult.confirm(code).
-            window.confirmationResult = confirmationResult;
-            
-            formDispatch({
-              type: formType.SEND_OTP,
-              confirmOtp: confirmationResult,
-              form: formType.OTP,
-            });
-            console.log(confirmationResult);
-          })
-          .catch(function (error) {
-            // Error; SMS not sent
-            // ...
-            
-            console.log(error);
-          });
+       
       });
   };
 
@@ -321,42 +341,23 @@ const Signup = () => {
   };
 
   const onForgetPass = () => {
-    window.appVerifier = new firebase.auth.RecaptchaVerifier(
-      "recaptcha_forget_container",
-      {
-        size: "invisible",
-      }
-    );
-    const appVerifier = window.appVerifier;
-    var phoneNumber = "+" + formState.userInfo.phone;
-    firebase
-      .auth()
-      .signInWithPhoneNumber(phoneNumber, appVerifier)
-      .then(function (confirmationResult) {
-        console.log("Success");
-        // SMS sent. Prompt user to type the code from the message, then sign the
-        // user in with confirmationResult.confirm(code).
-        window.confirmationResult = confirmationResult;
-
-        formDispatch({
-          type: formType.SEND_OTP,
-          confirmOtp: confirmationResult,
-          form: formType.OTP,
-        });
-        console.log(confirmationResult);
-      })
-      .catch(function (error) {
-        console.log("Error:" + error.code);
-      });
+    setupRecaptcha();
     formDispatch({ type: formType.FORGET_PASS });
   };
 
+  const changePhone=()=>{
+    formDispatch({ 
+      type: formType.Change_Phone,
+      form: formType.PHONE 
+    });
+  }
   let formContent = "";
  
   switch (formState.form) {
     case formType.PHONE:
-     
+  
       formContent = (
+       
         <PhoneForm
           containerClass="phoneField signupInput"
           valid={(value, country) => phoneValid(value, country)}
@@ -371,12 +372,10 @@ const Signup = () => {
           clicked={onPhone}
         />
       );
-        
+      
       break;
     case formType.PASSWORD:
-      if (loading || isloading) {
-        formContent= <Spinner />
-      }else{
+    
       formContent = (
         <PasswordForm
           value={formState.userInfo.password}
@@ -386,7 +385,6 @@ const Signup = () => {
           change={onInputChange("password")}
         />
       );
-      }
       break;
     case formType.NAME:
       formContent = (
@@ -411,6 +409,7 @@ const Signup = () => {
       
       break;
     case formType.OTP:
+   
       formContent = (
         <OtpForm
           value={formState.otp}
@@ -419,8 +418,10 @@ const Signup = () => {
             formDispatch({ type: formType.CHANGE_OTP, otp: value })
           }
           phone={formState.userInfo.phone}
+          reSendOtp={handleSendOtp}
+          changePhone={changePhone}
         />
-      );
+      )
       break;
     case formType.CONFIRM_PASSWORD:
       formContent = (
@@ -447,7 +448,9 @@ const Signup = () => {
   }
   return (
     <section className="custom_page signup">
+      <div ref={recatchRef}>
       <div id="recaptcha_container"></div>
+      </div>
 {authRedirect}
       <div className="modal-dialog">
         <div className="modal-content">

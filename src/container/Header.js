@@ -3,8 +3,7 @@ import ButtonLink from "../UI/Button/ButtonLink";
 // import Button from '../UI/Button/Button';
 import MyBag from "../UI/MyBag";
 import CartBtn from "../UI/Button/CartBtn";
-import { Link } from "react-router-dom";
-// import Notification from "../UI/Notification";
+import { Link, Route, Switch, useLocation } from "react-router-dom";
 import CartBag from "../UI/CartBag";
 import logo from "../assets/img/logo.png";
 import pro from "../assets/img/pro.png";
@@ -61,7 +60,7 @@ const Header = (props) => {
   const deleverYaddress = useSelector((state) => state.address.addressCurrent);
   const notificationCount = useSelector((state) => state.auth.notifiacationCount);
 
-
+const location=useLocation()
  
   const getCategories=()=>{
     if (categories.length==0) {
@@ -570,7 +569,11 @@ const Header = (props) => {
       </header>
 
       <CartBag clicked={cartClickHandler} />
-      <MyBag cartShow={cartShow} closed={cartClosed} />
+      {
+        location.pathname.match('/checkout')? <MyBag cartShow={false} closed={cartClosed} />:<MyBag cartShow={cartShow} closed={cartClosed} />
+      }
+ 
+      
       <Suspense fallback={<h3>Loading...</h3>}>
       <Sidebar isLoading={loading} categories={categories} show={showSidebar} closed={shideberClosed} />
       </Suspense>

@@ -1025,15 +1025,14 @@ body{
     top: 45px;
     width: 500px;
     height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
     background-color: #FFF;
     z-index: 77;
     -webkit-box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.75);
     -moz-box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.75);
     box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.75);
     padding: 30px 15px;
-}
-.popular-search{
-    
 }
 
 /* result not found css */

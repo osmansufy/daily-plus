@@ -17,7 +17,7 @@ const Search = (props) => {
   console.log(searchResult);
   console.log(searchEnter);
 
-  const getPreOrders = () => {
+  const getSearchProducts = () => {
     if (searchEnter !== "") {
       const timer = setTimeout(() => {
         setShowResult(false);
@@ -44,7 +44,7 @@ const Search = (props) => {
     setSearchEnter("");
   };
   useEffect(() => {
-    getPreOrders();
+    getSearchProducts();
   }, [searchEnter, inputRef]);
 
   const onSearchClose = () => {

@@ -29,6 +29,11 @@ const OtpForm = (props) => {
   inputStyle="w-100 mx-1"
 
 />
+<div className="d-flex my-3 justify-content-between">
+<a onClick={props.reSendOtp} className="text-danger">Resend OTP </a>
+<a onClick={props.changePhone}>Change Phone Number</a>
+</div>
+
     
       <Button type="submit" onClick={props.clicked}  className="w-100 mt-3" variant="primary">Next</Button>
              {/* {formField} */}

@@ -145,6 +145,7 @@ const onDeletePromo=()=>{
     event.preventDefault();
     const orderSend = {
       owner: userInfo.id,
+      recipient_name:userInfo.name,
       cart: activeCart,
       promo:information.promoId,
       ts_delivery: information.deliveryTime,
